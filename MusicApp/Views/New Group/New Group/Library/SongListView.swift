@@ -24,7 +24,7 @@ class SongListView_NavCon: UINavigationController{
         
         navigationBar.isTranslucent = false
         navigationBar.prefersLargeTitles = true
-        navigationBar.tintColor = .red
+        navigationBar.tintColor = THEME_COLOR
         viewControllers.append(AppManager.shared.songListView)
         navigationBar.shadowImage = UIImage()
 
@@ -91,7 +91,7 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         tableView.tableFooterView = UIView()
         tableView.register(MyTableViewCell.self, forCellReuseIdentifier: cellID)
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: headerID)
-        tableView.sectionIndexColor = .red
+        tableView.sectionIndexColor = THEME_COLOR
         
         tableView.rowHeight = 58
         tableView.separatorInset.left = CellConstants.separatorLeftInset
@@ -110,7 +110,7 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         navigationItem.searchController = self.searchController
         searchController.dimsBackgroundDuringPresentation = false
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.tintColor = .red
+        searchController.searchBar.tintColor = THEME_COLOR
         searchController.searchBar.delegate = self
         searchController.delegate = self
         
@@ -729,14 +729,14 @@ class MyTableViewCell: CircleInteractionResponseCell, SongObserver{
             
         case .paused:
             nowPlayingAnimator.stopAnimating()
-            topLabel.textColor = .red
-            bottomLabel.textColor = .red
+            topLabel.textColor = THEME_COLOR
+            bottomLabel.textColor = THEME_COLOR
             topLabel.font = UIFont.boldSystemFont(ofSize: 17)
         
         case .playing:
             nowPlayingAnimator.startAnimating()
-            topLabel.textColor = .red
-            bottomLabel.textColor = .red
+            topLabel.textColor = THEME_COLOR
+            bottomLabel.textColor = THEME_COLOR
             topLabel.font = UIFont.boldSystemFont(ofSize: 17)
             
         }
@@ -778,7 +778,7 @@ class MyTableViewCell: CircleInteractionResponseCell, SongObserver{
                                y: 0,
                                width: 20,
                                height: 20)
-        let x = NVActivityIndicatorView(frame: viewFrame, type: .audioEqualizer, color: .red, padding: nil)
+        let x = NVActivityIndicatorView(frame: viewFrame, type: .audioEqualizer, color: THEME_COLOR, padding: nil)
         x.bottomSide = 50
         x.rightSide = 100
         return x

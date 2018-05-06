@@ -33,7 +33,7 @@ class ProgressIndicator: UIView {
     private var progressBar: UIView = {
         let x = UIView()
         x.translatesAutoresizingMaskIntoConstraints = false
-        x.backgroundColor = .red
+        x.backgroundColor = THEME_COLOR
         return x
     }()
     

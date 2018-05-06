@@ -64,7 +64,7 @@ class CustomSlider: UIView {
     var customDelegate: CustomSliderDelegate?
     
     var sliderButtonAnimationTime = 0.3
-    private var activeColor: UIColor = .red
+    private var activeColor: UIColor = THEME_COLOR
     private var inactiveColor: UIColor = .gray
     private var rightSideColor: UIColor = UIColor.lightGray.withAlphaComponent(0.3)
     

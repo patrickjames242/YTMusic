@@ -76,7 +76,7 @@ class AppManager: NSObject{
 //    static var tabBarHeight: CGFloat = 49 + appInsets.bottom
     static var minimizedMusicViewHeight: CGFloat = 70
     
-    static var defaultTintColor = UIColor.red
+//    static var defaultTintColor = THEME_COLOR(asker: self)
     static var currentAppBottomInset: CGFloat = 49
     
     
@@ -621,7 +621,7 @@ class AppManager: NSObject{
         let previousStatusBarStatus = UIApplication.shared.statusBarStyle
         UIApplication.shared.statusBarStyle = .default
         let webView = MySafariViewController(url: url)
-        webView.preferredControlTintColor = .red
+        webView.preferredControlTintColor = THEME_COLOR
         webView.actionToCompleteUponDismisal = {
             
             UIApplication.shared.statusBarStyle = previousStatusBarStatus
@@ -664,7 +664,7 @@ class AppManager: NSObject{
         
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .red
+        button.backgroundColor = THEME_COLOR
         
         button.setAttributedTitle(NSAttributedString(string: "Search Youtube", attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white]), for: .normal)
         

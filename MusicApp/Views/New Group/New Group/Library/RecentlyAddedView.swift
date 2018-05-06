@@ -20,7 +20,7 @@ class RecentlyAdded_NavCon: UINavigationController{
         navigationBar.shadowImage = UIImage()
         navigationBar.isTranslucent = false
         navigationBar.prefersLargeTitles = true
-        navigationBar.tintColor = .red
+        navigationBar.tintColor = THEME_COLOR
         viewControllers.append(AppManager.shared.recentlyAddedView)
     }
     
@@ -334,15 +334,15 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
             
         case .paused:
             nowPlayingAnimator.stopAnimating()
-            albumArtist.textColor = .red
+            albumArtist.textColor = THEME_COLOR
             albumName.font = UIFont.boldSystemFont(ofSize: 15)
-            albumName.textColor = .red
+            albumName.textColor = THEME_COLOR
             
         case .playing:
             nowPlayingAnimator.startAnimating()
-            albumArtist.textColor = .red
+            albumArtist.textColor = THEME_COLOR
             albumName.font = UIFont.boldSystemFont(ofSize: 15)
-            albumName.textColor = .red
+            albumName.textColor = THEME_COLOR
         }
     }
     
@@ -409,7 +409,7 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
                                y: 0,
                                width: 25,
                                height: 25)
-        let x = NVActivityIndicatorView(frame: viewFrame, type: .audioEqualizer, color: .red, padding: nil)
+        let x = NVActivityIndicatorView(frame: viewFrame, type: .audioEqualizer, color: THEME_COLOR, padding: nil)
         
         x.bottomSide = albumHeight - 7
         x.rightSide = albumWidth - 7

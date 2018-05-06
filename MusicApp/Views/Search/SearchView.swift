@@ -15,7 +15,7 @@ class SearchTableView_NavCon: UINavigationController{
         navigationBar.prefersLargeTitles = true
         navigationBar.isTranslucent = false
         navigationBar.shadowImage = UIImage()
-        navigationBar.tintColor = .red
+        navigationBar.tintColor = THEME_COLOR
         viewControllers.append(AppManager.shared.searchView)
         
         
@@ -54,7 +54,7 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
             setBackgroundView()
         }
         searchController.searchBar.delegate = self
-        searchController.searchBar.tintColor = .red
+        searchController.searchBar.tintColor = THEME_COLOR
         searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.hidesSearchBarWhenScrolling = false
         searchController.dimsBackgroundDuringPresentation = false

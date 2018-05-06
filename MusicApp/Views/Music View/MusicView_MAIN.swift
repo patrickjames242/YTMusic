@@ -401,9 +401,9 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     lazy var artistAndAlbumLabel: UILabel = {
         let x = UILabel()
         x.font = UIFont.systemFont(ofSize: 22)
-        x.textColor = .red
+        x.textColor = THEME_COLOR
         x.textAlignment = .center
-        x.textColor = .red
+        x.textColor = THEME_COLOR
         x.translatesAutoresizingMaskIntoConstraints = false
 
         return x
@@ -468,7 +468,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         let x = MPVolumeView()
         x.showsVolumeSlider = false
         x.showsRouteButton = true
-        x.tintColor = .red
+        x.tintColor = THEME_COLOR
         let image = UIImage(named: "icons8-earbud-headphones-filled-100")!.withRenderingMode(.alwaysTemplate)
         x.setRouteButtonImage( image ,for: .normal)
         x.translatesAutoresizingMaskIntoConstraints = false
@@ -477,7 +477,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     
     lazy var audioDevicesButtonCover: UIImageView = {
         let x = UIImageView(image: UIImage(named: "icons8-earbud-headphones-filled-100")!.withRenderingMode(.alwaysTemplate))
-        x.tintColor = .red
+        x.tintColor = THEME_COLOR
         x.translatesAutoresizingMaskIntoConstraints = false
         return x
         
@@ -492,7 +492,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         let threeDotImageView = UIImageView(image: UIImage(named: "icons8-more-filled-100")!.withRenderingMode(.alwaysTemplate))
         threeDotImageView.translatesAutoresizingMaskIntoConstraints = false
         threeDotImageView.contentMode = .scaleAspectFit
-        threeDotImageView.tintColor = .red
+        threeDotImageView.tintColor = THEME_COLOR
         threeDotImageView.isUserInteractionEnabled = false
         
         x.addSubview(threeDotImageView)
@@ -521,7 +521,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         let playlistImageView = UIImageView(image: UIImage(named: "icons8-playlist-96")!.withRenderingMode(.alwaysTemplate))
         playlistImageView.translatesAutoresizingMaskIntoConstraints = false
         playlistImageView.contentMode = .scaleAspectFit
-        playlistImageView.tintColor = .red
+        playlistImageView.tintColor = THEME_COLOR
         playlistImageView.isUserInteractionEnabled = false
         
         x.addSubview(playlistImageView)

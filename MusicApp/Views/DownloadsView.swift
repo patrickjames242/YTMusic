@@ -21,7 +21,7 @@ class DownloadsView_NavCon: UINavigationController{
         navigationBar.isTranslucent = false
         navigationBar.shadowImage = UIImage()
         viewControllers.append(AppManager.shared.downloadsView)
-        navigationBar.tintColor = .red
+        navigationBar.tintColor = THEME_COLOR
     }
 }
 
@@ -445,7 +445,7 @@ fileprivate class DownloadsTableViewCell: CircleInteractionResponseCell, Downloa
     
     
     private func changeDownloadStateTo(_ status: DownloadStatus){
-        progressLabel.textColor = .red
+        progressLabel.textColor = THEME_COLOR
         progressLabel.font = UIFont.boldSystemFont(ofSize: 15)
 
         progressBar.alpha = 1
@@ -628,14 +628,14 @@ fileprivate class DownloadsTableViewCell: CircleInteractionResponseCell, Downloa
     private lazy var progressLabel: UILabel = {
         let x = UILabel()
         x.font = UIFont.boldSystemFont(ofSize: 15)
-        x.textColor = .red
+        x.textColor = THEME_COLOR
         return x
     }()
     
     
     private lazy var threeDotButton: UIImageView = {
         let x = UIImageView(image: UIImage(cgImage: #imageLiteral(resourceName: "icons8-more-filled-100").cgImage!, scale: 1, orientation: UIImageOrientation.left).withRenderingMode(.alwaysTemplate))
-        x.tintColor = .red
+        x.tintColor = THEME_COLOR
         x.translatesAutoresizingMaskIntoConstraints = false
         x.contentMode = .scaleAspectFit
         return x

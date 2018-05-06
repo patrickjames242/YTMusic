@@ -185,14 +185,14 @@ class MenuBarCell: UICollectionViewCell{
     
     override var isHighlighted: Bool{
         didSet{
-            label.textColor = isHighlighted ? .red : .lightGray
+            label.textColor = isHighlighted ? THEME_COLOR : .lightGray
         }
     }
     
     
     override var isSelected: Bool{
         didSet{
-            label.textColor = isSelected ? .red : .lightGray
+            label.textColor = isSelected ? THEME_COLOR : .lightGray
             
         }
     }

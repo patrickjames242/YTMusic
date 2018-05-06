@@ -148,7 +148,7 @@ class MenuBarViewController: UIViewController, UIScrollViewDelegate, MenuBarDele
         let x = UINavigationBar()
         x.isTranslucent = true
       
-        x.tintColor = .red
+        x.tintColor = THEME_COLOR
         
         
         x.setBackgroundImage(UIImage(), for: .default)
@@ -233,9 +233,9 @@ class MenuBarViewController: UIViewController, UIScrollViewDelegate, MenuBarDele
         
         
         let button = UIButton.init(type: .system)
-        button.setTitleColor(.red, for: .normal)
+        button.setTitleColor(THEME_COLOR, for: .normal)
         
-        button.setAttributedTitle(NSAttributedString.init(string: "Done", attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17), NSAttributedStringKey.foregroundColor: UIColor.red]), for: .normal)
+        button.setAttributedTitle(NSAttributedString.init(string: "Done", attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17), NSAttributedStringKey.foregroundColor: THEME_COLOR]), for: .normal)
         
         button.addTarget(self, action: #selector(respondToDismissButtonPressed), for: .touchUpInside)
         

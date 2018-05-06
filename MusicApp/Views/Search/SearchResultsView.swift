@@ -282,7 +282,7 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
         
         let progressAnimator = NVActivityIndicatorView(frame: progressAnimatorFrame,
                                                        type: NVActivityIndicatorType.ballRotateChase,
-                                                       color: .red,
+                                                       color: THEME_COLOR,
                                                        padding: nil)
         return progressAnimator
     }()
@@ -605,7 +605,7 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
     
     private lazy var threeDotButton: UIImageView = {
        let x = UIImageView(image: UIImage(cgImage: #imageLiteral(resourceName: "icons8-more-filled-100").cgImage!, scale: 1, orientation: UIImageOrientation.left).withRenderingMode(.alwaysTemplate))
-        x.tintColor = .red
+        x.tintColor = THEME_COLOR
         x.translatesAutoresizingMaskIntoConstraints = false
         x.contentMode = .scaleAspectFit
         return x

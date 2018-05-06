@@ -22,7 +22,7 @@ class ScrollBar: UIView{
     
     private lazy var scrollLine: UIView = {
         let x = UIView()
-        x.backgroundColor = .red
+        x.backgroundColor = THEME_COLOR
         x.translatesAutoresizingMaskIntoConstraints = false
         return x
     }()

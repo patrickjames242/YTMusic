@@ -73,7 +73,7 @@ class Screen: UIViewController, UITabBarDelegate{
 //        tabBar.pin(left: view.leftAnchor, right: view.rightAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor)
 //
 //        let backgroundView = UIView()
-//        backgroundView.backgroundColor = .red
+//        backgroundView.backgroundColor = THEME_COLOR
 //        view.addSubview(backgroundView)
 //
 //        backgroundView.pin(left: tabBar.leftAnchor, right: tabBar.rightAnchor, top: tabBar.topAnchor, size: CGSize.height(49 + Variations.bottomAppInset))
@@ -221,7 +221,7 @@ class Screen: UIViewController, UITabBarDelegate{
                                         height: tabBarHeight))
         x.isTranslucent = false
         x.barTintColor = .white
-        x.tintColor = .red
+        x.tintColor = THEME_COLOR
 //        x.translatesAutoresizingMaskIntoConstraints = false
         x.setItems([songsItem, searchItem, downloadsItem, settingsItem], animated: true)
         let imageInsets = Variations.Screen.tabBarItemsBottomInset

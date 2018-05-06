@@ -102,7 +102,7 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
                 let deleteLabel = UILabel()
                 deleteLabel.translatesAutoresizingMaskIntoConstraints = false
                 deleteLabel.text = "Delete All Songs"
-                deleteLabel.textColor = .red
+                deleteLabel.textColor = THEME_COLOR
                 
                 cell.addSubview(deleteLabel)
                 
