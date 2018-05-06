@@ -173,7 +173,18 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     
     
     
-    
+    func setSearchResultsWithText(_ text: String){
+        navigationItem.title = text
+
+        YTAPIManager.main.getYoutubeSearchResultsWith(searchText: text, amount: 50) { [weak weakSelf = self] (videos, error) in
+            if let weakSelf = weakSelf {
+                weakSelf.dealWithYoutubeVideoQueryResults(resultingVideos: videos, error: error)
+            }
+            
+            
+        }
+        
+    }
     
     
     
@@ -184,10 +195,11 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     
     func setRelatedVideosTo(vidID: String){
         
-        YTAPIManager.main.getRelatedVidoesTo(vidID: vidID) { (videoArray) in
-            self.removeProgressAnimator()
-            self.videos = videoArray
-            self.tableView.reloadData()
+        YTAPIManager.main.getRelatedVidoesTo(vidID: vidID) { [weak weakSelf = self] (videoArray, error)  in
+            
+            guard let weakSelf = weakSelf else {return}
+            
+            weakSelf.dealWithYoutubeVideoQueryResults(resultingVideos: videoArray, error: error)
         }
         
         
@@ -195,60 +207,25 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     
     
     
-    
-    
-    
-    
-    func setSearchResultsWithText(_ text: String){
-        navigationItem.title = text
-
-        YTAPIManager.main.getYoutubeSearchResultsWith(searchText: text, amount: 50) {[weak weakSelf = self] (videos, error) in
-            if weakSelf == nil{return}
-            
-  
-            
-            if let videos = videos {
-                
-                if !videos.isEmpty{
-                    
-                    weakSelf?.videos = videos
-                    weakSelf?.tableView.reloadData()
-                    weakSelf?.removeProgressAnimator()
-                    return
-                }
-                
-            }
-                
-                
-
-                weakSelf?.navigationItem.title = "Something Went Wrong! 😫😫"
-                weakSelf?.removeProgressAnimator()
-                
-                
-                if error == nil{
-                    
-                    AppManager.displayErrorMessage(target: self, message: "Something went wrong when trying to fetch Youtube search results.", completion: {
-                        weakSelf?.navigationController?.popToRootViewController(animated: true)
-                    })
-                    return
-                    
-                } else {
-                
-                AppManager.displayErrorMessage(target: weakSelf!, message: error!.localizedDescription){
-                    
-                    weakSelf?.navigationController?.popToRootViewController(animated: true)
-                }
-                
-            }
-            
+    private func dealWithYoutubeVideoQueryResults(resultingVideos: [YoutubeVideo]?, error: Error?){
+        removeProgressAnimator()
+        
+        if error != nil{
+            AppManager.displayErrorMessage(target: self, message: error!.localizedDescription, completion: nil)
+            return
         }
         
+        guard let unwrappedVideos = resultingVideos, !unwrappedVideos.isEmpty else {
+            
+            
+            AppManager.displayErrorMessage(target: self, message: "There are no videos to display.", completion: nil)
+            return
+        }
+        
+        videos = unwrappedVideos
+        
+        
     }
-    
-    
-    
-    
-    
     
     
     

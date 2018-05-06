@@ -277,7 +277,7 @@ extension MusicView: SongQueueDelegate{
         }
         catch{
             
-            fatalError("setting the song \(song.name) resulted in an error in the MusicView_SongPlayer.swift file, in the 'setUpMusicPlayer' function")
+            fatalError("setting the song, \(song.name) resulted in an error in the MusicView_SongPlayer.swift file, in the 'setUpMusicPlayer' function")
         
         }
         
@@ -457,13 +457,13 @@ extension MusicView: SongQueueDelegate{
                 self.pauseMusic()
                 changePlayPauseButtonImagesTo(.play)
             }
-        case .ended:
+        case .ended: break
             
             
-            if !songIsPlaying{
-                self.playMusic()
-                changePlayPauseButtonImagesTo(.pause)
-            }
+//            if !songIsPlaying{
+//                self.playMusic()
+//                changePlayPauseButtonImagesTo(.pause)
+//            }
             
         }
     }
@@ -486,7 +486,6 @@ extension MusicView: SongQueueDelegate{
         
         for x in session.currentRoute.outputs{
             if x.portType != AVAudioSessionPortBuiltInSpeaker{ continue }
-            
             DispatchQueue.main.sync {
                 self.pauseMusic()
                 changePlayPauseButtonImagesTo(.play)

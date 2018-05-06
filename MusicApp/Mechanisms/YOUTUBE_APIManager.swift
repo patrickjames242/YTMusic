@@ -36,7 +36,7 @@ class YTAPIManager: NSObject {
     // MARK: - GET RELATED VIDEOS
     
     
-    func getRelatedVidoesTo(vidID: String, completion: @escaping ([YoutubeVideo]) -> Void){
+    func getRelatedVidoesTo(vidID: String, completion: @escaping ([YoutubeVideo]?, Error?) -> Void){
         
         
         
@@ -44,21 +44,27 @@ class YTAPIManager: NSObject {
         
         
         
-        let urlString = strURL.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlFragmentAllowed)!
+        guard let urlString = strURL.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlFragmentAllowed), let url = URL(string: urlString) else {
+            completion(nil, nil)
+            return
+        }
         
-        let url = URL(string: urlString)!
+        
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil{
-                print(error!)
+                print("There was an error in the 'getRelatedVidoesTo' function in the Youtube api manager class. \(error!)")
+                completion(nil, error!)
                 return
             }
         
             self.parseJSONFromYoutubeSearchResults(data: data!, completion: { (videoArray) in
                 
                 DispatchQueue.main.sync {
-                    completion(videoArray)
+                    
+                    
+                    completion(videoArray, nil)
                 }
             })
           
@@ -91,10 +97,11 @@ class YTAPIManager: NSObject {
         
         getVideosFromYT_IDs([ID]) { (videoArray) in
             if videoArray.isEmpty{
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
 
-                AppManager.displayErrorMessage(target: AppManager.shared.screen, message: "A problem occured when attempting to download the video from your clipboard", completion: nil); return
+                AppManager.displayErrorMessage(target: AppManager.shared.screen, message: "A problem occured when attempting to download the video from your clipboard", completion: nil)
                 }
+                return
             }
             
             
