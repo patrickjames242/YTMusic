@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17C67b" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DBData" representedClassName="DBData" syncable="YES" codeGenerationType="class">
+        <attribute name="data" attributeType="Binary" syncable="YES"/>
+        <attribute name="identifier" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="DBDownloadItem" representedClassName="DBDownloadItem" syncable="YES" codeGenerationType="class">
+        <attribute name="channelName" attributeType="String" syncable="YES"/>
+        <attribute name="dateFinished" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="dateStarted" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="image" attributeType="Binary" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ytID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="dbSong" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBSong" inverseName="dbDownloadItem" inverseEntity="DBSong" syncable="YES"/>
+    </entity>
+    <entity name="DBSong" representedClassName="DBSong" syncable="YES" codeGenerationType="class">
+        <attribute name="artistName" attributeType="String" syncable="YES"/>
+        <attribute name="dataIdentifier" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="defaultArtistName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="defaultName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="image" attributeType="Binary" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="ytID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="dbDownloadItem" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DBDownloadItem" inverseName="dbSong" inverseEntity="DBDownloadItem" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="DBData" positionX="-189" positionY="-124" width="128" height="73"/>
+        <element name="DBDownloadItem" positionX="-128" positionY="-477" width="128" height="178"/>
+        <element name="DBSong" positionX="-506" positionY="-337" width="128" height="178"/>
+    </elements>
+</model>
