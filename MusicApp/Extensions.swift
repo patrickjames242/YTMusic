@@ -9,19 +9,7 @@
 import UIKit
 import SafariServices
 
-//
-//class MyButton: UIButton{
-//    
-//    var layoutSubViewsClosure: ((CGRect) -> Void)?
-//    
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        if let action = layoutSubViewsClosure{
-//            action(frame)
-//        }
-//    }
-//}
-//
+
 
 
 func youtubeURL(from videoID: String) -> URL?{
@@ -399,14 +387,17 @@ extension Array {
         if isEmpty{return nil}
         return self.count - 1
     }
-    
+}
+
+
+
+extension Array where Element: Song{
     
     private func turnIntoDictionary(array:[Song]) -> [String: [Song]]{
         
         let dictionaryToReturn = (Dictionary.init(grouping: array) { (element) -> String in
             
-            let songName = element.name.uppercased()
-            let songNameToReturn = songName.removeWhiteSpaces()
+            let songNameToReturn = element.name.uppercased().removeWhiteSpaces()
             
             let firstLetter = String(songNameToReturn[element.name.startIndex])
             let characterSet = CharacterSet(charactersIn: firstLetter)
@@ -425,13 +416,9 @@ extension Array {
         if self.isEmpty{return ([], [])}
 
         
-        if !(self is [Song]){
-            
-            fatalError("you can not alphabetize an array of elements other than [Song]")
-        }
+      
 
-        let dictionary = turnIntoDictionary(array: self as! [Song])
-        let dict2 = dictionary.sorted { $0.key < $1.key }
+        let dict2 = turnIntoDictionary(array: self).sorted{$0.key < $1.key }
         
         let songArrays = EArray<[Song]>()
         let letterArray = EArray<String>()
