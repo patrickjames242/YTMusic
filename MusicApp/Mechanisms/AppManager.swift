@@ -48,7 +48,7 @@ fileprivate let sharedRecentlyAddedView = RecentlyAddedView(collectionViewLayout
 
 var THEME_COLOR: UIColor{
     
-    return UIColor.red
+    return UIColor.purple
 }
 
 

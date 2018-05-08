@@ -457,13 +457,13 @@ extension MusicView: SongQueueDelegate{
                 self.pauseMusic()
                 changePlayPauseButtonImagesTo(.play)
             }
-        case .ended: break
+        case .ended:
             
             
-//            if !songIsPlaying{
-//                self.playMusic()
-//                changePlayPauseButtonImagesTo(.pause)
-//            }
+            if !songIsPlaying{
+                self.playMusic()
+                changePlayPauseButtonImagesTo(.pause)
+            }
             
         }
     }

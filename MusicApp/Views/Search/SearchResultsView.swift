@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import MediaPlayer
 //MARK: - TABLE VIEW CONTROLLER
 
 
@@ -211,18 +211,28 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
         removeProgressAnimator()
         
         if error != nil{
-            AppManager.displayErrorMessage(target: self, message: error!.localizedDescription, completion: nil)
+            AppManager.displayErrorMessage(target: self, message: error!.localizedDescription){
+        
+                self.navigationController?.popViewController(animated: true)
+            }
             return
         }
         
         guard let unwrappedVideos = resultingVideos, !unwrappedVideos.isEmpty else {
             
             
-            AppManager.displayErrorMessage(target: self, message: "There are no videos to display.", completion: nil)
+            AppManager.displayErrorMessage(target: self, message: "There are no videos to display."){
+                
+                self.navigationController?.popViewController(animated: true)
+                
+                
+            }
             return
         }
         
         videos = unwrappedVideos
+        tableView.reloadData()
+        
         
         
     }

@@ -222,12 +222,13 @@ class Screen: UIViewController, UITabBarDelegate{
         x.isTranslucent = false
         x.barTintColor = .white
         x.tintColor = THEME_COLOR
+        
 //        x.translatesAutoresizingMaskIntoConstraints = false
         x.setItems([songsItem, searchItem, downloadsItem, settingsItem], animated: true)
         let imageInsets = Variations.Screen.tabBarItemsBottomInset
         
         
-        
+        downloadsItem.badgeColor = THEME_COLOR
         songsItem.imageInsets.bottom = imageInsets
         searchItem.imageInsets.bottom = imageInsets
         downloadsItem.imageInsets.bottom = imageInsets

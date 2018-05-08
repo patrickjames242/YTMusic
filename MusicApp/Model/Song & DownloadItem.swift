@@ -50,16 +50,16 @@ class Song: NSObject {
     
     private static var allSongs = [String: Song]()
     
-    static func createNew(from downloadItem: DownloadItem, songData: Data, completion: @escaping (Song) -> Void) {
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
-            
-            let object = DBManager.createAndSaveNewDBSongObject(from: downloadItem.object, songData: songData)
-            let newSong = wrap(object: object)
-            DispatchQueue.main.sync {
-                 NotificationCenter.default.post(name: NewSongWasCreatedNotification, object: newSong, userInfo: [NewlyCreatedSongObjectKey : newSong])
-                completion(newSong)
-            }
-        }
+    static func createNew(from downloadItem: DownloadItem, songData: Data) -> Song{
+        
+        
+        let object = DBManager.createAndSaveNewDBSongObject(from: downloadItem.object, songData: songData)
+        let newSong = wrap(object: object)
+        
+        NotificationCenter.default.post(name: NewSongWasCreatedNotification, object: newSong, userInfo: [NewlyCreatedSongObjectKey : newSong])
+        return newSong
+        
+        
     }
     
     

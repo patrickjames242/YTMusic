@@ -40,6 +40,7 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
     func create(completion: (UITableViewCell) -> Void) -> UITableViewCell{
         let newCell = UITableViewCell(style: .default, reuseIdentifier: "blah blah blah")
         completion(newCell)
+        
         return newCell
     }
     
@@ -50,8 +51,12 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
         
         [
             self.create(completion: { (cell) in
-                cell.textLabel?.text = "About the Developer"
-                cell.accessoryType = .disclosureIndicator
+                let aboutMe = AboutMeView()
+                cell.addSubview(aboutMe)
+                cell.selectionStyle = .none
+                let INSET: CGFloat = 15
+                
+                aboutMe.pin(left: cell.leftAnchor, right: cell.rightAnchor, top: cell.topAnchor, bottom: cell.bottomAnchor, insets: UIEdgeInsets(top: INSET, left: INSET, bottom: INSET, right: INSET))
                 
             })
             
@@ -102,7 +107,7 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
                 let deleteLabel = UILabel()
                 deleteLabel.translatesAutoresizingMaskIntoConstraints = false
                 deleteLabel.text = "Delete All Songs"
-                deleteLabel.textColor = THEME_COLOR
+                deleteLabel.textColor = .red
                 
                 cell.addSubview(deleteLabel)
                 
@@ -114,10 +119,20 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
     
     ]
     
+    var tableViewCellHeaderStrings = [
+    nil,
+    "app settings",
+    "support",
+    nil,
+
+    
+    
+    ]
+    
     var tableViewCellFooterStrings = [
         nil,
         nil,
-        nil,
+        "Tell me what you think of the app! 🙃😇",
         
         "Deletes all songs in the library. Note: deleted songs cannot be recovered!"
     ]
@@ -141,8 +156,21 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
     override func numberOfSections(in tableView: UITableView) -> Int {
         return tableViewCells.count
     }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return tableViewCellHeaderStrings[section]
+    }
+    
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return tableViewCellFooterStrings[section]
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath == IndexPath(item: 0, section: 0){
+            return 130
+        }
+        
+        return 50
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -198,6 +226,13 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
     
     init(){ fatalError("Don't use the 'init()' initializer to initialize a Music Settings View Controller!!!!") }; required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
+
+
+
+
+
+
+
 
 
 

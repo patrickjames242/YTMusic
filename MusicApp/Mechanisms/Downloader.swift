@@ -82,14 +82,15 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
                 return
             }
             
-            
-            Song.createNew(from: downloadItem, songData: data) { (newSong) in
+            DispatchQueue.main.sync {
+                let newSong = Song.createNew(from: downloadItem, songData: data)
                 self.displayDownloadFinishedNotification()
                 
                 downloadItem.changeStatusTo(.finished(newSong, Date()))
                 self.downloadTaskDict[downloadTask] = nil
             }
-        
+            
+            
         } catch {
         
             print("An error occured in the 'didFinishDownloadingTo' delegate function in Downloader.swift: \(error)")
