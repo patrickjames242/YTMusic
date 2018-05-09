@@ -5,6 +5,8 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>youtube</string>
+		<string>fb</string>
+		<string>snapchat</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

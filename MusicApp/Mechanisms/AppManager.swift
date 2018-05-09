@@ -48,7 +48,7 @@ fileprivate let sharedRecentlyAddedView = RecentlyAddedView(collectionViewLayout
 
 var THEME_COLOR: UIColor{
     
-    return UIColor.purple
+    return UIColor.red
 }
 
 
@@ -207,9 +207,9 @@ class AppManager: NSObject{
     //MARK: - ERROR MESSAGE
     
     
-    static func displayErrorMessage(target: UIViewController, message: String, completion: (() -> Void)?){
+    static func displayErrorMessage(target: UIViewController, title: String = "Oops",message: String, completion: (() -> Void)?){
         
-        let alert = UIAlertController(title: "Oops", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel){ (action) in
             if let completion = completion{
                 completion()
@@ -442,7 +442,7 @@ class AppManager: NSObject{
                 UIApplication.shared.open(youtubeAppURL, options: [:], completionHandler: nil)
                 
             } else {
-                displayErrorMessage(target: AppManager.shared.screen, message: "Something went wrong when trying to redirect you to the App Store.", completion: nil)
+                displayErrorMessage(target: AppManager.shared.screen, message: "Something went wrong when trying to redirect you to the iTunes Store.", completion: nil)
             }
         }
         

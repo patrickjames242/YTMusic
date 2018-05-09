@@ -248,6 +248,48 @@ struct Variations {
         
     }
     
+    
+    
+    struct Settings{
+        
+        static var scrollViewContentViewHeightDifferenceFactor: CGFloat{
+            
+            switch currentDevice{
+                
+            case .iPhoneSE: return 150
+            default: return 0
+                
+            }
+            
+            
+        }
+        
+        static var meImageTopAndBottomSpacing: CGFloat{
+            
+            switch currentDevice{
+                
+            case .iPhoneX: return 40
+            
+            case .iPhonePlus: return 30
+            
+            default: return 15
+            }
+            
+        }
+        
+        static var showsScrollIndicator: Bool{
+            switch currentDevice{
+                
+            case .iPhoneSE: return true
+            default: return false
+                
+            }
+            
+        }
+        
+        
+    }
+    
    
     
     

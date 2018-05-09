@@ -7,7 +7,9 @@
 //
 
 import UIKit
-
+import MessageUI
+import Contacts
+import ContactsUI
 
 
 
@@ -140,7 +142,7 @@ class AboutMeView: UIView {
 
 
 
-class AboutMeController: UIViewController{
+class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
     
     
     override func viewDidLoad() {
@@ -152,6 +154,7 @@ class AboutMeController: UIViewController{
         
     }
     
+   
     
     
     private lazy var paragraphLabel: UILabel = {
@@ -160,6 +163,13 @@ class AboutMeController: UIViewController{
         x.textAlignment = .center
         x.font = UIFont.systemFont(ofSize: 14)
         x.numberOfLines = 0
+        
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        let boundingRectHeight = NSString(string: x.text!).boundingRect(with: CGSize(width: view.frame.width - 50, height: CGFloat.greatestFiniteMagnitude), options: options, attributes: [.font: x.font], context: nil).height + 1
+        
+        x.heightAnchor.constraint(equalToConstant: boundingRectHeight).isActive = true
+        
+        
         return x
         
         
@@ -170,6 +180,7 @@ class AboutMeController: UIViewController{
     private lazy var topView: UIView = {
         
         let x = UIView()
+        x.backgroundColor = .white
         return x
         
         
@@ -178,15 +189,102 @@ class AboutMeController: UIViewController{
     private lazy var bottomView: UIView = {
         
         let x = UIView()
+        x.backgroundColor = .white
         return x
         
+        
+    }()
+    
+    
+    private lazy var shortDescriptionLabel: UILabel = {
+        let x = UILabel()
+        
+        x.textColor = THEME_COLOR
+        x.text = "19 | University of The Bahamas | 🇧🇸🇧🇸"
+        x.numberOfLines = 1
+        x.font = UIFont.systemFont(ofSize: 14)
+        
+        
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        let boundingRectHeight = NSString(string: x.text!).boundingRect(with: CGSize(width: view.frame.width - 50, height: CGFloat.greatestFiniteMagnitude), options: options, attributes: [.font: x.font], context: nil).height
+        
+        x.heightAnchor.constraint(equalToConstant: boundingRectHeight).isActive = true
+        
+        
+        return x
+        
+        
+    }()
+    
+    
+    private lazy var imPatrickLabel: UILabel = {
+        
+        let x = UILabel()
+        x.text = "Hey, I'm Patrick!"
+        x.textAlignment = .center
+        x.font = UIFont.boldSystemFont(ofSize: 16)
+        x.numberOfLines = 0
+        
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        let boundingRectHeight = NSString(string: x.text!).boundingRect(with: CGSize(width: view.frame.width - 50, height: CGFloat.greatestFiniteMagnitude), options: options, attributes: [.font: x.font], context: nil).height
+        
+        x.heightAnchor.constraint(equalToConstant: boundingRectHeight).isActive = true
+        
+        return x
+    }()
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if Variations.Settings.showsScrollIndicator{
+            scrollView.flashScrollIndicators()
+        }
+    }
+    
+    
+    private lazy var scrollView: UIScrollView = {
+        
+        let x = UIScrollView()
+        x.contentLayoutGuide.widthAnchor.constraint(equalTo: x.frameLayoutGuide.widthAnchor).isActive = true
+        x.contentLayoutGuide.heightAnchor.constraint(equalTo: x.frameLayoutGuide.heightAnchor, constant: Variations.Settings.scrollViewContentViewHeightDifferenceFactor).isActive = true
+        
+ 
+        x.addSubview(aboutMeLabel)
+        x.addSubview(paragraphLabel)
+        x.addSubview(shortDescriptionLabel)
+        x.addSubview(circleImage)
+        x.addSubview(imPatrickLabel)
+        
+        aboutMeLabel.pin(top: x.contentLayoutGuide.topAnchor, centerX: x.contentLayoutGuide.centerXAnchor, insets: UIEdgeInsets(top: 10))
+        
+        let CIRCLE_INSETS = Variations.Settings.meImageTopAndBottomSpacing
+        
+        circleImage.pin(top: aboutMeLabel.bottomAnchor, bottom: imPatrickLabel.topAnchor, centerX: x.contentLayoutGuide.centerXAnchor, width: circleImage.heightAnchor, height: circleImage.widthAnchor,insets: UIEdgeInsets(top: CIRCLE_INSETS, bottom: CIRCLE_INSETS))
+        
+        
+        imPatrickLabel.pin(bottom: shortDescriptionLabel.topAnchor, centerX: x.contentLayoutGuide.centerXAnchor, insets: UIEdgeInsets(bottom: 3))
+        
+        shortDescriptionLabel.pin(bottom: paragraphLabel.topAnchor, centerX: x.contentLayoutGuide.centerXAnchor, insets: UIEdgeInsets(bottom: 10))
+        
+        
+        paragraphLabel.pin (left: x.contentLayoutGuide.leftAnchor, right: x.contentLayoutGuide.rightAnchor, bottom: x.contentLayoutGuide.bottomAnchor, insets: UIEdgeInsets(left: 25, right: 25))
+        
+
+        return x
         
     }()
     
     private lazy var aboutMeLabel: UILabel = {
         let x = UILabel()
         x.text = "About Me"
+        x.numberOfLines = 1
         x.font = UIFont.boldSystemFont(ofSize: 40)
+        
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        let boundingRectHeight = NSString(string: x.text!).boundingRect(with: CGSize(width: view.frame.width - 50, height: CGFloat.greatestFiniteMagnitude), options: options, attributes: [.font: x.font], context: nil).height
+        
+        x.heightAnchor.constraint(equalToConstant: boundingRectHeight).isActive = true
+        
         return x
     }()
     
@@ -196,6 +294,26 @@ class AboutMeController: UIViewController{
         x.contentMode = .scaleAspectFill
         return x
         
+    }()
+    
+    private let innerCircleImage = UIImageView(image: #imageLiteral(resourceName: "ME"))
+
+    
+    private lazy var circleImage: UIView = {
+        innerCircleImage.contentMode = .scaleAspectFill
+        innerCircleImage.layer.masksToBounds = true
+        let wrapper = UIView()
+        wrapper.addSubview(innerCircleImage)
+        innerCircleImage.pinAllSidesTo(wrapper)
+        
+        wrapper.backgroundColor = .clear
+        wrapper.layer.shadowColor = UIColor.black.cgColor
+        wrapper.layer.shadowRadius = 10
+        wrapper.layer.shadowOffset = CGSize(width: 0, height: 2)
+        wrapper.layer.shadowOpacity = 0.8
+        
+        
+        return wrapper
     }()
     
     
@@ -212,9 +330,7 @@ class AboutMeController: UIViewController{
         x.layer.shadowOffset = CGSize(width: 0, height: 2)
         x.layer.shadowOpacity = 0.8
         
-        
-    
-        
+
         innerCloseButton.backgroundColor = THEME_COLOR
         innerCloseButton.layer.masksToBounds = true
         
@@ -241,6 +357,12 @@ class AboutMeController: UIViewController{
         let button3 = SocialMediaButton(type: .whatsapp)
         let button4 = SocialMediaButton(type: .email)
         
+        
+        button1.addTarget(self, action: #selector(respondToFacebookButtonPressed), for: .touchUpInside)
+        button2.addTarget(self, action: #selector(respondToSnapChatButtonPressed), for: .touchUpInside)
+        button3.addTarget(self, action: #selector(respondToWhatsAppButtonPressed), for: .touchUpInside)
+        button4.addTarget(self, action: #selector(respondToEmailButtonTapped), for: .touchUpInside)
+        
         let x = UIStackView(arrangedSubviews: [button1, button2, button3, button4])
         x.axis = .horizontal
         x.distribution = .fillEqually
@@ -248,6 +370,122 @@ class AboutMeController: UIViewController{
         return x
         
     }()
+    
+    
+    @objc private func respondToEmailButtonTapped(){
+        
+        
+        if MFMailComposeViewController.canSendMail(){
+            let newController = MFMailComposeViewController()
+            newController.setSubject("Music App Feedback")
+            newController.setToRecipients(["patrickjh1998@hotmail.com"])
+            newController.setMessageBody("Hey Patrick, your app is awesome!", isHTML: false)
+            newController.mailComposeDelegate = self
+            self.present(newController, animated: true, completion: nil)
+        } else {
+            AppManager.displayErrorMessage(target: self, message: "For some reason, iOS is now allowing this app to send emails. Check your email settings.", completion: nil)
+        }
+    }
+    
+    
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        
+        
+        controller.dismiss(animated: true){
+            if let error = error{
+            AppManager.displayErrorMessage(target: self, message: error.localizedDescription, completion: nil)
+            }
+            
+        }
+    }
+    
+    
+    
+    @objc private func respondToFacebookButtonPressed(){
+        
+        guard let url = URL(string: "https://www.facebook.com/patrick.hanna.75") else {return}
+        guard let appURL = URL(string: "fb://profile/100002070912835") else {return}
+        if UIApplication.shared.canOpenURL(appURL){
+            UIApplication.shared.open(appURL, completionHandler: nil)
+        } else {
+            UIApplication.shared.open(url) { (success) in
+                if !success{
+                    AppManager.displayErrorMessage(target: self, message: "An error occured when trying to redirect you to my Facebook page 😞.", completion: nil)
+                    return
+                }
+                
+            }
+        }
+    }
+    
+    @objc private func respondToWhatsAppButtonPressed(){
+        let newContact = CNMutableContact()
+        newContact.givenName = "Patrick Hanna"
+        
+        newContact.phoneNumbers.append(CNLabeledValue(label: "cell", value: CNPhoneNumber(stringValue: "+1 (242) 809-2518")))
+        let contactVC = CNContactViewController(forUnknownContact: newContact)
+        contactVC.contactStore = CNContactStore()
+        contactVC.allowsActions = false
+        navController = UINavigationController(rootViewController: contactVC)
+        contactVC.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(respondToContactCancelButtonTapped))
+        contactVC.navigationItem.title = "Save My Number!"
+        self.present(navController, animated: true, completion: nil)
+        
+        
+    }
+    
+    
+    
+    private var navController: UINavigationController!
+    
+    @objc private func respondToContactCancelButtonTapped(){
+        
+        navController!.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    
+    
+    @objc func respondToSnapChatButtonPressed(){
+        let url = URL(string: "snapchat://www.snapchat.com/add/patrickjh1998")!
+        
+        UIApplication.shared.open(url) { (success) in
+            if !success{
+                self.displayDownloadSnapchatAlert()
+                
+            }
+        }
+        
+    }
+    
+    private func displayDownloadSnapchatAlert(){
+        
+        let alert = UIAlertController(title: "You don't have Snapchat installed 😣", message: "I tried to redirect you to my profile on Snapchat, but you don't have it installed 😰. Would you like to install it now?", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        let installAction = UIAlertAction(title: "Install", style: .default) { (action) in
+            
+            let url = URL(string: "itms://itunes.apple.com/us/app/apple-store/id447188370?mt=8")!
+            UIApplication.shared.open(url, completionHandler: { (success) in
+                if !success{
+                    AppManager.displayErrorMessage(target: self, message: "Something went wrong when trying to redirect you to the iTunes store.", completion: nil)
+                }
+            })
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(installAction)
+        present(alert, animated: true, completion: nil)
+        
+        
+    }
+    
+    
+    
+    
+    
     
     
 
@@ -261,6 +499,7 @@ class AboutMeController: UIViewController{
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         innerCloseButton.layer.cornerRadius = innerCloseButton.frame.height / 2
+        innerCircleImage.layer.cornerRadius = innerCircleImage.frame.height / 2
         
     }
     
@@ -269,21 +508,36 @@ class AboutMeController: UIViewController{
     
     private func setUpViews(){
         
+        
+        view.addSubview(topView)
+        view.addSubview(bottomView)
+        
         view.addSubview(closeButton)
         view.addSubview(socialMediaStackView)
-        view.addSubview(aboutMeLabel)
-        view.addSubview(paragraphLabel)
+        
+        
+        view.addSubview(scrollView)
+     
+        
         
         closeButton.pin(right: view.rightAnchor, top: view.safeAreaLayoutGuide.topAnchor, size: CGSize(width: 70, height: 30), insets: UIEdgeInsets(top: 10, right: 20))
+    
         
-        aboutMeLabel.pin(top: view.safeAreaLayoutGuide.topAnchor, centerX: view.centerXAnchor, insets: UIEdgeInsets(top: 60))
+        topView.pin(left: view.leftAnchor, right: view.rightAnchor, top: view.topAnchor, bottom: closeButton.bottomAnchor, insets: UIEdgeInsets(bottom: -20))
         
-        
-        
-        paragraphLabel.pin(left: socialMediaStackView.leftAnchor, right: socialMediaStackView.rightAnchor, bottom: socialMediaStackView.topAnchor, insets: UIEdgeInsets(bottom: 50))
-        
-        
+   
         socialMediaStackView.pin(left: view.leftAnchor, right: view.rightAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, insets: UIEdgeInsets(left: 25, bottom: 25, right: 25))
+        
+        
+        bottomView.pin(left: view.leftAnchor, right: view.rightAnchor, top: socialMediaStackView.topAnchor, bottom: view.bottomAnchor,insets: UIEdgeInsets(top: -25))
+        
+        
+        
+        scrollView.pin(left: view.leftAnchor, right: view.rightAnchor, top: topView.bottomAnchor, bottom: bottomView.topAnchor)
+        
+        
+        
+        
         
         
         
@@ -366,14 +620,40 @@ class AboutMeController: UIViewController{
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 fileprivate class SocialMediaButton: UIButton{
     
     
     enum SocialMediaImageType: String{
+    
         case whatsapp = "whatsapp"
         case snapchat = "snapchat"
         case facebook = "facebook"
         case email = "email"
+    
     }
     
     
@@ -395,6 +675,7 @@ fileprivate class SocialMediaButton: UIButton{
         x.contentMode = .scaleAspectFill
         x.backgroundColor = THEME_COLOR
         x.layer.masksToBounds = true
+        x.isUserInteractionEnabled = false
         return x
         
     }()
@@ -414,7 +695,7 @@ fileprivate class SocialMediaButton: UIButton{
         x.addSubview(socialMediaImage)
         
         
-        
+        x.isUserInteractionEnabled = false
         socialMediaImage.pinAllSidesTo(x)
         
         return x
