@@ -21,7 +21,7 @@ final class UserPreferences{
         
     }
     
-    // DONT MESS WITH THESE STRINGS!!!!!!! YOUR GONNA FUCK SOME SHIT UP!!!!!
+    // DONT MESS WITH THESE STRINGS!!!!!!! YOUR GONNA MESS SOME STUFF UP!!!!!
     
     
     private static let audioPanningPositionKey = "audio Panning position"

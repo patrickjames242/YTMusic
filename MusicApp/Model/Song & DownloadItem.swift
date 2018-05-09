@@ -518,7 +518,9 @@ class DownloadItem: Equatable{
         
         
         if -DBObject.dateStarted!.timeIntervalSinceNow >= (60 * 60 * 24){
+            allCurrentInstances[DBObject.uniqueID!] = nil
             DBManager.delete(downloadItem: DBObject)
+            
             return nil
         }
         return DBObject

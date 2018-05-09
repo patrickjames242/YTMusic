@@ -176,6 +176,18 @@ fileprivate func getYTFormattedPublishedAtDateString(from string: String) -> Str
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // MARK: - FORMAT THE NUMBER OF VIEWS
 
 
@@ -204,6 +216,19 @@ fileprivate func getYTFormattedViewsFrom(numberOfViews: String) -> String{
     
     return stringToReturn
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // MARK: - DEAL WITH YOUTUBE'S RETARDED DURATION STRING
