@@ -82,6 +82,7 @@ class YoutubeVideo: NSObject {
         let task = URLSession.shared.dataTask(with: thumbnailLink) { (data, response, error) in
             if let error = error{
                 print("there was an error in the 'initiateImageDownload' function in a YoutubeVideoObject: name:\(self.name), error: \(error)")
+                self.imageDownloadHasStarted = false
                 return
             }
             
@@ -94,6 +95,7 @@ class YoutubeVideo: NSObject {
             
                 
             } else {
+                self.imageDownloadHasStarted = false
                 print("Something went wrong in the 'initiateImageDownload' function in a YoutubeVideo object name: \(self.name)")
             }
             

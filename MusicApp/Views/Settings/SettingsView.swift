@@ -16,7 +16,7 @@ class MusicSettings_NavCon: UINavigationController {
         super.viewDidLoad()
         navigationBar.prefersLargeTitles = true
         navigationBar.isTranslucent = false
-    
+        navigationBar.tintColor = THEME_COLOR
         viewControllers.append(AppManager.shared.musicSettings)
     }
     
@@ -73,7 +73,7 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
             },
             
             self.create { (cell) in
-                cell.textLabel?.text = "Configure Audio Channels"
+                cell.textLabel?.text = "Configure Audio Panning"
                 cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             },
             
@@ -175,7 +175,10 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if indexPath == IndexPath(item: 0, section: 2){
+        
+        switch indexPath{
+        
+        case IndexPath(item: 0, section: 2):
             
             
             if MFMailComposeViewController.canSendMail(){
@@ -189,8 +192,11 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
                 AppManager.displayErrorMessage(target: self, message: "For some reason, iOS is now allowing this app to send emails. Check your email settings.", completion: nil)
             }
             
+        case IndexPath(item: 1, section: 1):
             
-            
+            navigationController?.pushViewController(AudioPanningTableView(), animated: true)
+        
+        default: break
             
         }
         
@@ -220,7 +226,6 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
     
     
     
-    //MARK: - INITIALIZING BULLSHIT
     
     override init(style: UITableViewStyle) { super.init(style: .grouped) }
     

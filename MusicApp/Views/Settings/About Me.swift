@@ -429,7 +429,6 @@ class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
         contactVC.allowsActions = false
         navController = UINavigationController(rootViewController: contactVC)
         contactVC.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(respondToContactCancelButtonTapped))
-        contactVC.navigationItem.title = "Save My Number!"
         self.present(navController, animated: true, completion: nil)
         
         

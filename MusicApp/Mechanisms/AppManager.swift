@@ -307,21 +307,7 @@ class AppManager: NSObject{
     
     
     
-    
-    
-    
-    
    
-
-    //MARK: - AUDIO PANNING CHANGED
-    
-    func audioPanningPositionWasSetTo(_ position: Float){
-        
-        if musicView.songPlayer == nil {return}
-        musicView.songPlayer.pan = position
-        
-    }
-    
     
     
     

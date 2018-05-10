@@ -525,10 +525,21 @@ extension MusicView: SongQueueDelegate{
         NotificationCenter.default.addObserver(self, selector: #selector(respondTo__AVAudioSessionInteruption__Notification(notification:)), name: Notification.Name.AVAudioSessionInterruption, object: nil)
         
         
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToAudioPanningStateChangeNotification), name: AudioPanningStateDidChangeNotification, object: nil)
         
     }
     
+    @objc func respondToAudioPanningStateChangeNotification(){
+        
+        guard let player = songPlayer else {return}
+        
+        if UserPreferences.audioPanningIsOn{
+            player.pan = UserPreferences.audioPanningPosition
+        } else {
+            player.pan = 0
+
+        }
+    }
     
     func deactivateAudioSession(){
         
@@ -601,6 +612,9 @@ extension MusicView: SongQueueDelegate{
         NotificationCenter.default.removeObserver(self, name: Notification.Name.AVAudioSessionInterruption, object: nil)
         
         NotificationCenter.default.removeObserver(self, name: SongNameDidChangeNotification, object: nil)
+        
+        
+        NotificationCenter.default.removeObserver(self, name: AudioPanningStateDidChangeNotification, object: nil)
         
 
     }

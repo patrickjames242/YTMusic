@@ -25,6 +25,7 @@ final class UserPreferences{
     
     
     private static let audioPanningPositionKey = "audio Panning position"
+    private static let audioPanningToggleKey = "audio panning toggle"
     private static let searchHistoryKey = "SEARCH HISTORY KEY"
     
     
@@ -123,7 +124,7 @@ final class UserPreferences{
             }
             return defaults.value(forKey: UserPreferences.audioPanningPositionKey) as! Float
         } set {
-            UserPreferences.change_AudioPanningPositionTo(newValue)
+            change_AudioPanningPositionTo(newValue)
         }
     }
     
@@ -131,7 +132,19 @@ final class UserPreferences{
     
     
     
-    
+    static var audioPanningIsOn: Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: audioPanningToggleKey)
+        }
+        
+        set{
+            
+            UserDefaults.standard.set(newValue, forKey: audioPanningToggleKey)
+            NotificationCenter.default.post(name: AudioPanningStateDidChangeNotification, object: nil, userInfo: nil)
+        }
+        
+        
+    }
     
     
     
@@ -143,10 +156,13 @@ final class UserPreferences{
         let position1 = max(-1 , min( position, 1))
         
         defaults.set(position1, forKey: key)
-        AppManager.shared.audioPanningPositionWasSetTo(position)
-        
+        NotificationCenter.default.post(name: AudioPanningStateDidChangeNotification, object: self)
     }
 }
+
+let AudioPanningStateDidChangeNotification = Notification.Name("AudioPanningDidChangeNotification")
+
+
 
 
 

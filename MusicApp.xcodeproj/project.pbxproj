@@ -193,7 +193,7 @@
 		60EECBA1209FA10100853741 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		60EECBA3209FA12800853741 /* About Me.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "About Me.swift"; sourceTree = "<group>"; };
 		60EECBA5209FA14500853741 /* App Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Info.swift"; sourceTree = "<group>"; };
-		60EECBA7209FC85500853741 /* AudioPanningTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPanningTableView.swift; sourceTree = "<group>"; };
+		60EECBA7209FC85500853741 /* AudioPanningTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPanningTableView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		60F246A920379F310074F572 /* MediaButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaButton.swift; sourceTree = "<group>"; };
 		60F95A3020685D860019AA27 /* RecentlyAddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyAddedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
