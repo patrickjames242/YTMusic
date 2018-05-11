@@ -162,6 +162,7 @@ class AudioPanningTableView: UITableViewController{
             tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .fade)
             
         } else {
+            
             UserPreferences.audioPanningIsOn = false
             cells.remove(at: 1)
             tableView.deleteSections(IndexSet(integer: 1), with: .fade)
@@ -227,7 +228,7 @@ class AudioPanningTableView: UITableViewController{
     private var cellFooterStrings = [
     
         
-        "Adjust the audio volume balance between left and right channels.",
+        "When enabled, this allows you to adjust the audio volume balance between left and right channels.",
         nil
         
     ]

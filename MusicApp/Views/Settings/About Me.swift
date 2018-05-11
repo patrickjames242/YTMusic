@@ -334,7 +334,7 @@ class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
         innerCloseButton.backgroundColor = THEME_COLOR
         innerCloseButton.layer.masksToBounds = true
         
-        innerCloseButton.setAttributedTitle(NSAttributedString(string: "close", attributes: [.font: UIFont.boldSystemFont(ofSize: 14.5), .foregroundColor: UIColor.white]), for: .normal)
+        innerCloseButton.setAttributedTitle(NSAttributedString(string: "Close", attributes: [.font: UIFont.boldSystemFont(ofSize: 14.5), .foregroundColor: UIColor.white]), for: .normal)
         
         innerCloseButton.addTarget(self, action: #selector(respondtoDismissButtonPressed), for: .touchUpInside)
         

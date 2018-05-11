@@ -68,7 +68,7 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
         
         [
             self.create { (cell) in
-                cell.textLabel?.text = "App Info"
+                cell.textLabel?.text = "Song Info"
                 cell.accessoryType = .disclosureIndicator
             },
             
@@ -93,48 +93,50 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
         
         [
             self.create{ (cell) in
-                cell.textLabel?.text = "Report a Bug or Give Feedback"
+                cell.textLabel?.text = "Report a Bug"
+                cell.accessoryType = .disclosureIndicator
+                
+            },
+            
+            self.create{ (cell) in
+                cell.textLabel?.text = "Give Feedback"
+                cell.accessoryType = .disclosureIndicator
+                
+            },
+            
+            
+            
+            
+            ],
+        
+        [
+            
+            self.create{ (cell) in
+                cell.textLabel?.text = "Share This App"
                 cell.accessoryType = .disclosureIndicator
                 
             }
             
-        ],
-        
-        // NEW SECTION
-        
-        [
-            self.create(completion: { (cell) in
-                let deleteLabel = UILabel()
-                deleteLabel.translatesAutoresizingMaskIntoConstraints = false
-                deleteLabel.text = "Delete All Songs"
-                deleteLabel.textColor = .red
-                
-                cell.addSubview(deleteLabel)
-                
-                deleteLabel.centerXAnchor.constraint(equalTo: cell.centerXAnchor).isActive = true
-                deleteLabel.centerYAnchor.constraint(equalTo: cell.centerYAnchor).isActive = true
-            })
-        
+            
         ]
-    
+        
     ]
     
     var tableViewCellHeaderStrings = [
-    nil,
-    "app settings",
-    "support",
-    nil,
-
-    
-    
+        nil,
+        "app settings",
+        "support",
+        "spread the word"
     ]
     
-    var tableViewCellFooterStrings = [
+    
+    
+    var cellFooterStrings = [
         nil,
         nil,
-        "Tell me what you think of the app! 🙃😇",
         
-        "Deletes all songs in the library. Note: deleted songs cannot be recovered!"
+        "I'd really appreciate your constructive feedback 😇!",
+        "Why not tell your friends and family! It's a great app after all!"
     ]
     
     
@@ -162,9 +164,10 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
     }
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return tableViewCellFooterStrings[section]
+        return cellFooterStrings[section]
     }
     
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath == IndexPath(item: 0, section: 0){
             return 130
@@ -178,7 +181,7 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
         
         switch indexPath{
         
-        case IndexPath(item: 0, section: 2):
+        case IndexPath(item: 0, section: 2), IndexPath(item: 1, section: 2):
             
             
             if MFMailComposeViewController.canSendMail(){
@@ -191,6 +194,9 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
             } else {
                 AppManager.displayErrorMessage(target: self, message: "For some reason, iOS is now allowing this app to send emails. Check your email settings.", completion: nil)
             }
+            
+        case IndexPath(item: 0, section: 1):
+            navigationController?.pushViewController(AppInfoTableView(), animated: true)
             
         case IndexPath(item: 1, section: 1):
             

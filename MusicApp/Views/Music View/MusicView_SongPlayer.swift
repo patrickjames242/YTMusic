@@ -12,18 +12,6 @@ import MediaPlayer
 import AVFoundation
 
 
-extension MPRemoteCommandCenter{
-    func blockAllEvents(){
-        
-        playCommand.isEnabled = false
-        pauseCommand.isEnabled = false
-        previousTrackCommand.isEnabled = false
-        nextTrackCommand.isEnabled = false
-        changePlaybackPositionCommand.isEnabled = false
-    }
-    
-    
-}
 
 
 
@@ -50,11 +38,6 @@ extension MusicView: SongQueueDelegate{
         
         albumImage.showShadow(with: 0.2)
         albumImage.maximizeImage()
-//        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.9, options: .curveLinear, animations: {
-//            self.setMaximizedAlbumCoverConstraints(sliding: false, playing: true)
-//
-//        }, completion: nil)
-        
     }
     
     
@@ -73,9 +56,7 @@ extension MusicView: SongQueueDelegate{
         albumImage.hideShadow(with: 0.3)
         
         albumImage.minimizeImage()
-//        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
-//            self.setMaximizedAlbumCoverConstraints(sliding: false, playing: false)
-//        }, completion: nil)
+
         
     }
     

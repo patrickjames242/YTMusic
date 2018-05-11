@@ -93,17 +93,10 @@ extension YoutubeVideo{
             self.init(name: title, videoID: id, channel: channelTitle, thumbnailLink: url , duration: formattedTimeString, views: formattedViewsString, date: date)
             
             
-        } catch{
+        } catch {
             return nil
         }
-        
-        
-        
-        
-        
-        
     }
-    
 }
 
 

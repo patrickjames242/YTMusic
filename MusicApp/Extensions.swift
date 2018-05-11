@@ -14,7 +14,17 @@ import SafariServices
 
 
 
-
+extension UIColor{
+    
+    
+    
+    convenience init(red: CGFloat, green: CGFloat, blue: CGFloat){
+        
+        self.init(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1)
+        
+        
+    }
+}
 
 
 func youtubeURL(from videoID: String) -> URL?{
@@ -234,12 +244,12 @@ extension UIView{
              bottom: NSLayoutYAxisAnchor? = nil,
              centerX: NSLayoutXAxisAnchor? = nil,
              centerY: NSLayoutYAxisAnchor? = nil,
-             
              width: NSLayoutDimension? = nil,
              height: NSLayoutDimension? = nil,
-             
              size: CGSize? = nil,
              insets: UIEdgeInsets = UIEdgeInsets.zero){
+        
+        
         
         translatesAutoresizingMaskIntoConstraints = false
         if let left = left{

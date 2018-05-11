@@ -63,6 +63,12 @@ class Song: NSObject {
     }
     
     
+    static func count() -> Int{
+        
+        return DBManager.countSongObjects()
+        
+    }
+    
     
     static func getAll() -> [Song]{
         let objects = DBManager.getAllSongs()
@@ -162,7 +168,22 @@ class Song: NSObject {
     
     
     
-    
+    static func getNumberOfBytes(completion: @escaping (Int) -> Void){
+        
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async{
+            
+            
+            let numberOfBytes = Song.getAll().map{$0.data.count}.reduce(0) {$0 + $1}
+            
+            DispatchQueue.main.sync {
+                completion(numberOfBytes)
+                
+            }
+            
+            
+            
+        }
+    }
     
     
     
@@ -311,9 +332,14 @@ class DownloadItem: Equatable{
     
     fileprivate let object: DBDownloadItem
     
+    
+
+    
+    
     func delete(){
-        
+        DownloadItem.allCurrentInstances[uniqueID] = nil
         DBManager.delete(downloadItem: object)
+
     }
     
     var name: String            { return object.name!}
@@ -656,7 +682,24 @@ fileprivate final class DBManager{
     
     
     
-    
+    static func countSongObjects() -> Int{
+        
+        let fetchRequest: NSFetchRequest<DBSong> = DBSong.fetchRequest()
+        
+        do{
+            
+            return try context.count(for: fetchRequest)
+
+            
+        } catch {
+            print("there was an error in the 'countSongObjects' function in Song & DownloadItem.swift \n \(error) ")
+            return 0
+        }
+        
+        
+        
+        
+    }
     
     
     static func getDataForDBSongObject(_ song: DBSong) -> Data{

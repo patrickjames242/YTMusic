@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-
+import Foundation
 
 
 //MARK: - CORE DATA
@@ -45,6 +45,8 @@ class Database{
             }
         }
     }
+    
+    
     
     
     
