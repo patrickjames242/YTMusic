@@ -193,7 +193,7 @@ extension MusicView: SongQueueDelegate{
     
     private final class Storage{
     
-        static var currentlyPlayingSong: Song?
+        static weak var currentlyPlayingSong: Song?
         
     }
     

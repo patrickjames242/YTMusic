@@ -92,7 +92,9 @@ class SongQueueVisualizer: UITableViewController{
         
         switch type{
         case .fill:
+            songs = newArray
             tableView.reloadData()
+            tableView.endUpdates()
         case .insert:
             let indexPath = IndexPath(row: index!, section: 0)
             tableView.insertRows(at: [indexPath], with: .fade)
@@ -114,10 +116,6 @@ class SongQueueVisualizer: UITableViewController{
             tableView.deselectRow(at: index, animated: true)
 
         }
-        
-        
-        
-        
     }
 
     

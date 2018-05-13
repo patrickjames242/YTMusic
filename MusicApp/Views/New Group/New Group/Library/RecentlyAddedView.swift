@@ -346,7 +346,7 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
     }
     
     
-    private var currentSong: Song?
+    private weak var currentSong: Song?
     
     
     private func changeCellNowPlayingStateTo(state: SongPlayingStatus){

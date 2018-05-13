@@ -223,7 +223,7 @@ class SongQueue{
             if newSong == nextSong {return}
         }
         
-        if let currentSong = nowPlayingSong{
+        if let currentSong = nowPlayingSong {
             if newSong == currentSong{ return }
         } else { return }
         
@@ -323,6 +323,7 @@ class SongQueue{
     
     
     func getVisualizer() -> UIViewController{
+        
         let upNextController = upNextStack.getVisualizer(type: .upNext)
         let upNextItem = MenuBarControllerItem(viewController: upNextController, name: "Up Next")
         

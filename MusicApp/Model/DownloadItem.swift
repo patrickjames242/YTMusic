@@ -20,7 +20,7 @@ import UIKit
 
 
 
-protocol DownloadItemDelegate{
+protocol DownloadItemDelegate : class{
     func DLStatusDidChangeTo(_ status: DownloadStatus)
 }
 
@@ -78,23 +78,34 @@ class DownloadItem: Equatable{
     }
     
     
-    var delegate: DownloadItemDelegate?
+ 
+    
+    weak var delegate: DownloadItemDelegate?
     
     let image: UIImage
     
     
     
     /// This is not used outside of the Song and DownloadItem classes
-    let object: DBDownloadItem
     
+   let object: DBDownloadItem
     
-    
+
+
+    deinit{
+
+        // precautionary measure...... because I've had bad experiences
+        deleteTimer.invalidate()
+        print("A downloadItem has been been deinitialized")
+    }
+
     
     
     func delete(){
+        deleteTimer.invalidate()
         DownloadItem.allCurrentInstances[uniqueID] = nil
         DBManager.delete(downloadItem: object)
-        instanceIsNoLongerInUse = true
+        
         
     }
     
@@ -268,8 +279,6 @@ class DownloadItem: Equatable{
             allCurrentInstances[newItem.uniqueID] = newItem
             return newItem
         }
-        
-        
     }
     
     static func wrap(array: [DBDownloadItem]) -> [DownloadItem]{
@@ -292,52 +301,40 @@ class DownloadItem: Equatable{
     
     
     
-    private static func filterObject(DBObject: DBDownloadItem) -> DBDownloadItem? {
-        guard let status = DBObject.status, let storageStatus = DBDownloadItemStatus(rawValue: status) else {
-            DBManager.delete(downloadItem: DBObject)
-            return nil
-        }
+    
+    private static func objectShouldBeDeleted(object: DBDownloadItem) -> Bool{
+        guard let startDate = object.dateStarted else { return true }
         
-        if storageStatus == .paused{return DBObject}
+        if -startDate.timeIntervalSinceNow >= (60 * 60 * 23) { return true }
         
-        
-        if -DBObject.dateStarted!.timeIntervalSinceNow >= (60 * 60 * 24){
-            allCurrentInstances[DBObject.uniqueID!] = nil
-            DBManager.delete(downloadItem: DBObject)
-            
-            return nil
-        }
-        return DBObject
-        
-        
+        return false
     }
     
-    // figure out where these instances are being held that are preventing them from being deallocated
     
-    /// this is a patch fix and very bad coding.FIX IT LATER.
+    private var deleteTimer = Timer()
     
-    private var instanceIsNoLongerInUse = false
     
-    private func startFilterTimer(){
-        Timer.scheduledTimer(withTimeInterval: 20 * 60, repeats: true) { [weak weakSelf = self](timer) in
-            if weakSelf == nil || self.instanceIsNoLongerInUse {timer.invalidate(); return}
+    
+    private func startDeleteTimer(){
+        
+        deleteTimer = Timer.scheduledTimer(withTimeInterval: (60 * 20), repeats: true, block: { [weak weakSelf = self] (timer) in
+            guard let weakSelf = weakSelf else { timer.invalidate(); return }
             
-            
-            if DownloadItem.filterObject(DBObject: weakSelf!.object) == nil{
-                weakSelf?.instanceIsNoLongerInUse = true
+            if DownloadItem.objectShouldBeDeleted(object: weakSelf.object){
+                weakSelf.delete()
                 timer.invalidate()
             }
-            
-            
-            
-        }
+        })
     }
     
     
     
     private init?(DBObject: DBDownloadItem) {
         
-        if DownloadItem.filterObject(DBObject: DBObject) == nil{return nil}
+        if DownloadItem.objectShouldBeDeleted(object: DBObject){
+            DBManager.delete(downloadItem: DBObject)
+            return nil
+        }
         
         self.image = UIImage(data: DBObject.image!)!
         self.object = DBObject
@@ -365,18 +362,9 @@ class DownloadItem: Equatable{
             self._runTimeStatus = DownloadStatus.canceled(DBObject.dateFinished!)
         }
         
-        startFilterTimer()
+        startDeleteTimer()
+
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
 
 

@@ -400,7 +400,7 @@ fileprivate let separationInset: CGFloat = 11
 // TABLE VIEW CELL PROTOCOL
 
 
-fileprivate protocol DownloadCellDelegate{
+fileprivate protocol DownloadCellDelegate: class{
     
     func userDidPressThreeDotButtonOn(_ video: DownloadItem)
     
@@ -543,9 +543,11 @@ fileprivate class DownloadsTableViewCell: CircleInteractionResponseCell, Downloa
  
     
     
-    private var currentDownloadItem: DownloadItem?
+    private weak var currentDownloadItem: DownloadItem?{
+        didSet{ if currentDownloadItem == nil{ timer.invalidate() }}
+    }
     
-    var threeButtonDelegate: DownloadCellDelegate?
+    weak var threeButtonDelegate: DownloadCellDelegate?
     
     private var timer = Timer()
     

@@ -68,7 +68,9 @@ class SearchHistoryList: Codable{
     }
     
     
-    
+    func removeAll(){
+        list.removeAll()
+    }
     
     
     

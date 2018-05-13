@@ -17,7 +17,7 @@ class Database{
     //MARK: - CORE DATA STACK
     
     static var context: NSManagedObjectContext{
-        return Database.persistentContainer.viewContext
+        return persistentContainer.viewContext
     }
     
     

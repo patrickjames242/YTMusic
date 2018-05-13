@@ -74,7 +74,7 @@ class Song: NSObject {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
             
             for song in getAll(){
-                
+                allSongs[song.uniqueID] = nil
                 DBManager.delete(song: song.object)
                 DispatchQueue.main.async {
                     NotificationCenter.default.post(name: SongWasDeletedNotification, object: song, userInfo: [DeletedSongObjectKey : song])
@@ -138,7 +138,9 @@ class Song: NSObject {
     
     
     func delete(){
+        Song.allSongs[self.uniqueID] = nil
         DBManager.delete(song: object)
+        
         NotificationCenter.default.post(name: SongWasDeletedNotification, object: self, userInfo: [DeletedSongObjectKey : self])
     }
     
@@ -191,6 +193,10 @@ class Song: NSObject {
             observer.songPlayingStatusDidChangeTo(status)
         }
         
+    }
+    
+    deinit {
+        print("A song oject was deinitted")
     }
     
     

@@ -706,7 +706,7 @@ class MyTableViewCell: CircleInteractionResponseCell, SongObserver{
     
     //MARK: - SONG PLAYING STATUS DID CHANGE STUFF, TABLE VIEW CELL
     
-    private var currentSong: Song?
+    private weak var currentSong: Song?
     func setWith(song: Song){
         
         currentSong?.removeObserver(self)

@@ -23,7 +23,7 @@ enum SuggestionsType{ case loaded, history}
 
 
 
-class SearchSuggestionsBrain{
+class SearchSuggestionsBrain: SearchHistoryDelegate{
     
     
     
@@ -38,10 +38,12 @@ class SearchSuggestionsBrain{
         self.owner = owner
         self.currentSuggestionsType = .history
         owner.searchSuggestions(didChangeTo: UserPreferences.searchHistory, type: .history)
-        
+        UserPreferences.searchHistoryDelegate = self
     }
     
-    
+    func allSongsWereRemovedFromSearchHistory() {
+        sendUpdatedHistory()
+    }
     
     
     
@@ -49,12 +51,7 @@ class SearchSuggestionsBrain{
         currentTextInSearchBar = text
         guard let text = text, !text.removeWhiteSpaces().isEmpty else { sendUpdatedHistory(); return }
         
-        
         sendUpatedLoadedSuggestions(for: text)
-        
-        
-        
-        
         
     }
     

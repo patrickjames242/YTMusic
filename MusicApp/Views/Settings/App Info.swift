@@ -64,30 +64,32 @@ class AppInfoTableView: UITableViewController{
     
 
     private let countCell = AppInfoTableViewCell(text: "Number Of Songs")
-    private let memoryCell = AppInfoTableViewCell(text: "Total Song Storage")
     
     
     private lazy var cells: [[UITableViewCell]] = [
         [
             self.countCell,
-            self.memoryCell,
-        ],
-        [
-            MiddleBlueTextCell(text: "Purge Through All Songs")
         ],
         
         [
-            MiddleBlueTextCell(text: "Delete All Songs")
-            
+            MiddleTextCell(text: "Remove All Search History")
+        ],
+        
+        [
+            MiddleTextCell(text: "Purge Through All Songs")
+        ],
+        
+        [
+            MiddleTextCell(text: "Delete All Songs")
         ]
         
     ]
     
     private let cellFooterStrings = [
         nil,
+        "This clears all the Youtube search history currently stored on the device",
         "Select multiple songs, and delete them all at the same time.",
         "This deletes ALL songs currently in your library. Be warned that deleted songs cannot be recovered."
-        
     ]
     
     
@@ -119,9 +121,12 @@ class AppInfoTableView: UITableViewController{
         switch indexPath{
         
         case IndexPath(row: 0, section: 1):
-            respondToPurgeSongsButtonPressed()
+            respondToDeleteAllHistoryButtonPressed()
             
         case IndexPath(row: 0, section: 2):
+            respondToPurgeSongsButtonPressed()
+            
+        case IndexPath(row: 0, section: 3):
             respondToDeleteAllSongsButtonPressed()
             
         
@@ -133,6 +138,27 @@ class AppInfoTableView: UITableViewController{
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    
+    private func respondToDeleteAllHistoryButtonPressed(){
+        let alert = UIAlertController(title: "You're About To Delete All Search History.", message: "Are you sure this is what you want to do?", preferredStyle: .alert)
+        
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+            
+            UserPreferences.removeAllItemsFromSearchHistory()
+
+            
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
+    
     
     private func respondToPurgeSongsButtonPressed(){
         
@@ -265,7 +291,7 @@ fileprivate class AppInfoTableViewCell: UITableViewCell{
 
 
 
-class MiddleBlueTextCell: UITableViewCell{
+class MiddleTextCell: UITableViewCell{
     
     init(text: String){
         

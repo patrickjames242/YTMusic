@@ -11,6 +11,11 @@ import UIKit
 
 
 
+protocol SearchHistoryDelegate{
+    
+    func allSongsWereRemovedFromSearchHistory()
+    
+}
 
 
 final class UserPreferences{
@@ -23,7 +28,6 @@ final class UserPreferences{
     
     // DONT MESS WITH THESE STRINGS!!!!!!! YOUR GONNA MESS SOME STUFF UP!!!!!
     
-    
     private static let audioPanningPositionKey = "audio Panning position"
     private static let audioPanningToggleKey = "audio panning toggle"
     private static let searchHistoryKey = "SEARCH HISTORY KEY"
@@ -32,6 +36,14 @@ final class UserPreferences{
     
     
     // MARK: - SEARCH HISTORY
+    
+    
+    
+    
+    static var searchHistoryDelegate: SearchHistoryDelegate?
+
+    
+    
     static var searchHistory: [String]{
 
         initialize_searchHistory_ifNeeded()
@@ -48,9 +60,10 @@ final class UserPreferences{
     static func addItemToSearchHistory(_ text: String){
         
         initialize_searchHistory_ifNeeded()
+        
         _searchHistory!.insert(newEntry: text)
         
-        UserDefaults.standard.set(_searchHistory!.data!, forKey: searchHistoryKey)
+        saveHistory()
     }
     
     
@@ -59,14 +72,26 @@ final class UserPreferences{
         
         _searchHistory!.remove(entry: text)
         
-        UserDefaults.standard.set(_searchHistory!.data!, forKey: searchHistoryKey)
+        saveHistory()
+    }
+    
+    static func removeAllItemsFromSearchHistory(){
+        initialize_searchHistory_ifNeeded()
         
+        _searchHistory!.removeAll()
         
+        saveHistory()
         
+        searchHistoryDelegate?.allSongsWereRemovedFromSearchHistory()
     }
     
     
     
+    private static func saveHistory(){
+        
+        UserDefaults.standard.set(_searchHistory!.data!, forKey: searchHistoryKey)
+
+    }
     
     
     
@@ -85,6 +110,29 @@ final class UserPreferences{
             _searchHistory = newHistoryList
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
