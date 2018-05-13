@@ -17,9 +17,13 @@ class SongEditorView: UINavigationController{
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
+    override func interfaceColorDidChange(to color: UIColor) {
+        navigationBar.tintColor = color
+    }
+    
     init(song: Song){
         super.init(rootViewController: SongEditorViewController(song: song))
-        navigationBar.tintColor = THEME_COLOR
+        navigationBar.tintColor = THEME_COLOR(asker: self)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -125,6 +129,11 @@ fileprivate class SongEditorViewController: UITableViewController, UITextFieldDe
     }
     
     
+    override func interfaceColorDidChange(to color: UIColor) {
+        textField1.tintColor = color
+        textField2.tintColor = color
+    }
+    
     
     
     private lazy var textField1: UITextField = {
@@ -132,7 +141,7 @@ fileprivate class SongEditorViewController: UITableViewController, UITextFieldDe
         x.text = currentSong.name
         x.placeholder = "Song Name"
         x.clearButtonMode = .always
-        x.tintColor = THEME_COLOR
+        x.tintColor = THEME_COLOR(asker: self)
         x.delegate = self
         x.autocapitalizationType = UITextAutocapitalizationType.words
         x.translatesAutoresizingMaskIntoConstraints = false
@@ -147,7 +156,7 @@ fileprivate class SongEditorViewController: UITableViewController, UITextFieldDe
          x.text = currentSong.artistName
         x.placeholder = "Song Artist"
         x.clearButtonMode = .always
-        x.tintColor = THEME_COLOR
+        x.tintColor = THEME_COLOR(asker: self)
         x.delegate = self
         x.autocapitalizationType = UITextAutocapitalizationType.words
         x.translatesAutoresizingMaskIntoConstraints = false

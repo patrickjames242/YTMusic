@@ -21,7 +21,13 @@ class DownloadsView_NavCon: UINavigationController{
         navigationBar.isTranslucent = false
         navigationBar.shadowImage = UIImage()
         viewControllers.append(AppManager.shared.downloadsView)
-        navigationBar.tintColor = THEME_COLOR
+        navigationBar.tintColor = THEME_COLOR(asker: self)
+    }
+    
+    
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        navigationBar.tintColor = color
     }
 }
 
@@ -173,7 +179,7 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
     var downloads = [DownloadItem](){
         didSet{
             if downloads.isEmpty{
-                tableView.backgroundView = AppManager.getInterfaceBackgroundViewWith(title: "No Recent Downloads", message: "Search Youtube to start a download!")
+                tableView.backgroundView = ScrollableContentBackgroundView(title: "No Recent Downloads", message: "Search Youtube to start a download!")
                 tableView.isScrollEnabled = false
             } else {
                 tableView.backgroundView = nil
@@ -444,8 +450,26 @@ fileprivate class DownloadsTableViewCell: CircleInteractionResponseCell, Downloa
     }
     
     
+    
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        
+        if let currentItem = currentDownloadItem{
+            
+            switch currentItem.runTimeStatus{
+            case .inactive, .buffering, .paused, .canceled, .loading:
+                progressLabel.textColor = color
+                threeDotButton.tintColor = color
+            default: break
+            }
+            
+        }
+    }
+    
+    
+    
     private func changeDownloadStateTo(_ status: DownloadStatus){
-        progressLabel.textColor = THEME_COLOR
+        progressLabel.textColor = THEME_COLOR(asker: self)
         progressLabel.font = UIFont.boldSystemFont(ofSize: 15)
 
         progressBar.alpha = 1
@@ -628,14 +652,14 @@ fileprivate class DownloadsTableViewCell: CircleInteractionResponseCell, Downloa
     private lazy var progressLabel: UILabel = {
         let x = UILabel()
         x.font = UIFont.boldSystemFont(ofSize: 15)
-        x.textColor = THEME_COLOR
+        x.textColor = THEME_COLOR(asker: self)
         return x
     }()
     
     
     private lazy var threeDotButton: UIImageView = {
         let x = UIImageView(image: UIImage(cgImage: #imageLiteral(resourceName: "icons8-more-filled-100").cgImage!, scale: 1, orientation: UIImageOrientation.left).withRenderingMode(.alwaysTemplate))
-        x.tintColor = THEME_COLOR
+        x.tintColor = THEME_COLOR(asker: self)
         x.translatesAutoresizingMaskIntoConstraints = false
         x.contentMode = .scaleAspectFit
         return x

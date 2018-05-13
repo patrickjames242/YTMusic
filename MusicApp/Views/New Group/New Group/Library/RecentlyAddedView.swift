@@ -20,8 +20,12 @@ class RecentlyAdded_NavCon: UINavigationController{
         navigationBar.shadowImage = UIImage()
         navigationBar.isTranslucent = false
         navigationBar.prefersLargeTitles = true
-        navigationBar.tintColor = THEME_COLOR
+        navigationBar.tintColor = THEME_COLOR(asker: self)
         viewControllers.append(AppManager.shared.recentlyAddedView)
+    }
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        navigationBar.tintColor = color
     }
     
     
@@ -87,7 +91,9 @@ class RecentlyAddedView: UICollectionViewController, UICollectionViewDelegateFlo
     private var songs = [Song](){
         didSet{
             if songs.isEmpty{
-                collectionView?.backgroundView = AppManager.getInterfaceBackgroundViewWith(title: "Your Library Is Empty 😭", message: "Add songs from Youtube to fill your library!")
+                collectionView?.backgroundView = ScrollableContentBackgroundView(title: "Your Library Is Empty 😭", message: "Add songs from Youtube to fill your library!")
+                
+                
                 collectionView?.isScrollEnabled = false
             } else {
                 collectionView?.backgroundView = nil
@@ -100,19 +106,7 @@ class RecentlyAddedView: UICollectionViewController, UICollectionViewDelegateFlo
     
     
     
-    
-    private func instantiateSongsArray(with array: [Song]){
-        var editableArray = array
-        
-        while editableArray.count > 50{
-            
-            editableArray.removeLast()
-            
-        }
-        self.songs = editableArray
-        
 
-    }
     
     
     private var fetchedResultsController: NSFetchedResultsController<DBSong>!
@@ -165,6 +159,7 @@ class RecentlyAddedView: UICollectionViewController, UICollectionViewDelegateFlo
         let sort = NSSortDescriptor.init(key: "date", ascending: false)
         
         fetchRequest.sortDescriptors = [sort]
+        fetchRequest.fetchLimit = 50
         fetchedResultsController = NSFetchedResultsController<DBSong>.init(fetchRequest: fetchRequest, managedObjectContext: Database.context, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
         var fetchedObjects = [DBSong]()
@@ -176,20 +171,53 @@ class RecentlyAddedView: UICollectionViewController, UICollectionViewDelegateFlo
             print("An error occured in the 'setUpFetchedResultsController' in RecentlyAddedView.swift")
         }
         
-        self.instantiateSongsArray(with: Song.wrap(array: fetchedObjects))
+        self.songs = Song.wrap(array: fetchedObjects)
         collectionView!.reloadData()
         
     }
     
-    
+    func getIndexPath(for song: Song) -> IndexPath?{
+        for song1 in songs where song1 == song{
+            if let index = songs.index(of: song){
+                return IndexPath(row: index, section: 0)
+            }
+        }
+        return nil
+    }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+       
         
-        let fetchedObjects = fetchedResultsController.fetchedObjects!
         
-        self.instantiateSongsArray(with: Song.wrap(array: fetchedObjects))
-        collectionView!.reloadData()
+        
+        collectionView?.performBatchUpdates({
+
+            
+            let newSongs = Song.wrap(array: controller.fetchedObjects! as! [DBSong])
+            
+            self.songs = newSongs
+            
+            
+            
+            switch type{
+
+
+            case .delete:
+                self.collectionView?.deleteItems(at: [indexPath!])
+            case .update:
+                self.collectionView?.reloadItems(at: [indexPath!])
+            case .insert:
+                self.collectionView?.insertItems(at: [newIndexPath!])
+            case .move:
+                self.collectionView?.moveItem(at: indexPath!, to: newIndexPath!)
+
+            }
+            
+            
+        }, completion: nil)
+        
+      
         
     }
     
@@ -334,15 +362,15 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
             
         case .paused:
             nowPlayingAnimator.stopAnimating()
-            albumArtist.textColor = THEME_COLOR
+            albumArtist.textColor = THEME_COLOR(asker: self)
             albumName.font = UIFont.boldSystemFont(ofSize: 15)
-            albumName.textColor = THEME_COLOR
+            albumName.textColor = THEME_COLOR(asker: self)
             
         case .playing:
             nowPlayingAnimator.startAnimating()
-            albumArtist.textColor = THEME_COLOR
+            albumArtist.textColor = THEME_COLOR(asker: self)
             albumName.font = UIFont.boldSystemFont(ofSize: 15)
-            albumName.textColor = THEME_COLOR
+            albumName.textColor = THEME_COLOR(asker: self)
         }
     }
     
@@ -351,7 +379,15 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
     }
     
     
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        nowPlayingAnimator.color = color
+        if let currentSong = currentSong{
+            if currentSong.nowPlayingStatus == .paused || currentSong.nowPlayingStatus == .playing{
+                albumArtist.textColor = color
+                albumName.textColor = color
+            }
+        }
+    }
     
     
     
@@ -409,7 +445,7 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
                                y: 0,
                                width: 25,
                                height: 25)
-        let x = NVActivityIndicatorView(frame: viewFrame, type: .audioEqualizer, color: THEME_COLOR, padding: nil)
+        let x = NVActivityIndicatorView(frame: viewFrame, type: .audioEqualizer, color: THEME_COLOR(asker: self), padding: nil)
         
         x.bottomSide = albumHeight - 7
         x.rightSide = albumWidth - 7

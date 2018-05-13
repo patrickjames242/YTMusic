@@ -46,18 +46,6 @@ fileprivate let sharedRecentlyAddedView = RecentlyAddedView(collectionViewLayout
 
 
 
-var THEME_COLOR: UIColor{
-    
-    return UIColor.red
-}
-
-
-
-
-
-
-
-
 
 
 
@@ -111,8 +99,9 @@ class AppManager: NSObject{
         
             
         }
-
         
+        ColorManager.changeInterfaceColor(to: .red)
+ 
         return screen
     }
 
@@ -207,7 +196,7 @@ class AppManager: NSObject{
     //MARK: - ERROR MESSAGE
     
     
-    static func displayErrorMessage(target: UIViewController, title: String = "Oops",message: String, completion: (() -> Void)?){
+    static func displayErrorMessage(target: UIViewController = AppManager.shared.screen, title: String = "Oops",message: String, completion: (() -> Void)?){
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel){ (action) in
@@ -610,7 +599,7 @@ class AppManager: NSObject{
         let previousStatusBarStatus = UIApplication.shared.statusBarStyle
         UIApplication.shared.statusBarStyle = .default
         let webView = MySafariViewController(url: url)
-        webView.preferredControlTintColor = THEME_COLOR
+        webView.preferredControlTintColor = CURRENT_THEME_COLOR
         webView.actionToCompleteUponDismisal = {
             
             UIApplication.shared.statusBarStyle = previousStatusBarStatus
@@ -637,70 +626,70 @@ class AppManager: NSObject{
     
     // THIS IS THE BACKGROUND VIEW DISPLAYED ON ALL COLLECTION AND TABLE VIEWS WHEN THERE ARE NO CELLS TO DISPLAY
     
-    static func getInterfaceBackgroundViewWith(title: String, message: String) -> UIView{
-        
-        let x = UIView()
-        
-        let topLabel = UILabel()
-        topLabel.translatesAutoresizingMaskIntoConstraints = false
-        topLabel.text = title
-        topLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        
-        let bottomLabel = UILabel()
-        bottomLabel.translatesAutoresizingMaskIntoConstraints = false
-        bottomLabel.text = message
-        bottomLabel.textColor = .gray
-        
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = THEME_COLOR
-        
-        button.setAttributedTitle(NSAttributedString(string: "Search Youtube", attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white]), for: .normal)
-        
-        let buttonHolderView = UIView()
-        buttonHolderView.translatesAutoresizingMaskIntoConstraints = false
-        buttonHolderView.backgroundColor = .clear
-        buttonHolderView.layer.shadowColor = UIColor.black.cgColor
-        buttonHolderView.layer.shadowRadius = 10
-        buttonHolderView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        buttonHolderView.layer.shadowOpacity = 0.8
-        buttonHolderView.addSubview(button)
-        
-        
-        button.addTarget(self, action: #selector(AppManager.respondToSearchButtonTapped), for: .touchUpInside)
-        [topLabel, bottomLabel, buttonHolderView].forEach { x.addSubview($0) }
-        
-        
-        topLabel.centerXAnchor.constraint(equalTo: x.centerXAnchor).isActive = true
-        topLabel.topAnchor.constraint(equalTo: x.topAnchor, constant: 70).isActive = true
-        
-        
-        bottomLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 5).isActive = true
-        bottomLabel.centerXAnchor.constraint(equalTo: x.centerXAnchor).isActive = true
-        
-        
-        buttonHolderView.centerXAnchor.constraint(equalTo: x.centerXAnchor).isActive = true
-        buttonHolderView.topAnchor.constraint(equalTo: bottomLabel.bottomAnchor, constant: 20).isActive = true
-        buttonHolderView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        buttonHolderView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        
-        button.topAnchor.constraint(equalTo: buttonHolderView.topAnchor).isActive = true
-        button.leftAnchor.constraint(equalTo: buttonHolderView.leftAnchor).isActive = true
-        button.rightAnchor.constraint(equalTo: buttonHolderView.rightAnchor).isActive = true
-        button.bottomAnchor.constraint(equalTo: buttonHolderView.bottomAnchor).isActive = true
-        
-        
-        
-        x.layoutIfNeeded()
-        
-        button.layer.cornerRadius = button.frame.height/2
-        
-        
-        return x
-        
-
-    }
-    
+//    static func getInterfaceBackgroundViewWith(title: String, message: String) -> UIView{
+//        
+//        let x = UIView()
+//        
+//        let topLabel = UILabel()
+//        topLabel.translatesAutoresizingMaskIntoConstraints = false
+//        topLabel.text = title
+//        topLabel.font = UIFont.boldSystemFont(ofSize: 20)
+//        
+//        let bottomLabel = UILabel()
+//        bottomLabel.translatesAutoresizingMaskIntoConstraints = false
+//        bottomLabel.text = message
+//        bottomLabel.textColor = .gray
+//        
+//        let button = UIButton(type: .system)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.backgroundColor = THEME_COLOR(asker: self)
+//        
+//        button.setAttributedTitle(NSAttributedString(string: "Search Youtube", attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white]), for: .normal)
+//        
+//        let buttonHolderView = UIView()
+//        buttonHolderView.translatesAutoresizingMaskIntoConstraints = false
+//        buttonHolderView.backgroundColor = .clear
+//        buttonHolderView.layer.shadowColor = UIColor.black.cgColor
+//        buttonHolderView.layer.shadowRadius = 10
+//        buttonHolderView.layer.shadowOffset = CGSize(width: 0, height: 2)
+//        buttonHolderView.layer.shadowOpacity = 0.8
+//        buttonHolderView.addSubview(button)
+//        
+//        
+//        button.addTarget(self, action: #selector(AppManager.respondToSearchButtonTapped), for: .touchUpInside)
+//        [topLabel, bottomLabel, buttonHolderView].forEach { x.addSubview($0) }
+//        
+//        
+//        topLabel.centerXAnchor.constraint(equalTo: x.centerXAnchor).isActive = true
+//        topLabel.topAnchor.constraint(equalTo: x.topAnchor, constant: 70).isActive = true
+//        
+//        
+//        bottomLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 5).isActive = true
+//        bottomLabel.centerXAnchor.constraint(equalTo: x.centerXAnchor).isActive = true
+//        
+//        
+//        buttonHolderView.centerXAnchor.constraint(equalTo: x.centerXAnchor).isActive = true
+//        buttonHolderView.topAnchor.constraint(equalTo: bottomLabel.bottomAnchor, constant: 20).isActive = true
+//        buttonHolderView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+//        buttonHolderView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+//        
+//        button.topAnchor.constraint(equalTo: buttonHolderView.topAnchor).isActive = true
+//        button.leftAnchor.constraint(equalTo: buttonHolderView.leftAnchor).isActive = true
+//        button.rightAnchor.constraint(equalTo: buttonHolderView.rightAnchor).isActive = true
+//        button.bottomAnchor.constraint(equalTo: buttonHolderView.bottomAnchor).isActive = true
+//        
+//        
+//        
+//        x.layoutIfNeeded()
+//        
+//        button.layer.cornerRadius = button.frame.height/2
+//        
+//        
+//        return x
+//        
+//
+//    }
+//    
     
     @objc private static func respondToSearchButtonTapped(){
         

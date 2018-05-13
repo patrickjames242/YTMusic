@@ -27,7 +27,7 @@ final class UserPreferences{
     private static let audioPanningPositionKey = "audio Panning position"
     private static let audioPanningToggleKey = "audio panning toggle"
     private static let searchHistoryKey = "SEARCH HISTORY KEY"
-    
+    private static let appThemeColorKey = "APP THEME COLOR KEY"
     
     
     
@@ -54,7 +54,16 @@ final class UserPreferences{
     }
     
     
-    
+    static func removeItemFromSearchHistory(_ text: String){
+        initialize_searchHistory_ifNeeded()
+        
+        _searchHistory!.remove(entry: text)
+        
+        UserDefaults.standard.set(_searchHistory!.data!, forKey: searchHistoryKey)
+        
+        
+        
+    }
     
     
     
@@ -85,10 +94,27 @@ final class UserPreferences{
     
     
     
+    private static var DEFAULT_APP_THEME_COLOR = UIColor.red
     
     
-    
-    
+    static var currentAppThemeColor: UIColor{
+        
+        
+        get {
+            
+            if let color = UserDefaults.standard.color(forKey: appThemeColorKey){
+                return color
+            }
+            let defaultColor = DEFAULT_APP_THEME_COLOR
+            UserDefaults.standard.set(defaultColor, forKey: appThemeColorKey)
+            return defaultColor
+            
+        } set {
+            
+            UserDefaults.standard.set(newValue, forKey: appThemeColorKey)
+            
+        }
+    }
     
     
     

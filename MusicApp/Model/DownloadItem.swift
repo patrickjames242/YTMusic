@@ -1,262 +1,14 @@
 //
-//  Templates.swift
+//  DownloadItem.swift
 //  MusicApp
 //
-//  Created by Patrick Hanna on 2/23/18.
+//  Created by Patrick Hanna on 5/11/18.
 //  Copyright © 2018 Patrick Hanna. All rights reserved.
 //
-import UIKit
-import Foundation
+
+
 import CoreData
-
-
-
-
-
-
-
-
-
-
-let SongNameDidChangeNotification = Notification.Name("SongNameDidChange")
-let SongWasDeletedNotification = Notification.Name("SongWasDeleted")
-let DeletedSongObjectKey = "DeletedSong"
-
-let NewSongWasCreatedNotification = Notification.Name("NewSongWasCreated")
-let NewlyCreatedSongObjectKey = "NewSong"
-
-let UserDidPressPlaySongNext = Notification.Name("UserWantsToPlaySongNext")
-let SelectedUpNextSongKey = "UpNextSong"
-
-
-
-
-
-enum SongPlayingStatus{ case playing, paused, inactive }
-
-
-
-protocol SongObserver: NSObjectProtocol {
-    
-    func songPlayingStatusDidChangeTo(_ status: SongPlayingStatus)
-}
-
-
-
-
-
-
-class Song: NSObject {
-    
-    private static var allSongs = [String: Song]()
-    
-    static func createNew(from downloadItem: DownloadItem, songData: Data) -> Song{
-        
-        
-        let object = DBManager.createAndSaveNewDBSongObject(from: downloadItem.object, songData: songData)
-        let newSong = wrap(object: object)
-        
-        NotificationCenter.default.post(name: NewSongWasCreatedNotification, object: newSong, userInfo: [NewlyCreatedSongObjectKey : newSong])
-        return newSong
-        
-        
-    }
-    
-    
-    static func count() -> Int{
-        
-        return DBManager.countSongObjects()
-        
-    }
-    
-    
-    static func getAll() -> [Song]{
-        let objects = DBManager.getAllSongs()
-        return wrap(array: objects)
-    }
-    
-    static func wrap(object: DBSong) -> Song{
-        if let song = allSongs[object.dataIdentifier!]{
-            return song
-        } else {
-            let newSong = Song(DB_Object: object)
-            allSongs[object.dataIdentifier!] = newSong
-            return newSong
-        }
-    }
-    
-    
-    
-    static func wrap(array: [DBSong]) -> [Song]{
-        let collectionToReturn = EArray<Song>()
-        
-        collectionToReturn.irateThrough(array: array) { wrap(object: $0) }
-        
-        return collectionToReturn.elements
-    }
-    
-    
-    static func ==(lhs: Song, rhs: Song) -> Bool {
-        return lhs.uniqueID == rhs.uniqueID
-    }
-    
-    
-    func playNext(){
-        NotificationCenter.default.post(name: UserDidPressPlaySongNext, object: self, userInfo: [SelectedUpNextSongKey : self])
-        
-        
-    }
-    
-    
-    
-    func delete(){
-        DBManager.delete(song: object)
-        NotificationCenter.default.post(name: SongWasDeletedNotification, object: self, userInfo: [DeletedSongObjectKey : self])
-    }
-    
-    func changeNamesToDefaults(){
-        DBManager.changeDBSongNamesToDefaults(object: object)
-        NotificationCenter.default.post(name: SongNameDidChangeNotification, object: self)
-    }
-    
-    func changeNamesTo(title: String, artist: String){
-        
-        DBManager.changeDBSongNames(object: object, name: title, artist: artist)
-        NotificationCenter.default.post(name: SongNameDidChangeNotification, object: self)
-    }
-    
-    
-    
-    
-    
-    private var myObservers = [SongObserver]()
-    
-    func addObserver(_ sender: SongObserver){
-        
-        self.myObservers.append(sender)
-        
-    }
-    
-    func removeObserver(_ sender: SongObserver){
-        var x = 0
-        for observer in myObservers{
-            
-            if sender === observer{
-                myObservers.remove(at: x)
-                x -= 1
-            }
-            x += 1
-        }
-    }
-
-    private var _currentNowPlayingStatus = SongPlayingStatus.inactive
-    
-    var nowPlayingStatus: SongPlayingStatus{
-        return _currentNowPlayingStatus
-    }
-    
-    func changeNowPlayingStatusTo(_ status: SongPlayingStatus){
-        
-        self._currentNowPlayingStatus = status
-        
-        for observer in myObservers{
-            observer.songPlayingStatusDidChangeTo(status)
-        }
-        
-    }
-    
-    
-    
-    
-    static func getNumberOfBytes(completion: @escaping (Int) -> Void){
-        
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async{
-            
-            
-            let numberOfBytes = Song.getAll().map{$0.data.count}.reduce(0) {$0 + $1}
-            
-            DispatchQueue.main.sync {
-                completion(numberOfBytes)
-                
-            }
-            
-            
-            
-        }
-    }
-    
-    
-    
-
-    
-    var data: Data{
-        return DBManager.getDataForDBSongObject(object)
-    }
-    
-    var name: String{
-        return object.name!
-    }
-    var artistName: String{
-        return object.artistName!
-    }
-    
-    var uniqueID: String
-    let image: UIImage
-    var duration: TimeInterval = 0
-    
-    
-
-    var youtubeID: String?{
-        return object.ytID
-        
-    }
-    
-    
-    fileprivate let object: DBSong
-    
-
-    
-    private init(DB_Object: DBSong){
-        self.image = UIImage(data: DB_Object.image!)!
-        self.object = DB_Object
-        self.uniqueID = DB_Object.dataIdentifier!
-        
-    }
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import UIKit
 
 
 
@@ -320,26 +72,30 @@ enum DBDownloadItemStatus: String{
 
 class DownloadItem: Equatable{
     
-
+    
     static func ==(lhs: DownloadItem, rhs: DownloadItem) -> Bool {
         return lhs.uniqueID == rhs.uniqueID
     }
-
-
+    
+    
     var delegate: DownloadItemDelegate?
     
     let image: UIImage
     
-    fileprivate let object: DBDownloadItem
     
     
-
+    /// This is not used outside of the Song and DownloadItem classes
+    let object: DBDownloadItem
+    
+    
+    
     
     
     func delete(){
         DownloadItem.allCurrentInstances[uniqueID] = nil
         DBManager.delete(downloadItem: object)
-
+        instanceIsNoLongerInUse = true
+        
     }
     
     var name: String            { return object.name!}
@@ -441,18 +197,18 @@ class DownloadItem: Equatable{
     
     
     
-  
     
     
     
-
     
     
-
     
     
-
-
+    
+    
+    
+    
+    
     
     
     
@@ -464,30 +220,30 @@ class DownloadItem: Equatable{
     
     func changeStatusTo(_ newStatus: DownloadStatus){
         switch newStatus{
-       
+            
         case .paused(let data, let date):
             
             self._resumeData = data
             
             self._endDate = date
             self._storageStatus = .paused
-
+            
         case .finished(let song, let date):
             self._songObject = song
-
+            
             self._endDate = date
             self._storageStatus = .finished
-
+            
         case .failed(let date):
             
             self._endDate = date
             self._storageStatus = .failed
-
+            
         case .canceled(let date):
             
             self._endDate = date
             self._storageStatus = .cancelled
-
+            
         default:
             if self._storageStatus != .changing{
                 self._storageStatus = .changing
@@ -512,6 +268,8 @@ class DownloadItem: Equatable{
             allCurrentInstances[newItem.uniqueID] = newItem
             return newItem
         }
+        
+        
     }
     
     static func wrap(array: [DBDownloadItem]) -> [DownloadItem]{
@@ -539,7 +297,7 @@ class DownloadItem: Equatable{
             DBManager.delete(downloadItem: DBObject)
             return nil
         }
-    
+        
         if storageStatus == .paused{return DBObject}
         
         
@@ -554,12 +312,19 @@ class DownloadItem: Equatable{
         
     }
     
+    // figure out where these instances are being held that are preventing them from being deallocated
+    
+    /// this is a patch fix and very bad coding.FIX IT LATER.
+    
+    private var instanceIsNoLongerInUse = false
+    
     private func startFilterTimer(){
         Timer.scheduledTimer(withTimeInterval: 20 * 60, repeats: true) { [weak weakSelf = self](timer) in
-            if weakSelf == nil{timer.invalidate(); return}
+            if weakSelf == nil || self.instanceIsNoLongerInUse {timer.invalidate(); return}
             
             
             if DownloadItem.filterObject(DBObject: weakSelf!.object) == nil{
+                weakSelf?.instanceIsNoLongerInUse = true
                 timer.invalidate()
             }
             
@@ -585,17 +350,17 @@ class DownloadItem: Equatable{
             DBObject.dateFinished = DBObject.dateStarted!
             DBObject.status = DBDownloadItemStatus.failed.rawValue
             self._runTimeStatus = DownloadStatus.failed(DBObject.dateFinished!)
-        
+            
         case .failed:
             self._runTimeStatus = DownloadStatus.failed(DBObject.dateFinished!)
-        
+            
         case .finished:
             self._runTimeStatus = DownloadStatus.finished(Song.wrap(object: DBObject.dbSong!), DBObject.dateFinished!)
-        
+            
         case .paused:
             let resumeData1 = DBManager.getResumeData(for: DBObject)
             self._runTimeStatus = DownloadStatus.paused(resumeData1!, DBObject.dateFinished!)
-        
+            
         case .cancelled:
             self._runTimeStatus = DownloadStatus.canceled(DBObject.dateFinished!)
         }
@@ -646,7 +411,29 @@ class DownloadItem: Equatable{
 
 
 
-//MARK: - CORE DATA CONVENIENCE FUNCTIONS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 fileprivate final class DBManager{
     
@@ -666,201 +453,6 @@ fileprivate final class DBManager{
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    static func countSongObjects() -> Int{
-        
-        let fetchRequest: NSFetchRequest<DBSong> = DBSong.fetchRequest()
-        
-        do{
-            
-            return try context.count(for: fetchRequest)
-
-            
-        } catch {
-            print("there was an error in the 'countSongObjects' function in Song & DownloadItem.swift \n \(error) ")
-            return 0
-        }
-        
-        
-        
-        
-    }
-    
-    
-    static func getDataForDBSongObject(_ song: DBSong) -> Data{
-        
-        return getDBDataObjectFor(song: song).data!
-        
-    }
-    
-
-    
-    static func changeDBSongNames(object: DBSong, name: String, artist: String){
-        
-        object.name = name
-        object.artistName = artist
-        
-        saveContext()
-    }
-    
-    static func changeDBSongNamesToDefaults(object: DBSong){
-        object.name = object.defaultName!
-        object.artistName = object.defaultArtistName!
-        saveContext()
-    }
-    
-    
-
-    
-    
-    static func delete(song: DBSong){
-        let dbdata = getDBDataObjectFor(song: song)
-        context.delete(dbdata)
-        context.delete(song)
-        saveContext()
-    }
-    
-    
-    
-
-    
-    
-    private static func getDBDataObjectFor(song: DBSong) -> DBData{
-        
-        let fetchRequest: NSFetchRequest<DBData> = DBData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "identifier = %@", song.dataIdentifier!)
-        var dataObjects = [DBData]()
-        
-        do{
-            dataObjects = try context.fetch(fetchRequest)
-        } catch{
-            print(error)
-        }
-        return dataObjects[0]
-    }
-    
-    
-    
-    
-    
-    static func getAllSongs() -> [DBSong]{
-        var fetchedSongs = [DBSong]()
-        let fetchRequest: NSFetchRequest<DBSong> = DBSong.fetchRequest()
-        do{
-            fetchedSongs = try context.fetch(fetchRequest)
-        } catch {
-            
-            print("there was an error in the 'getAllSongs' function in DBManager.swift: \(error)")
-            
-        }
-        
-        return fetchedSongs
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    static func createAndSaveNewDBSongObject(from downloadItem: DBDownloadItem, songData: Data) -> DBSong{
-        
-        let identifier = NSUUID().uuidString
-        
-        let newDBSong = DBSong(context: context)
-        newDBSong.dataIdentifier = identifier
-        newDBSong.name = downloadItem.name
-        newDBSong.image = downloadItem.image
-        newDBSong.artistName = downloadItem.channelName
-        newDBSong.date = Date()
-        newDBSong.ytID = downloadItem.ytID
-        newDBSong.defaultName = downloadItem.name!
-        newDBSong.defaultArtistName = downloadItem.channelName!
-        
-        
-        let newDBDAta = DBData(context: DBManager.context)
-        newDBDAta.data = songData
-        newDBDAta.identifier = identifier
-        
-        
-        saveContext()
-        return newDBSong
-    }
-
-    
     static func delete(downloadItem: DBDownloadItem){
         if let itemData = self.getDBDataObjectFor(downloadItem: downloadItem){
             context.delete(itemData)
@@ -869,7 +461,7 @@ fileprivate final class DBManager{
         saveContext()
     }
     
-
+    
     static func createAndSaveNewDBDownloadItem(from youtubeVideo: YoutubeVideo, imageData: Data) -> DBDownloadItem{
         
         let newObject = DBDownloadItem(context: context)
@@ -935,23 +527,6 @@ fileprivate final class DBManager{
         saveContext()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

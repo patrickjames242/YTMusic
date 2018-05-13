@@ -14,7 +14,7 @@ import SafariServices
 
 
 
-extension UIColor{
+extension UIColor {
     
     
     
@@ -22,9 +22,39 @@ extension UIColor{
         
         self.init(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1)
         
+    }
+    
+    
+    static var random: UIColor{
+        
+        let random1 = CGFloat(arc4random_uniform(255))
+        let random2 = CGFloat(arc4random_uniform(255))
+        let random3 = CGFloat(arc4random_uniform(255))
+        
+        return UIColor(red: random1, green: random2, blue: random3)
+        
         
     }
+    
+    
+    
+    
+    
+    
+    
 }
+
+
+extension UserDefaults {
+    func set(_ color: UIColor, forKey key: String) {
+        set(NSKeyedArchiver.archivedData(withRootObject: color), forKey: key)
+    }
+    func color(forKey key: String) -> UIColor? {
+        guard let data = data(forKey: key) else { return nil }
+        return NSKeyedUnarchiver.unarchiveObject(with: data) as? UIColor
+    }
+}
+
 
 
 func youtubeURL(from videoID: String) -> URL?{

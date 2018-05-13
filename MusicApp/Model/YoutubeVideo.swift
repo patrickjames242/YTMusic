@@ -75,28 +75,30 @@ class YoutubeVideo: NSObject {
     func initiateImageDownloadIfNeeded(){
         
         
-        if imageDownloadHasStarted{return}
+        if imageDownloadHasStarted { return }
         
         imageDownloadHasStarted = true
         
-        let task = URLSession.shared.dataTask(with: thumbnailLink) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: thumbnailLink) { [weak weakSelf = self](data, response, error) in
             if let error = error{
-                print("there was an error in the 'initiateImageDownload' function in a YoutubeVideoObject: name:\(self.name), error: \(error)")
-                self.imageDownloadHasStarted = false
+                print("there was an error in the 'initiateImageDownload' function in a YoutubeVideoObject: name:\(weakSelf?.name ?? " !!! self is nil !!! "), error: \(error)")
+                weakSelf?.imageDownloadHasStarted = false
+                weakSelf?.initiateImageDownloadIfNeeded()
                 return
             }
             
             if let data = data, let image = UIImage(data: data){
                 DispatchQueue.main.async {
-                    self.image = image
-                    self.delegate?.imageDidFinishDownloading(video: self, image: image)
+                    weakSelf?.image = image
+                    weakSelf?.delegate?.imageDidFinishDownloading(video: self, image: image)
                 }
                 
             
                 
             } else {
-                self.imageDownloadHasStarted = false
-                print("Something went wrong in the 'initiateImageDownload' function in a YoutubeVideo object name: \(self.name)")
+                weakSelf?.imageDownloadHasStarted = false
+                weakSelf?.initiateImageDownloadIfNeeded()
+                print("Something went wrong in the 'initiateImageDownload' function in a YoutubeVideo object name: \(weakSelf?.name ?? " !!! self is nil !!! ")")
             }
             
         }

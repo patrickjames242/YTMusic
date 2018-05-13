@@ -382,7 +382,14 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     
     
     
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        
+        artistAndAlbumLabel.textColor = color
+        audioDevicesButton.tintColor = color
+        audioDevicesButtonCover.tintColor = color
+        threeDotImageView.tintColor = color
+        playlistImageView.tintColor = color
+    }
     
     
     
@@ -401,9 +408,8 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     lazy var artistAndAlbumLabel: UILabel = {
         let x = UILabel()
         x.font = UIFont.systemFont(ofSize: 22)
-        x.textColor = THEME_COLOR
+        x.textColor = THEME_COLOR(asker: self)
         x.textAlignment = .center
-        x.textColor = THEME_COLOR
         x.translatesAutoresizingMaskIntoConstraints = false
 
         return x
@@ -468,7 +474,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         let x = MPVolumeView()
         x.showsVolumeSlider = false
         x.showsRouteButton = true
-        x.tintColor = THEME_COLOR
+        x.tintColor = THEME_COLOR(asker: self)
         let image = UIImage(named: "icons8-earbud-headphones-filled-100")!.withRenderingMode(.alwaysTemplate)
         x.setRouteButtonImage( image ,for: .normal)
         x.translatesAutoresizingMaskIntoConstraints = false
@@ -477,22 +483,22 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     
     lazy var audioDevicesButtonCover: UIImageView = {
         let x = UIImageView(image: UIImage(named: "icons8-earbud-headphones-filled-100")!.withRenderingMode(.alwaysTemplate))
-        x.tintColor = THEME_COLOR
+        x.tintColor = THEME_COLOR(asker: self)
         x.translatesAutoresizingMaskIntoConstraints = false
         return x
         
     }()
     
+    private let threeDotImageView = UIImageView(image: UIImage(named: "icons8-more-filled-100")!.withRenderingMode(.alwaysTemplate))
 
     
     lazy var threeDotButton: UIButton = {
        let x = UIButton(type: .system)
         x.translatesAutoresizingMaskIntoConstraints = false
         
-        let threeDotImageView = UIImageView(image: UIImage(named: "icons8-more-filled-100")!.withRenderingMode(.alwaysTemplate))
         threeDotImageView.translatesAutoresizingMaskIntoConstraints = false
         threeDotImageView.contentMode = .scaleAspectFit
-        threeDotImageView.tintColor = THEME_COLOR
+        threeDotImageView.tintColor = THEME_COLOR(asker: self)
         threeDotImageView.isUserInteractionEnabled = false
         
         x.addSubview(threeDotImageView)
@@ -513,15 +519,15 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         
     }
 
+    private let playlistImageView = UIImageView(image: UIImage(named: "icons8-playlist-96")!.withRenderingMode(.alwaysTemplate))
 
     lazy var songQueueListButton: UIButton = {
         let x = UIButton(type: .system)
         x.translatesAutoresizingMaskIntoConstraints = false
         
-        let playlistImageView = UIImageView(image: UIImage(named: "icons8-playlist-96")!.withRenderingMode(.alwaysTemplate))
         playlistImageView.translatesAutoresizingMaskIntoConstraints = false
         playlistImageView.contentMode = .scaleAspectFit
-        playlistImageView.tintColor = THEME_COLOR
+        playlistImageView.tintColor = THEME_COLOR(asker: self)
         playlistImageView.isUserInteractionEnabled = false
         
         x.addSubview(playlistImageView)

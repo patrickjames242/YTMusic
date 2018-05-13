@@ -142,13 +142,18 @@ class MenuBarViewController: UIViewController, UIScrollViewDelegate, MenuBarDele
     
     private var scrollViewIsAutomaticallyScrolling = false
     
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        navBar.tintColor = color
+        button.setTitleColor(color, for: .normal)
+        setButtonAttributesUsing(color: color)
+        
+    }
     
     private lazy var navBar: UINavigationBar = {
         let x = UINavigationBar()
         x.isTranslucent = true
       
-        x.tintColor = THEME_COLOR
+        x.tintColor = THEME_COLOR(asker: self)
         
         
         x.setBackgroundImage(UIImage(), for: .default)
@@ -222,7 +227,8 @@ class MenuBarViewController: UIViewController, UIScrollViewDelegate, MenuBarDele
         return x
         
     }()
-    
+    private let button = UIButton.init(type: .system)
+
     private lazy var bottomBar: UIView = {
         
        let x = UIView()
@@ -232,10 +238,8 @@ class MenuBarViewController: UIViewController, UIScrollViewDelegate, MenuBarDele
         
         
         
-        let button = UIButton.init(type: .system)
-        button.setTitleColor(THEME_COLOR, for: .normal)
+        setButtonAttributesUsing(color: THEME_COLOR(asker: self))
         
-        button.setAttributedTitle(NSAttributedString.init(string: "Done", attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17), NSAttributedStringKey.foregroundColor: THEME_COLOR]), for: .normal)
         
         button.addTarget(self, action: #selector(respondToDismissButtonPressed), for: .touchUpInside)
         
@@ -248,6 +252,13 @@ class MenuBarViewController: UIViewController, UIScrollViewDelegate, MenuBarDele
         return x
         
     }()
+    
+    
+    private func setButtonAttributesUsing(color: UIColor){
+        button.setAttributedTitle(NSAttributedString.init(string: "Done", attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17), NSAttributedStringKey.foregroundColor: color]), for: .normal)
+        
+        
+    }
     
 
     private let bottomBarHeight: CGFloat = 40

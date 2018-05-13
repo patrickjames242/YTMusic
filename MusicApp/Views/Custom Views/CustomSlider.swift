@@ -53,7 +53,9 @@ class CustomSlider: UIView {
     
     
     
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        activeColor = color
+    }
     
     
     
@@ -64,7 +66,7 @@ class CustomSlider: UIView {
     var customDelegate: CustomSliderDelegate?
     
     var sliderButtonAnimationTime = 0.3
-    private var activeColor: UIColor = THEME_COLOR
+    private lazy var activeColor: UIColor = THEME_COLOR(asker: self)
     private var inactiveColor: UIColor = .gray
     private var rightSideColor: UIColor = UIColor.lightGray.withAlphaComponent(0.3)
     

@@ -269,7 +269,7 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
         
         let progressAnimator = NVActivityIndicatorView(frame: progressAnimatorFrame,
                                                        type: NVActivityIndicatorType.ballRotateChase,
-                                                       color: THEME_COLOR,
+                                                       color: THEME_COLOR(asker: self),
                                                        padding: nil)
         return progressAnimator
     }()
@@ -282,7 +282,9 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     
     
     
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        progressAnimator.color = color
+    }
     
     
     
@@ -592,12 +594,16 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
     
     private lazy var threeDotButton: UIImageView = {
        let x = UIImageView(image: UIImage(cgImage: #imageLiteral(resourceName: "icons8-more-filled-100").cgImage!, scale: 1, orientation: UIImageOrientation.left).withRenderingMode(.alwaysTemplate))
-        x.tintColor = THEME_COLOR
+        x.tintColor = THEME_COLOR(asker: self)
         x.translatesAutoresizingMaskIntoConstraints = false
         x.contentMode = .scaleAspectFit
         return x
         
     }()
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        threeDotButton.tintColor = color
+    }
     
     private lazy var threeDotButton_ActivationArea: UIView = {
        let x = UIView()

@@ -202,7 +202,10 @@ class Screen: UIViewController, UITabBarDelegate{
         
     }()
     
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        tabBar.tintColor = color
+        downloadsItem.badgeColor = color
+    }
     
     
     private lazy var songsItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "note"), tag: 1)
@@ -221,14 +224,14 @@ class Screen: UIViewController, UITabBarDelegate{
                                         height: tabBarHeight))
         x.isTranslucent = false
         x.barTintColor = .white
-        x.tintColor = THEME_COLOR
+        x.tintColor = THEME_COLOR(asker: self)
         
 //        x.translatesAutoresizingMaskIntoConstraints = false
         x.setItems([songsItem, searchItem, downloadsItem, settingsItem], animated: true)
         let imageInsets = Variations.Screen.tabBarItemsBottomInset
         
         
-        downloadsItem.badgeColor = THEME_COLOR
+        downloadsItem.badgeColor = THEME_COLOR(asker: self)
         songsItem.imageInsets.bottom = imageInsets
         searchItem.imageInsets.bottom = imageInsets
         downloadsItem.imageInsets.bottom = imageInsets

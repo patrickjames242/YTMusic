@@ -24,7 +24,7 @@ class SongListView_NavCon: UINavigationController{
         
         navigationBar.isTranslucent = false
         navigationBar.prefersLargeTitles = true
-        navigationBar.tintColor = THEME_COLOR
+        navigationBar.tintColor = THEME_COLOR(asker: self)
         viewControllers.append(AppManager.shared.songListView)
         navigationBar.shadowImage = UIImage()
 
@@ -33,7 +33,9 @@ class SongListView_NavCon: UINavigationController{
     }
     
     
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        navigationBar.tintColor = color
+    }
     
     
     
@@ -91,7 +93,7 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         tableView.tableFooterView = UIView()
         tableView.register(MyTableViewCell.self, forCellReuseIdentifier: cellID)
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: headerID)
-        tableView.sectionIndexColor = THEME_COLOR
+        tableView.sectionIndexColor = THEME_COLOR(asker: self)
         
         tableView.rowHeight = 58
         tableView.separatorInset.left = CellConstants.separatorLeftInset
@@ -102,6 +104,11 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
     }
     
     
+    override func interfaceColorDidChange(to color: UIColor) {
+        tableView.sectionIndexColor = color
+        searchController.searchBar.tintColor = color
+    }
+    
     
     private func setUpSearchBar(){
         
@@ -110,7 +117,7 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         navigationItem.searchController = self.searchController
         searchController.dimsBackgroundDuringPresentation = false
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.tintColor = THEME_COLOR
+        searchController.searchBar.tintColor = THEME_COLOR(asker: self)
         searchController.searchBar.delegate = self
         searchController.delegate = self
         
@@ -171,7 +178,7 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
     var officialSongsTuple = (songs: [[Song]](), sectionNames: [String](), type: SongListType.all){
         didSet{
             if officialSongsTuple.songs.isEmpty && officialSongsTuple.type == .all{
-                tableView?.backgroundView = AppManager.getInterfaceBackgroundViewWith(title: "Your Library Is Empty 😭", message: "Add songs from Youtube to fill your library!")
+                tableView?.backgroundView = ScrollableContentBackgroundView(title: "Your Library Is Empty 😭", message: "Add songs from Youtube to fill your library!")
                 tableView?.isScrollEnabled = false
                 navigationItem.searchController = nil
             } else {
@@ -729,14 +736,14 @@ class MyTableViewCell: CircleInteractionResponseCell, SongObserver{
             
         case .paused:
             nowPlayingAnimator.stopAnimating()
-            topLabel.textColor = THEME_COLOR
-            bottomLabel.textColor = THEME_COLOR
+            topLabel.textColor = THEME_COLOR(asker: self)
+            bottomLabel.textColor = THEME_COLOR(asker: self)
             topLabel.font = UIFont.boldSystemFont(ofSize: 17)
         
         case .playing:
             nowPlayingAnimator.startAnimating()
-            topLabel.textColor = THEME_COLOR
-            bottomLabel.textColor = THEME_COLOR
+            topLabel.textColor = THEME_COLOR(asker: self)
+            bottomLabel.textColor = THEME_COLOR(asker: self)
             topLabel.font = UIFont.boldSystemFont(ofSize: 17)
             
         }
@@ -751,7 +758,16 @@ class MyTableViewCell: CircleInteractionResponseCell, SongObserver{
     
     
     
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        nowPlayingAnimator.color = color
+
+        if let currentSong = currentSong{
+            if currentSong.nowPlayingStatus == .paused || currentSong.nowPlayingStatus == .playing{
+                topLabel.textColor = color
+                bottomLabel.textColor = color
+            }
+        }
+    }
     
     
     
@@ -778,7 +794,7 @@ class MyTableViewCell: CircleInteractionResponseCell, SongObserver{
                                y: 0,
                                width: 20,
                                height: 20)
-        let x = NVActivityIndicatorView(frame: viewFrame, type: .audioEqualizer, color: THEME_COLOR, padding: nil)
+        let x = NVActivityIndicatorView(frame: viewFrame, type: .audioEqualizer, color: THEME_COLOR(asker: self), padding: nil)
         x.bottomSide = 50
         x.rightSide = 100
         return x

@@ -47,13 +47,7 @@ class SearchHistoryList: Codable{
     func insert(newEntry: String){
       
         
-        for entry in list where entry.text == newEntry{
-            
-            if let entryIndex = list.index(of: entry){
-                list.remove(at: entryIndex)
-            }
-            
-        }
+        list = list.filter{$0.text != newEntry}
         
         
         let newHistoryEntry = SearchHistoryEntry(text: newEntry, date: Date())
@@ -63,6 +57,13 @@ class SearchHistoryList: Codable{
             list.removeLast()
         }
         
+        
+    }
+    
+    func remove(entry: String){
+        
+        list = list.filter{$0.text != entry}
+        sortList()
         
     }
     

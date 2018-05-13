@@ -183,16 +183,22 @@ class MenuBarCell: UICollectionViewCell{
         
     }
     
+    override func interfaceColorDidChange(to color: UIColor) {
+        if isHighlighted || isSelected{
+            label.textColor = color
+        }
+    }
+    
     override var isHighlighted: Bool{
         didSet{
-            label.textColor = isHighlighted ? THEME_COLOR : .lightGray
+            label.textColor = isHighlighted ? THEME_COLOR(asker: self) : .lightGray
         }
     }
     
     
     override var isSelected: Bool{
         didSet{
-            label.textColor = isSelected ? THEME_COLOR : .lightGray
+            label.textColor = isSelected ? THEME_COLOR(asker: self) : .lightGray
             
         }
     }

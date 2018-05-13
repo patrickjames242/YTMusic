@@ -20,9 +20,13 @@ class ScrollBar: UIView{
     }
     
     
+    override func interfaceColorDidChange(to color: UIColor) {
+        scrollLine.backgroundColor = color
+    }
+    
     private lazy var scrollLine: UIView = {
         let x = UIView()
-        x.backgroundColor = THEME_COLOR
+        x.backgroundColor = THEME_COLOR(asker: self)
         x.translatesAutoresizingMaskIntoConstraints = false
         return x
     }()

@@ -30,12 +30,17 @@ class ProgressIndicator: UIView {
     
     
     
-    private var progressBar: UIView = {
+    private lazy var progressBar: UIView = {
         let x = UIView()
         x.translatesAutoresizingMaskIntoConstraints = false
-        x.backgroundColor = THEME_COLOR
+        x.backgroundColor = THEME_COLOR(asker: self)
         return x
     }()
+    
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        progressBar.backgroundColor = color
+    }
     
     
     

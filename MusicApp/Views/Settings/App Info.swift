@@ -115,14 +115,86 @@ class AppInfoTableView: UITableViewController{
 
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        switch indexPath{
+        
+        case IndexPath(row: 0, section: 1):
+            respondToPurgeSongsButtonPressed()
+            
+        case IndexPath(row: 0, section: 2):
+            respondToDeleteAllSongsButtonPressed()
+            
+        
+        default: break
+            
+        }
+        
+        
+        
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    private func respondToPurgeSongsButtonPressed(){
+        
+        AppManager.displayErrorMessage(target: self, message: "Sorry, this feature is not available yet.", completion: nil)
+        
+        
     }
 
 
 
+    private func respondToDeleteAllSongsButtonPressed(){
+        
+        let alert = UIAlertController(title: "Are you absolutely sure?", message: "Deleted songs cannot be recovered.", preferredStyle: .alert)
+        
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+            
+            let alert2 = UIAlertController(title: "Are you sure sure sure?", message: "I'm just making sure.", preferredStyle: .actionSheet)
+            let deleteAction2 = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
+                
+                Song.deleteAll{
+                    
+                    self.initiateStatistics()
+                    
+                }
+                
+            })
+            
+            
+            let cancelAction2 = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            alert2.addAction(cancelAction2)
+            alert2.addAction(deleteAction2)
+            self.present(alert2, animated: true, completion: nil)
+            
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        present(alert, animated: true, completion: nil)
+        
+    }
 
 
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -205,13 +277,15 @@ class MiddleBlueTextCell: UITableViewCell{
     }
     
     
-
+    override func interfaceColorDidChange(to color: UIColor) {
+        middleTextLabel.textColor = color
+    }
     
     private lazy var middleTextLabel: UILabel = {
         let x = UILabel()
         
 //        x.textColor = UIColor(red: 0, green: 122, blue: 255)
-        x.textColor = THEME_COLOR
+        x.textColor = THEME_COLOR(asker: self)
         return x
         
         

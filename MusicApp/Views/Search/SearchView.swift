@@ -15,12 +15,14 @@ class SearchTableView_NavCon: UINavigationController{
         navigationBar.prefersLargeTitles = true
         navigationBar.isTranslucent = false
         navigationBar.shadowImage = UIImage()
-        navigationBar.tintColor = THEME_COLOR
+        navigationBar.tintColor = THEME_COLOR(asker: self)
         viewControllers.append(AppManager.shared.searchView)
         
         
     }
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        navigationBar.tintColor = color
+    }
     
     
     
@@ -33,7 +35,8 @@ class SearchTableView_NavCon: UINavigationController{
 
 
 
-class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggestionsCellProtocol{
+class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggestionsCellDelegate, SearchSuggestionsBrainDelegate{
+  
  
     private lazy var searchController = UISearchController(searchResultsController: nil)
 
@@ -41,20 +44,31 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
 
     
     
+    
+    
+    
+    
+    
+    
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        searchController.searchBar.tintColor = color
+    }
+    
+    
+    
     //MARK: - VIEW DID LOAD
     
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.searchController = self.searchController
         //        searchController.searchBar.shadowImage = UIImage()
         
-        if suggestionStrings.0.isEmpty{
-            setBackgroundView()
-        }
+       
         searchController.searchBar.delegate = self
-        searchController.searchBar.tintColor = THEME_COLOR
+        searchController.searchBar.tintColor = THEME_COLOR(asker: self)
         searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.hidesSearchBarWhenScrolling = false
         searchController.dimsBackgroundDuringPresentation = false
@@ -75,13 +89,13 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
         coverView.bottomAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 1).isActive = true
         coverView.heightAnchor.constraint(equalToConstant: 2).isActive = true
         
-        tableView.contentInset.top = -10
+        
         tableView.separatorColor = .white
         tableView.rowHeight = 60
         navigationItem.title = "Search Youtube"
         navigationItem.largeTitleDisplayMode = .always
 
-        
+        suggestionBrain = SearchSuggestionsBrain(owner: self)
         
         tableView.register(SearchSuggestionsCell.self, forCellReuseIdentifier: cellID)
         setBottomInsets()
@@ -122,39 +136,6 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     
     
     
-    
-    enum SuggestionType{ case history, loaded}
-    
-    
-    
-    private var suggestionStrings: (stringArray: [String], type: SuggestionType) = (UserPreferences.searchHistory,  .history){
-        didSet{
-        if suggestionStrings.0.isEmpty{
-            setBackgroundView()
-        } else {
-            tableView.backgroundView = nil
-            }
-        }
-    }
-    
-    
-    private var localSuggestionStrings = UserPreferences.searchHistory{
-        didSet{
-            if suggestionStrings.1 == .loaded{return}
-            suggestionStrings = (localSuggestionStrings, .history)
-        }
-    }
-    
-    private var loadedSuggestionStrings = [String](){
-        
-        didSet{
-            
-            suggestionStrings = (loadedSuggestionStrings, .loaded)
-            
-        }
-        
-    }
-    
 
     
     
@@ -163,6 +144,13 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     
     
     
+    
+    
+    
+    
+    
+    
+    private var searchSuggestions: (strings: [String], type: SuggestionsType) = ([], .history)
     
     
     
@@ -172,86 +160,74 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     
     //MARK: - SEARCH BAR STUFF
     
+    private var suggestionBrain: SearchSuggestionsBrain!
+    
+    
+    
+    func searchSuggestions(didChangeTo suggestions: [String], type: SuggestionsType) {
+        
+        searchSuggestions = (suggestions, type)
+        
+        if suggestions.isEmpty{
+            setBackgroundView()
+            tableView.isScrollEnabled = false
+        } else {
+            tableView.backgroundView = nil
+            tableView.isScrollEnabled = true
+        }
+        
+        
+        tableView.reloadData()
+        
+    }
+ 
+    
+    
+    
+    
     
     func userDidFillText(_ text: String) {
-        self.searchController.searchBar.text = text
-        self.searchBar(searchController.searchBar, textDidChange: text)
-        self.searchController.searchBar.becomeFirstResponder()
+        searchController.searchBar.text = text
+        suggestionBrain.searchTextDidChangeTo(text: text)
+        searchController.searchBar.becomeFirstResponder()
     }
     
-    func performSearch(){
-        guard let text = self.searchController.searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return}
-        if text.isEmpty{ return }
-        let searchResultsView = SearchResultsTableView()
-        searchResultsView.setSearchResultsWithText(text)
-        
-        navigationController?.pushViewController(searchResultsView, animated: true)
-        
-        UserPreferences.addItemToSearchHistory(text)
-        localSuggestionStrings = UserPreferences.searchHistory
-        
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        performSearch()
-        self.tableView.reloadData()
+        performSearch(with: searchBar.text!)
     }
     
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.suggestionStrings.1 = .history
-        self.localSuggestionStrings = UserPreferences.searchHistory
-        self.tableView.reloadData()
+        suggestionBrain.searchTextDidChangeTo(text: nil)
     }
     
-    
-    
-   
 
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     
-        if searchText.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty{
-            self.suggestionStrings.1 = .history
-            self.localSuggestionStrings = UserPreferences.searchHistory
-            self.tableView.reloadData()
-            return
-        }
+        suggestionBrain.searchTextDidChangeTo(text: searchText)
         
-        YTAPIManager.main.getAutoCompleteSuggestionsFrom(searchText: searchText) { (stringArray) in
-            if searchText != searchBar.text {return}
-            self.suggestionStrings = (stringArray, .loaded)
-            self.tableView.reloadData()
-        }
+        
     }
+    
+    
     
 
     
     
+    func performSearch(with text: String){
+        
+        suggestionBrain.userDidPressSearch(for: text)
+        let newResultsController = SearchResultsTableView()
+        newResultsController.setSearchResultsWithText(text)
+        navigationController?.pushViewController(newResultsController, animated: true)
+        
+        
+    }
     
     
     
-    
-    
-    
-    
-    
-    
-    
+
     
     
     
@@ -340,25 +316,45 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     //MARK: - TABLE VIEW FUNCTIONS
     
     
+    
+    
+    
+    
+    
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        if searchSuggestions.type == .loaded{return nil}
+        
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Remove") { (action, indexPath2) in
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath2], with: .automatic)
+            self.suggestionBrain.userDidRemoveEntry(text: self.searchSuggestions.strings[indexPath2.row])
+            self.searchSuggestions.strings.remove(at: indexPath2.row)
+            
+            tableView.endUpdates()
+        }
+        
+        return [deleteAction]
+    }
+    
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return suggestionStrings.0.count
+        return searchSuggestions.strings.count
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! SearchSuggestionsCell
-        cell.fillButtonDelegate = self
-        cell.setTypeTo(suggestionStrings.1)
-        cell.setLabelTextTo(suggestionStrings.0[indexPath.row])
+        cell.configure(sender: self, type: searchSuggestions.type, text: searchSuggestions.strings[indexPath.row])
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let chosenString = suggestionStrings.0[indexPath.row]
-        searchController.searchBar.text = chosenString
-        performSearch()
-        suggestionStrings = (localSuggestionStrings, .history)
-        tableView.reloadData()
+        
+        
+        performSearch(with: searchSuggestions.strings[indexPath.row])
+        
         
     }
 }
@@ -384,7 +380,7 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
 
 
 
-fileprivate protocol SearchSuggestionsCellProtocol{
+fileprivate protocol SearchSuggestionsCellDelegate{
     
     func userDidFillText(_ text: String)
     
@@ -411,18 +407,21 @@ fileprivate final class SearchSuggestionsCell: CircleInteractionResponseCell{
         
     }
     
-    func setTypeTo(_ type: SearchTableView.SuggestionType){
+    
+    func configure(sender: SearchSuggestionsCellDelegate, type: SuggestionsType, text: String){
+        
         
         self.searchIcon.image = ((type == .loaded) ? #imageLiteral(resourceName: "searchSuggestionsSearchIcon") : #imageLiteral(resourceName: "searchHistory")).withRenderingMode(.alwaysTemplate)
         
+        titleLabel.text = text
+
+        fillButtonDelegate = sender
+        
     }
+    
 
     
-    func setLabelTextTo(_ text: String){
-        titleLabel.text = text
-    }
-    
-    var fillButtonDelegate: SearchSuggestionsCellProtocol?
+    private var fillButtonDelegate: SearchSuggestionsCellDelegate?
     
     
     

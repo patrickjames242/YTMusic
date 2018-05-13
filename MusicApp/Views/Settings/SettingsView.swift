@@ -16,8 +16,12 @@ class MusicSettings_NavCon: UINavigationController {
         super.viewDidLoad()
         navigationBar.prefersLargeTitles = true
         navigationBar.isTranslucent = false
-        navigationBar.tintColor = THEME_COLOR
+        navigationBar.tintColor = THEME_COLOR(asker: self)
         viewControllers.append(AppManager.shared.musicSettings)
+    }
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        navigationBar.tintColor = color
     }
     
     
@@ -45,6 +49,8 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
     }
     
     
+    
+    
     lazy var tableViewCells = [
         
         // NEW SECTION
@@ -67,55 +73,29 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
         // NEW SECTION
         
         [
-            self.create { (cell) in
-                cell.textLabel?.text = "Song Info"
-                cell.accessoryType = .disclosureIndicator
-            },
+        
+            SettingsCell(text: "General", type: SettingsCellIconType.general)
+            ,
             
-            self.create { (cell) in
-                cell.textLabel?.text = "Configure Audio Panning"
-                cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-            },
+            SettingsCell(text: "Configure Audio Panning", type: SettingsCellIconType.panning),
             
-            self.create(completion: { (cell) in
-                cell.textLabel?.text = "Change App Theme Color"
-                cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-            }),
+            SettingsCell(text: "Configure App Theme Color", type: SettingsCellIconType.color),
             
-            self.create(completion: { (cell) in
-                cell.textLabel?.text = "Allow Notifications"
-                cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-
-            })
+            SettingsCell(text: "Allow Notifications", type: SettingsCellIconType.notifications)
         ],
         
         // NEW SECTION
         
         [
-            self.create{ (cell) in
-                cell.textLabel?.text = "Report a Bug"
-                cell.accessoryType = .disclosureIndicator
-                
-            },
+            SettingsCell(text: "Report a Bug", type: SettingsCellIconType.bug),
             
-            self.create{ (cell) in
-                cell.textLabel?.text = "Give Feedback"
-                cell.accessoryType = .disclosureIndicator
-                
-            },
-            
-            
-            
+            SettingsCell(text: "Give Feedback", type: SettingsCellIconType.feedback),
             
             ],
         
         [
             
-            self.create{ (cell) in
-                cell.textLabel?.text = "Share This App"
-                cell.accessoryType = .disclosureIndicator
-                
-            }
+            SettingsCell(text: "Share This App", type: SettingsCellIconType.share)
             
             
         ]
@@ -236,6 +216,93 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
     override init(style: UITableViewStyle) { super.init(style: .grouped) }
     
     init(){ fatalError("Don't use the 'init()' initializer to initialize a Music Settings View Controller!!!!") }; required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+}
+
+
+
+private enum SettingsCellIconType: String{ case general, panning, color, notifications, bug, feedback, share }
+
+
+
+fileprivate class SettingsCell: UITableViewCell{
+    
+    init(text: String, type: SettingsCellIconType){
+        super.init(style: .default, reuseIdentifier: "ya ma")
+        accessoryType = .disclosureIndicator
+        label.text = text
+        iconImageView.image = iconImageFor(type: type)
+    
+        setUpViews()
+        
+    }
+    
+    
+    
+    
+    
+  
+    
+    private func iconImageFor(type: SettingsCellIconType) -> UIImage{
+        
+        switch type{
+        case .bug: return #imageLiteral(resourceName: "errorTriangle")
+        case .color: return #imageLiteral(resourceName: "fillBucket")
+        case .feedback: return #imageLiteral(resourceName: "feedback")
+        case .general: return #imageLiteral(resourceName: "infoIcon")
+        case .notifications: return #imageLiteral(resourceName: "bell")
+        case .panning: return #imageLiteral(resourceName: "equalizer")
+        case .share: return #imageLiteral(resourceName: "shareIcon")
+        }
+        
+        
+    }
+    
+    
+    private lazy var label: UILabel = {
+        let x = UILabel()
+        
+        return x
+        
+    }()
+    
+    private lazy var iconImageView: UIImageView = {
+        let x = UIImageView()
+        x.contentMode = .scaleAspectFit
+        return x
+        
+        
+    }()
+    
+    
+    
+    private func setUpViews(){
+        
+        addSubview(label)
+        addSubview(iconImageView)
+        
+        let ICON_SIZE: CGFloat = 35
+        
+        iconImageView.pin(left: leftAnchor, centerY: centerYAnchor, size: CGSize(width: ICON_SIZE, height: ICON_SIZE), insets: UIEdgeInsets(left: 15))
+        
+        label.pin(left: iconImageView.rightAnchor, centerY: centerYAnchor, insets: UIEdgeInsets(left: 15))
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+ 
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError()
+    }
 }
 
 

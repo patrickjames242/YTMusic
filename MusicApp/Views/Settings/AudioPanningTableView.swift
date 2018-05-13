@@ -210,9 +210,8 @@ class AudioPanningTableView: UITableViewController{
             self.createCell(completion: { (cell) in
                 cell.textLabel?.text = "Toggle Audio Panning"
                 
-                let toggle = UISwitch()
                 toggle.setOn(UserPreferences.audioPanningIsOn, animated: false)
-                toggle.onTintColor = THEME_COLOR
+                toggle.onTintColor = THEME_COLOR(asker: self)
                 toggle.addTarget(self, action: #selector(respondToSwitchSwitched(sender:)), for: .valueChanged)
                 cell.addSubview(toggle)
                 toggle.pin(right: cell.rightAnchor, centerY: cell.centerYAnchor, insets: UIEdgeInsets(right: 15))
@@ -223,6 +222,14 @@ class AudioPanningTableView: UITableViewController{
         ]
         
     ]
+    
+    private let toggle = UISwitch()
+
+    
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        toggle.onTintColor = color
+    }
     
     
     private var cellFooterStrings = [

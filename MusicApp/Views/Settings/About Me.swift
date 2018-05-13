@@ -74,10 +74,16 @@ class AboutMeView: UIView {
         
     }()
     
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        learnMoreButton.backgroundColor = color
+        
+    }
+    
     private lazy var learnMoreButton: UIButton = {
         let x = UIButton(type: .system)
         
-        x.backgroundColor = THEME_COLOR
+        x.backgroundColor = THEME_COLOR(asker: self)
         
         x.setAttributedTitle(NSAttributedString(string: "Learn More", attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white]), for: .normal)
         
@@ -154,6 +160,12 @@ class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
         
     }
     
+    
+    override func interfaceColorDidChange(to color: UIColor) {
+        shortDescriptionLabel.textColor = color
+        innerCloseButton.backgroundColor = color
+    }
+    
    
     
     
@@ -199,7 +211,7 @@ class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
     private lazy var shortDescriptionLabel: UILabel = {
         let x = UILabel()
         
-        x.textColor = THEME_COLOR
+        x.textColor = THEME_COLOR(asker: self)
         x.text = "19 | University of The Bahamas | 🇧🇸🇧🇸"
         x.numberOfLines = 1
         x.font = UIFont.systemFont(ofSize: 14)
@@ -331,7 +343,7 @@ class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
         x.layer.shadowOpacity = 0.8
         
 
-        innerCloseButton.backgroundColor = THEME_COLOR
+        innerCloseButton.backgroundColor = THEME_COLOR(asker: self)
         innerCloseButton.layer.masksToBounds = true
         
         innerCloseButton.setAttributedTitle(NSAttributedString(string: "Close", attributes: [.font: UIFont.boldSystemFont(ofSize: 14.5), .foregroundColor: UIColor.white]), for: .normal)
@@ -672,7 +684,6 @@ fileprivate class SocialMediaButton: UIButton{
         
         let x = UIImageView()
         x.contentMode = .scaleAspectFill
-        x.backgroundColor = THEME_COLOR
         x.layer.masksToBounds = true
         x.isUserInteractionEnabled = false
         return x

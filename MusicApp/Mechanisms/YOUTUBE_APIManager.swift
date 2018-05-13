@@ -296,42 +296,7 @@ class YTAPIManager: NSObject {
     
     //MARK: - GET AUTO COMPLETE SUGGESTIONS
     
-    func getAutoCompleteSuggestionsFrom(searchText: String, completion: @escaping ([String]) -> Void){
-        
-        let urlString: NSString = "https://suggestqueries.google.com/complete/search?hl=en&ds=yt&q=\(searchText as NSString)&client=firefox" as NSString
-        
-        let urlString2 = urlString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
-        
-        let url = URL(string: urlString2)!
-        
-
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if error != nil{
-                print(error!)
-                return
-            }
-            DispatchQueue.main.sync {
-                let resultingStrings = self.parseJSONForSuggestionsFrom(data: data!)
-                completion(resultingStrings)
-            }
-        }
-        task.resume()
-    }
     
-    
-    private func parseJSONForSuggestionsFrom(data: Data) -> [String]{
-        var arrayToReturn = [String]()
-        do{
-            let resultsArray1 = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! NSArray
-            
-            let resultsArray = resultsArray1[1] as! Array<String>
-            
-            arrayToReturn = resultsArray
-            
-        } catch{ print(error) }
-        
-        return arrayToReturn
-    }
     
     
     
