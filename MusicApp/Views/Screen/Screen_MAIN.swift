@@ -48,7 +48,9 @@ class Screen: UIViewController, UITabBarDelegate{
     
     
     
-    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+        return UIInterfaceOrientationMask.portrait
+    }
     
     
     

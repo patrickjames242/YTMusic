@@ -283,7 +283,14 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     
     
     override func interfaceColorDidChange(to color: UIColor) {
+        
         progressAnimator.color = color
+        
+        if progressAnimator.isAnimating{
+            progressAnimator.stopAnimating()
+            progressAnimator.startAnimating()
+        }
+        
     }
     
     

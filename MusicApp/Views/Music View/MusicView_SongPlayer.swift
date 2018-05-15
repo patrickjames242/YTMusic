@@ -439,12 +439,26 @@ extension MusicView: SongQueueDelegate{
                 changePlayPauseButtonImagesTo(.play)
             }
         case .ended:
-            
-            
-            if !songIsPlaying{
-                self.playMusic()
-                changePlayPauseButtonImagesTo(.pause)
+            if let optionsValue = notification.userInfo![AVAudioSessionInterruptionOptionKey] as? UInt{
+                let options = AVAudioSessionInterruptionOptions.init(rawValue: optionsValue)
+                if options.contains(.shouldResume){
+                    
+                    if !songIsPlaying {
+                        self.playMusic()
+                        changePlayPauseButtonImagesTo(.pause)
+                    }
+                    
+                } else {
+                    if songIsPlaying{
+                        self.pauseMusic()
+                        changePlayPauseButtonImagesTo(.play)
+                    }
+                }
+                
+                
             }
+            
+            
             
         }
     }
@@ -564,7 +578,7 @@ extension MusicView: SongQueueDelegate{
         songPlayer = nil
     
         
-        
+        deactivateAudioSession()
         
         
         UIApplication.shared.endReceivingRemoteControlEvents()

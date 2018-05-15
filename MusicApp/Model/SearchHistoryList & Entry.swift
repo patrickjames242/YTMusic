@@ -39,18 +39,18 @@ class SearchHistoryList: Codable{
     
     private func sortList(){
         
-        list.sort{$0.date > $1.date}
+        list.sort { $0.date > $1.date }
 
     }
     
     
     func insert(newEntry: String){
-      
+        let text = newEntry.removeWhiteSpaces()
         
-        list = list.filter{$0.text != newEntry}
+        list = list.filter{$0.text != text}
         
         
-        let newHistoryEntry = SearchHistoryEntry(text: newEntry, date: Date())
+        let newHistoryEntry = SearchHistoryEntry(text: text, date: Date())
         list.append(newHistoryEntry)
         sortList()
         while list.count > objectDeletionThreshold{

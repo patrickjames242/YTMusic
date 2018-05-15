@@ -10,7 +10,7 @@ import UIKit
 
 
 
-protocol Colorful: class {
+protocol Colorful: NSObjectProtocol {
     
     func interfaceColorDidChange(to color: UIColor)
     
@@ -18,7 +18,7 @@ protocol Colorful: class {
 
 
 
-extension NSObject: Colorful{
+extension NSObject: Colorful {
     
     @objc func interfaceColorDidChange(to color: UIColor) {
         
@@ -31,6 +31,8 @@ extension NSObject: Colorful{
     
     
     
+    
+    
 }
 
 var CURRENT_THEME_COLOR: UIColor{
@@ -39,7 +41,17 @@ var CURRENT_THEME_COLOR: UIColor{
 
 
 
+fileprivate struct WeakColorful {
 
+    weak var value: Colorful?
+    
+    init(_ value: Colorful) {
+        self.value = value
+    }
+    
+    
+    
+}
 
 
 
@@ -49,25 +61,26 @@ var CURRENT_THEME_COLOR: UIColor{
 class ColorManager{
     
     fileprivate static func addColorObserver(sender: Colorful){
-        for observer in colorObservers where observer === sender{
+        
+        for observer in colorObservers where observer.value === sender{
             return
         }
         
-        colorObservers.append(sender)
+        colorObservers.append(WeakColorful(sender))
         
         
         
     }
     
     
-    private static var colorObservers = [Colorful]()
+    private static var colorObservers = [WeakColorful]()
     
     
     static func changeInterfaceColor(to color: UIColor){
         UserPreferences.currentAppThemeColor = color
         UIView.animate(withDuration: 0.5) {
-            for observer in colorObservers{
-                observer.interfaceColorDidChange(to: color)
+            for observer in colorObservers {
+                observer.value?.interfaceColorDidChange(to: color)
             }
         }
      

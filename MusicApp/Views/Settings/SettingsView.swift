@@ -68,14 +68,13 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
             
         ],
         
-
+        
         
         // NEW SECTION
         
         [
-        
-            SettingsCell(text: "General", type: SettingsCellIconType.general)
-            ,
+            
+            SettingsCell(text: "General", type: SettingsCellIconType.general),
             
             SettingsCell(text: "Configure Audio Panning", type: SettingsCellIconType.panning),
             
@@ -161,6 +160,24 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
         
         switch indexPath{
         
+        
+            
+            
+        case IndexPath(item: 0, section: 1):
+            
+            navigationController?.pushViewController(AppInfoTableView(), animated: true)
+            
+        case IndexPath(item: 1, section: 1):
+            
+            navigationController?.pushViewController(AudioPanningTableView(), animated: true)
+        
+        case IndexPath(item: 2, section: 1):
+            
+            navigationController?.pushViewController(ColorPicker(), animated: true)
+            
+        case IndexPath(item: 3, section: 1):
+            AppManager.displayErrorMessage(message: "Sorry, this feature is not available.", completion: nil)
+            
         case IndexPath(item: 0, section: 2), IndexPath(item: 1, section: 2):
             
             
@@ -174,13 +191,9 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
             } else {
                 AppManager.displayErrorMessage(target: self, message: "For some reason, iOS is now allowing this app to send emails. Check your email settings.", completion: nil)
             }
+        case IndexPath(item: 0, section: 3):
+            AppManager.displayErrorMessage(message: "Sorry, this feature is not available.", completion: nil)
             
-        case IndexPath(item: 0, section: 1):
-            navigationController?.pushViewController(AppInfoTableView(), animated: true)
-            
-        case IndexPath(item: 1, section: 1):
-            
-            navigationController?.pushViewController(AudioPanningTableView(), animated: true)
         
         default: break
             

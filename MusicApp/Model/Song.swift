@@ -64,11 +64,8 @@ class Song: NSObject {
     }
     
     
-    var theDuration: TimeInterval{
-        
-        return object.duration
-        
-    }
+    
+
     
     static func deleteAll(completion: (() -> Void)? = nil){
         DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
@@ -138,6 +135,7 @@ class Song: NSObject {
     
     
     func delete(){
+        downloadItem?.delete()
         Song.allSongs[self.uniqueID] = nil
         DBManager.delete(song: object)
         
@@ -163,7 +161,13 @@ class Song: NSObject {
     
     func addObserver(_ sender: SongObserver){
         
+        for observer in myObservers where observer === sender{
+            return
+        }
+        
         self.myObservers.append(sender)
+        
+        
         
     }
     
@@ -239,6 +243,14 @@ class Song: NSObject {
     var duration: TimeInterval = 0
     
     
+    
+    var downloadItem: DownloadItem?{
+        
+        if let item = object.dbDownloadItem{
+            return DownloadItem.wrap(object: item)
+        }
+        return nil
+    }
 
     var youtubeID: String?{
         return object.ytID

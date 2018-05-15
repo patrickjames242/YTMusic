@@ -381,6 +381,13 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
     
     override func interfaceColorDidChange(to color: UIColor) {
         nowPlayingAnimator.color = color
+        
+        if nowPlayingAnimator.isAnimating{
+            nowPlayingAnimator.stopAnimating()
+            nowPlayingAnimator.startAnimating()
+        }
+        
+        
         if let currentSong = currentSong{
             if currentSong.nowPlayingStatus == .paused || currentSong.nowPlayingStatus == .playing{
                 albumArtist.textColor = color

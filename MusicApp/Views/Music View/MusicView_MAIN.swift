@@ -202,9 +202,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
             self.carryOutPlayPauseButtonTarget()
             self.changePlayPauseButtonImagesTo(self.songIsPlaying ? .pause : .play)
             
-            if !self.songIsPlaying{
-                self.deactivateAudioSession()
-            }
+ 
             
         }
         return x
@@ -434,9 +432,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
             self.carryOutPlayPauseButtonTarget()
             self.changePlayPauseButtonImagesTo(self.songIsPlaying ? .pause : .play)
             
-            if !self.songIsPlaying{
-                self.deactivateAudioSession()
-            }
+     
         }
         x.automaticallyAnimatesImageWhenTapped = false
 

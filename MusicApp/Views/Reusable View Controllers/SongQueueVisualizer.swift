@@ -29,7 +29,7 @@ class SongQueueVisualizer: UITableViewController{
     
     
     private let type: SongQueueVisualizerType
-    private let reorderingDelegate: SongReorderingObserver
+    private weak var reorderingDelegate: SongReorderingObserver?
     
     init(songs: [Song], type: SongQueueVisualizerType, reorderingDelegate: SongReorderingObserver){
         self.reorderingDelegate = reorderingDelegate
@@ -85,22 +85,24 @@ class SongQueueVisualizer: UITableViewController{
     
  
     
-    func songQueueDidChange(type: SongQueueChangeType, object: Song?, at index: Int?, newArray: [Song]){
-        
+ 
+    
+    func songQueueDidChange(type: SongQueueChangeType, at indexes: [Int], newArray: [Song]){
+
+        let indexPaths = indexes.map{ IndexPath(row: $0, section: 0) }
+
         
        tableView.beginUpdates()
         
         switch type{
         case .fill:
-            songs = newArray
-            tableView.reloadData()
-            tableView.endUpdates()
+            
+            tableView.insertRows(at: indexPaths, with: .fade)
         case .insert:
-            let indexPath = IndexPath(row: index!, section: 0)
-            tableView.insertRows(at: [indexPath], with: .fade)
+            tableView.insertRows(at: indexPaths, with: .fade)
         case .delete:
-            let indexPath = IndexPath(row: index!, section: 0)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            tableView.deleteRows(at: indexPaths, with: .fade)
         }
         
         songs = newArray
@@ -149,7 +151,7 @@ class SongQueueVisualizer: UITableViewController{
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         songs.insert(songs.remove(at: sourceIndexPath.row), at: destinationIndexPath.row)
         
-        reorderingDelegate.songWasReordered(song: songs[destinationIndexPath.row], oldIndex: sourceIndexPath.row, newIndex: destinationIndexPath.row)
+        reorderingDelegate?.songWasReordered(song: songs[destinationIndexPath.row], oldIndex: sourceIndexPath.row, newIndex: destinationIndexPath.row)
     }
     
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {

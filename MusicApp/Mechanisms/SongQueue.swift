@@ -14,7 +14,7 @@ import Foundation
 
 
 
-protocol SongReorderingObserver{
+protocol SongReorderingObserver: class{
     func songWasReordered(song: Song, oldIndex: Int, newIndex: Int)
     func songWasRemoved(song: Song, at index: Int)
 }
@@ -75,7 +75,9 @@ class SongStack: SongReorderingObserver{
     func fill(with songs: [Song]){
         storage = songs
         
-        visualizer?.songQueueDidChange(type: .fill, object: nil, at: nil, newArray: getAll().reversed())
+        let indexes = Array(songs.indices)
+        
+        visualizer?.songQueueDidChange(type: .fill, at: indexes, newArray: getAll().reversed())
         
     }
     
@@ -95,7 +97,7 @@ class SongStack: SongReorderingObserver{
 
         let newSongArray: [Song] = self.getAll().reversed()
         
-        visualizer?.songQueueDidChange(type: .insert, object: song, at: newIndex, newArray: newSongArray)
+        visualizer?.songQueueDidChange(type: .insert, at: [newIndex], newArray: newSongArray)
     }
     
     func insertRandomly(song: Song){
@@ -106,7 +108,7 @@ class SongStack: SongReorderingObserver{
         let visualizerIndex = visualizedIndexTranslator(index: randomIndex)
 
         
-        visualizer?.songQueueDidChange(type: .insert, object: song, at: visualizerIndex, newArray: getAll().reversed())
+        visualizer?.songQueueDidChange(type: .insert, at: [visualizerIndex], newArray: getAll().reversed())
         
     }
     
@@ -122,12 +124,11 @@ class SongStack: SongReorderingObserver{
         if storage.isEmpty { return }
         
         let index = storage.lastItemIndex!
-        let song = storage[index]
         let newIndex = visualizedIndexTranslator(index: index)
         storage.remove(at: index)
         
         
-        visualizer?.songQueueDidChange(type: .delete, object: song, at: newIndex, newArray: getAll().reversed())
+        visualizer?.songQueueDidChange(type: .delete, at: [newIndex], newArray: getAll().reversed())
     }
     
     func popAndReturn() -> Song? {
@@ -143,7 +144,7 @@ class SongStack: SongReorderingObserver{
            let newIndex = visualizedIndexTranslator(index: index)
             storage.remove(at: index)
 
-            visualizer?.songQueueDidChange(type: .delete, object: song, at: newIndex, newArray: getAll().reversed())
+            visualizer?.songQueueDidChange(type: .delete, at: [newIndex], newArray: getAll().reversed())
 
         }
     }

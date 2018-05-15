@@ -17,7 +17,8 @@ class AppInfoTableView: UITableViewController{
         super.init(style: .grouped)
         
         navigationItem.largeTitleDisplayMode = .never
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(initiateStatistics), name: SongWasDeletedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(initiateStatistics), name: NewSongWasCreatedNotification, object: nil)
     }
 
 
@@ -31,7 +32,7 @@ class AppInfoTableView: UITableViewController{
     }
 
     
-    private func initiateStatistics(){
+    @objc private func initiateStatistics(){
         
         countCell.setInfoText(to: String(Song.count()))
         

@@ -236,6 +236,8 @@ class AudioPanningTableView: UITableViewController{
     
         
         "When enabled, this allows you to adjust the audio volume balance between left and right channels.",
+        
+        
         nil
         
     ]

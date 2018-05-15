@@ -65,6 +65,7 @@
 		6043DF1120977D780068101F /* SongQueueVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6043DF1020977D780068101F /* SongQueueVisualizer.swift */; };
 		6044CC4E209B2BEA00B5B1E3 /* ScrollBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6044CC4D209B2BEA00B5B1E3 /* ScrollBar.swift */; };
 		6044CC50209B2C9800B5B1E3 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6044CC4F209B2C9800B5B1E3 /* MenuBar.swift */; };
+		604D758620A9ECD600AE56D0 /* ColorChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604D758520A9ECD600AE56D0 /* ColorChooserView.swift */; };
 		604E0DD82034953200F0A5B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604E0DD72034953200F0A5B8 /* AppDelegate.swift */; };
 		604E0DE02034953200F0A5B8 /* MusicApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 604E0DDE2034953200F0A5B8 /* MusicApp.xcdatamodeld */; };
 		604E0DE52034953200F0A5B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 604E0DE32034953200F0A5B8 /* LaunchScreen.storyboard */; };
@@ -171,6 +172,7 @@
 		6043DF1020977D780068101F /* SongQueueVisualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongQueueVisualizer.swift; sourceTree = "<group>"; };
 		6044CC4D209B2BEA00B5B1E3 /* ScrollBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollBar.swift; sourceTree = "<group>"; };
 		6044CC4F209B2C9800B5B1E3 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
+		604D758520A9ECD600AE56D0 /* ColorChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChooserView.swift; sourceTree = "<group>"; };
 		604E0DD42034953200F0A5B8 /* MusicApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MusicApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		604E0DD72034953200F0A5B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		604E0DDF2034953200F0A5B8 /* MusicApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MusicApp.xcdatamodel; sourceTree = "<group>"; };
@@ -448,6 +450,7 @@
 				60EECBA3209FA12800853741 /* About Me.swift */,
 				60EECBA5209FA14500853741 /* App Info.swift */,
 				60EECBA7209FC85500853741 /* AudioPanningTableView.swift */,
+				604D758520A9ECD600AE56D0 /* ColorChooserView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -570,6 +573,7 @@
 				604E0DD82034953200F0A5B8 /* AppDelegate.swift in Sources */,
 				601AF532209E98B70014FA46 /* Downloader.swift in Sources */,
 				603CE09A2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallScaleRipple.swift in Sources */,
+				604D758620A9ECD600AE56D0 /* ColorChooserView.swift in Sources */,
 				603CE08C2065A50E00BDD5D6 /* NVActivityIndicatorView.swift in Sources */,
 				60F246AA20379F310074F572 /* MediaButton.swift in Sources */,
 				603CE09F2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBlank.swift in Sources */,

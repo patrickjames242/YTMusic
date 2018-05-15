@@ -32,6 +32,7 @@ class YoutubeVideo: NSObject {
     weak var delegate:YoutubeVideoDelegate?
     
     init(name: String, videoID: String, channel: String, thumbnailLink: URL, duration: String, views: String, date: String) {
+        
         self.name = name
         self.videoID = videoID
         self.channel = channel
@@ -72,7 +73,7 @@ class YoutubeVideo: NSObject {
 
     private var imageDownloadHasStarted = false
     
-    func initiateImageDownloadIfNeeded(){
+    func initiateImageDownloadIfNeeded() {
         
         
         if imageDownloadHasStarted { return }
@@ -80,14 +81,15 @@ class YoutubeVideo: NSObject {
         imageDownloadHasStarted = true
         
         let task = URLSession.shared.dataTask(with: thumbnailLink) { [weak weakSelf = self](data, response, error) in
-            if let error = error{
+            if let error = error {
                 print("there was an error in the 'initiateImageDownload' function in a YoutubeVideoObject: name:\(weakSelf?.name ?? " !!! self is nil !!! "), error: \(error)")
                 weakSelf?.imageDownloadHasStarted = false
                 weakSelf?.initiateImageDownloadIfNeeded()
                 return
             }
             
-            if let data = data, let image = UIImage(data: data){
+            if let data = data, let image = UIImage(data: data) {
+                
                 DispatchQueue.main.async {
                     weakSelf?.image = image
                     weakSelf?.delegate?.imageDidFinishDownloading(video: self, image: image)

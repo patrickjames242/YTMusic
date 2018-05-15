@@ -372,8 +372,9 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         
         if songIndexPath == nil { return }
         tableView.selectRow(at: songIndexPath!, animated: true, scrollPosition: .middle)
-        Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false) { (timer) in
-            self.tableView.deselectRow(at: songIndexPath!, animated: true)
+        Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false) { [weak weakSelf = self](timer) in
+            guard let weakSelf = weakSelf else {timer.invalidate(); return}
+            weakSelf.tableView.deselectRow(at: songIndexPath!, animated: true)
         }
     }
     
@@ -760,6 +761,11 @@ class MyTableViewCell: CircleInteractionResponseCell, SongObserver{
     
     override func interfaceColorDidChange(to color: UIColor) {
         nowPlayingAnimator.color = color
+        
+        if nowPlayingAnimator.isAnimating{
+            nowPlayingAnimator.stopAnimating()
+            nowPlayingAnimator.startAnimating()
+        }
 
         if let currentSong = currentSong{
             if currentSong.nowPlayingStatus == .paused || currentSong.nowPlayingStatus == .playing{

@@ -6,11 +6,30 @@
 //  Copyright © 2018 Patrick Hanna. All rights reserved.
 //
 
+
 import UIKit
 import SafariServices
 
 
 
+
+
+
+class MyView: UIView {
+    
+    var layoutSubviewsAction: (() -> Void)?
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if let action = layoutSubviewsAction{
+            action()
+        }
+        
+    }
+    
+    
+}
 
 
 

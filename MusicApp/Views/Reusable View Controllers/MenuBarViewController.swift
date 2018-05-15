@@ -111,7 +111,7 @@ class MenuBarViewController: UIViewController, UIScrollViewDelegate, MenuBarDele
     }()
   
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollViewIsAutomaticallyScrolling{return}
+        if scrollViewIsAutomaticallyScrolling { return }
         
         let index = Int((scrollView.contentOffset.x / scrollView.contentSize.width) * CGFloat(menuBarItems.count))
         
@@ -219,6 +219,8 @@ class MenuBarViewController: UIViewController, UIScrollViewDelegate, MenuBarDele
         
         
     }()
+    
+
     
     
     private lazy var bottomBlurView: UIVisualEffectView = {

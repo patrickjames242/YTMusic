@@ -109,10 +109,10 @@ class DownloadItem: Equatable{
         
     }
     
-    var name: String            { return object.name!}
-    var channelName: String     { return object.channelName!}
-    var ytVideoID: String       { return object.ytID!}
-    var startDate: Date         { return object.dateStarted!}
+    var name: String{ return object.name!}
+    var channelName: String{ return object.channelName!}
+    var ytVideoID: String{ return object.ytID!}
+    var startDate: Date{ return object.dateStarted!}
     var uniqueID: String
     private var _runTimeStatus: DownloadStatus
     
@@ -453,6 +453,7 @@ fileprivate final class DBManager{
     static func createAndSaveNewDBDownloadItem(from youtubeVideo: YoutubeVideo, imageData: Data) -> DBDownloadItem{
         
         let newObject = DBDownloadItem(context: context)
+    
         newObject.uniqueID = NSUUID().uuidString
         newObject.channelName = youtubeVideo.channel
         newObject.dateStarted = Date()

@@ -61,10 +61,30 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
         tableView.contentInset.top = -(separationInset / 2)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(respondToTrashCanButtonPressed))
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Paste URL", style: .plain, target: self, action: #selector(respondToURLButton))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: pasteButton)
+        
+//
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Paste URL", style: .plain, target: self, action: #selector(respondToURLButton))
+//
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "paste"), style: .plain, target: self, action: #selector(respondToURLButton))
         
         setUpFetchedResultsController()
     }
+    
+    private lazy var pasteButton: UIImageView = {
+        let x = UIImageView(image: #imageLiteral(resourceName: "paste").withRenderingMode(.alwaysTemplate))
+        x.contentMode = .scaleAspectFit
+        x.pin(size: CGSize(width: 22, height: 22))
+        x.isUserInteractionEnabled = true
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(respondToURLButton))
+        x.addGestureRecognizer(gesture)
+        
+        return x
+        
+    }()
+    
+
     
     
     
@@ -453,7 +473,7 @@ fileprivate class DownloadsTableViewCell: CircleInteractionResponseCell, Downloa
     
     
     override func interfaceColorDidChange(to color: UIColor) {
-        
+        threeDotButton.tintColor = color
         if let currentItem = currentDownloadItem{
             
             switch currentItem.runTimeStatus{
