@@ -63,6 +63,7 @@
 		603E13C1203BAB600010BCDB /* MusicView_Frames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E13C0203BAB600010BCDB /* MusicView_Frames.swift */; };
 		603E1F91204376C2006164E7 /* Screen_MusicViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E1F90204376C2006164E7 /* Screen_MusicViewDelegate.swift */; };
 		6043DF1120977D780068101F /* SongQueueVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6043DF1020977D780068101F /* SongQueueVisualizer.swift */; };
+		6044AC4D20AB0DB900E013F5 /* SongStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6044AC4C20AB0DB900E013F5 /* SongStack.swift */; };
 		6044CC4E209B2BEA00B5B1E3 /* ScrollBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6044CC4D209B2BEA00B5B1E3 /* ScrollBar.swift */; };
 		6044CC50209B2C9800B5B1E3 /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6044CC4F209B2C9800B5B1E3 /* MenuBar.swift */; };
 		604D758620A9ECD600AE56D0 /* ColorChooserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604D758520A9ECD600AE56D0 /* ColorChooserView.swift */; };
@@ -116,15 +117,15 @@
 		6002F048209B280E00360063 /* EArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EArray.swift; sourceTree = "<group>"; };
 		600F7E89203E2030009CF6BF /* MusicView_SongPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView_SongPlayer.swift; sourceTree = "<group>"; };
 		60164FF6203A21D400A6B2B6 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		601AF522209E98B60014FA46 /* SongQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SongQueue.swift; path = Mechanisms/SongQueue.swift; sourceTree = "<group>"; };
-		601AF523209E98B60014FA46 /* NowPlayingInfoCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NowPlayingInfoCenter.swift; path = Mechanisms/NowPlayingInfoCenter.swift; sourceTree = "<group>"; };
-		601AF524209E98B70014FA46 /* SearchAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchAPI.swift; path = Mechanisms/SearchAPI.swift; sourceTree = "<group>"; };
-		601AF525209E98B70014FA46 /* YOUTUBE_APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = YOUTUBE_APIManager.swift; path = Mechanisms/YOUTUBE_APIManager.swift; sourceTree = "<group>"; };
-		601AF526209E98B70014FA46 /* Variations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Variations.swift; path = Mechanisms/Variations.swift; sourceTree = "<group>"; };
-		601AF527209E98B70014FA46 /* Database_CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Database_CoreData.swift; path = Mechanisms/Database_CoreData.swift; sourceTree = "<group>"; };
-		601AF528209E98B70014FA46 /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppManager.swift; path = Mechanisms/AppManager.swift; sourceTree = "<group>"; };
-		601AF529209E98B70014FA46 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Downloader.swift; path = Mechanisms/Downloader.swift; sourceTree = "<group>"; };
-		601AF52A209E98B70014FA46 /* UserPreferences_UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserPreferences_UserDefaults.swift; path = Mechanisms/UserPreferences_UserDefaults.swift; sourceTree = "<group>"; };
+		601AF522209E98B60014FA46 /* SongQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongQueue.swift; sourceTree = "<group>"; };
+		601AF523209E98B60014FA46 /* NowPlayingInfoCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowPlayingInfoCenter.swift; sourceTree = "<group>"; };
+		601AF524209E98B70014FA46 /* SearchAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAPI.swift; sourceTree = "<group>"; };
+		601AF525209E98B70014FA46 /* YOUTUBE_APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YOUTUBE_APIManager.swift; sourceTree = "<group>"; };
+		601AF526209E98B70014FA46 /* Variations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variations.swift; sourceTree = "<group>"; };
+		601AF527209E98B70014FA46 /* Database_CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database_CoreData.swift; sourceTree = "<group>"; };
+		601AF528209E98B70014FA46 /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
+		601AF529209E98B70014FA46 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
+		601AF52A209E98B70014FA46 /* UserPreferences_UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPreferences_UserDefaults.swift; sourceTree = "<group>"; };
 		603CE0512065A50E00BDD5D6 /* NVActivityIndicatorAnimationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationDelegate.swift; sourceTree = "<group>"; };
 		603CE0532065A50E00BDD5D6 /* NVActivityIndicatorPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorPresenter.swift; sourceTree = "<group>"; };
 		603CE0542065A50E00BDD5D6 /* NVActivityIndicatorViewable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorViewable.swift; sourceTree = "<group>"; };
@@ -170,6 +171,7 @@
 		603E13C0203BAB600010BCDB /* MusicView_Frames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView_Frames.swift; sourceTree = "<group>"; };
 		603E1F90204376C2006164E7 /* Screen_MusicViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen_MusicViewDelegate.swift; sourceTree = "<group>"; };
 		6043DF1020977D780068101F /* SongQueueVisualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongQueueVisualizer.swift; sourceTree = "<group>"; };
+		6044AC4C20AB0DB900E013F5 /* SongStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongStack.swift; sourceTree = "<group>"; };
 		6044CC4D209B2BEA00B5B1E3 /* ScrollBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollBar.swift; sourceTree = "<group>"; };
 		6044CC4F209B2C9800B5B1E3 /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		604D758520A9ECD600AE56D0 /* ColorChooserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChooserView.swift; sourceTree = "<group>"; };
@@ -237,18 +239,8 @@
 		6002F03A209AB4C900360063 /* Mechanisms */ = {
 			isa = PBXGroup;
 			children = (
-				601AF528209E98B70014FA46 /* AppManager.swift */,
-				601AF527209E98B70014FA46 /* Database_CoreData.swift */,
-				601AF52A209E98B70014FA46 /* UserPreferences_UserDefaults.swift */,
-				601AF529209E98B70014FA46 /* Downloader.swift */,
-				601AF523209E98B60014FA46 /* NowPlayingInfoCenter.swift */,
-				601AF524209E98B70014FA46 /* SearchAPI.swift */,
-				601AF522209E98B60014FA46 /* SongQueue.swift */,
-				601AF526209E98B70014FA46 /* Variations.swift */,
-				601AF525209E98B70014FA46 /* YOUTUBE_APIManager.swift */,
-				60EECB9C209EA24200853741 /* Ugly_YoutubeVideo_JSONParsing.swift */,
-				606E5E6620A65A4B00FE43C0 /* SearchSuggestionsBrain.swift */,
-				60F2431320A79969007085E6 /* ColorManager.swift */,
+				6044AC4B20AB0D6E00E013F5 /* Instance */,
+				6044AC4A20AB0D3D00E013F5 /* Singleton */,
 			);
 			name = Mechanisms;
 			sourceTree = "<group>";
@@ -398,6 +390,33 @@
 				603CE07B2065A50E00BDD5D6 /* NVActivityIndicatorAnimationOrbit.swift */,
 			);
 			path = Animations;
+			sourceTree = "<group>";
+		};
+		6044AC4A20AB0D3D00E013F5 /* Singleton */ = {
+			isa = PBXGroup;
+			children = (
+				601AF528209E98B70014FA46 /* AppManager.swift */,
+				601AF527209E98B70014FA46 /* Database_CoreData.swift */,
+				601AF52A209E98B70014FA46 /* UserPreferences_UserDefaults.swift */,
+				601AF529209E98B70014FA46 /* Downloader.swift */,
+				601AF523209E98B60014FA46 /* NowPlayingInfoCenter.swift */,
+				601AF526209E98B70014FA46 /* Variations.swift */,
+				601AF525209E98B70014FA46 /* YOUTUBE_APIManager.swift */,
+				60F2431320A79969007085E6 /* ColorManager.swift */,
+			);
+			path = Singleton;
+			sourceTree = "<group>";
+		};
+		6044AC4B20AB0D6E00E013F5 /* Instance */ = {
+			isa = PBXGroup;
+			children = (
+				601AF524209E98B70014FA46 /* SearchAPI.swift */,
+				6044AC4C20AB0DB900E013F5 /* SongStack.swift */,
+				601AF522209E98B60014FA46 /* SongQueue.swift */,
+				606E5E6620A65A4B00FE43C0 /* SearchSuggestionsBrain.swift */,
+				60EECB9C209EA24200853741 /* Ugly_YoutubeVideo_JSONParsing.swift */,
+			);
+			path = Instance;
 			sourceTree = "<group>";
 		};
 		604E0DCB2034953100F0A5B8 = {
@@ -577,6 +596,7 @@
 				603CE08C2065A50E00BDD5D6 /* NVActivityIndicatorView.swift in Sources */,
 				60F246AA20379F310074F572 /* MediaButton.swift in Sources */,
 				603CE09F2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBlank.swift in Sources */,
+				6044AC4D20AB0DB900E013F5 /* SongStack.swift in Sources */,
 				603CE0A22065A50E00BDD5D6 /* NVActivityIndicatorAnimationTriangleSkewSpin.swift in Sources */,
 				603CE0882065A50E00BDD5D6 /* NVActivityIndicatorAnimationDelegate.swift in Sources */,
 				60F2431620A7A00D007085E6 /* InterfaceBackgroundView.swift in Sources */,
