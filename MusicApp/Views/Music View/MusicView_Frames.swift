@@ -173,7 +173,6 @@ extension MusicView {
     
     var albumDifferenceFactor: CGFloat{
         return Variations.MusicView.albumImageDifferenceFactor
-        //        return ((AppManager.screenWidth >= 375) ? 0 : 50 )
     }
     
     

@@ -47,7 +47,7 @@ class ColorPicker: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         x.delegate = self
         for (num, item) in colors.enumerated(){
             
-            if item.color == UserPreferences.currentAppThemeColor{
+            if item.color == DBColor.currentAppThemeColor{
                 x.selectRow(num, inComponent: 0, animated: false)
             }
             
@@ -79,7 +79,7 @@ class ColorPicker: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
  
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        ColorManager.changeInterfaceColor(to: colors[row].color)
+        DBColor.currentAppThemeColor = colors[row].color
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {

@@ -11,7 +11,7 @@ import UIKit
 
 
 
-class SongEditorView: UINavigationController{
+class SongEditorView: PortraitNavigationController{
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -95,7 +95,7 @@ fileprivate class SongEditorViewController: UITableViewController, UITextFieldDe
     
     @objc func respondToSaveButton(){
         currentSong.changeNamesTo(title: textField1.text!, artist: textField2.text!)
-        [textField1, textField2].forEach{ $0.resignFirstResponder()}
+        [textField1, textField2].forEach{ $0.resignFirstResponder() }
         self.dismiss(animated: true, completion: nil)
         
     }

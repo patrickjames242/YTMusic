@@ -12,24 +12,30 @@ import UIKit
 
 protocol YoutubeVideoDelegate: class {
     
-    func imageDidFinishDownloading(video: YoutubeVideo, image: UIImage)
+    var imageReceivedClosure: (_ wasDownloaded: Bool, YoutubeVideo, UIImage) -> Void { get }
+    
     
 }
 
 
-class YoutubeVideo: NSObject {
+struct YoutubeVideoThumbnailLink{
+    let lowQuality: URL
+    let mediumQuality: URL
+    let highQuality: URL
+    
+}
+
+
+class YoutubeVideo {
     
     let name: String
     let videoID: String
     let channel: String
-    let thumbnailLink: URL
     let duration: String
     let views: String
     let date: String
     
-    var image: UIImage?
-    
-    weak var delegate:YoutubeVideoDelegate?
+    let thumbnailLink: URL
     
     init(name: String, videoID: String, channel: String, thumbnailLink: URL, duration: String, views: String, date: String) {
         
@@ -41,20 +47,35 @@ class YoutubeVideo: NSObject {
         self.views = views
         self.date = date
         
-        super.init()
+//        super.init()
         
         
         
     }
     
     
+    
+
+    private var image: UIImage?
+    private weak var delegate:YoutubeVideoDelegate?
+
+
+    func registerAsDelegate(_ asker: YoutubeVideoDelegate){
+        
+        if image != nil{ delegate = nil; asker.imageReceivedClosure(false, self, image!); return }
+        
+        self.delegate = asker
+        
+        initiateImageDownloadIfNeeded()
         
         
-       
+    }
     
-    
-    
-    
+    func resignAsDelegate(_ asker: YoutubeVideoDelegate){
+        
+        self.delegate = nil
+        
+    }
     
     
     
@@ -71,36 +92,37 @@ class YoutubeVideo: NSObject {
     
     
 
-    private var imageDownloadHasStarted = false
+    private var imageDownloadIsInProgress = false
     
-    func initiateImageDownloadIfNeeded() {
+    private func initiateImageDownloadIfNeeded() {
         
         
-        if imageDownloadHasStarted { return }
+        if imageDownloadIsInProgress { return }
         
-        imageDownloadHasStarted = true
+        imageDownloadIsInProgress = true
         
         let task = URLSession.shared.dataTask(with: thumbnailLink) { [weak weakSelf = self](data, response, error) in
+            guard let weakSelf = weakSelf else {return}
+            weakSelf.imageDownloadIsInProgress = false
+            
+            
             if let error = error {
-                print("there was an error in the 'initiateImageDownload' function in a YoutubeVideoObject: name:\(weakSelf?.name ?? " !!! self is nil !!! "), error: \(error)")
-                weakSelf?.imageDownloadHasStarted = false
-                weakSelf?.initiateImageDownloadIfNeeded()
+                print("there was an error in the 'initiateImageDownload' function in a YoutubeVideoObject: name:\(weakSelf.name), error: \(error)")
+                weakSelf.initiateImageDownloadIfNeeded()
                 return
             }
+            
             
             if let data = data, let image = UIImage(data: data) {
                 
                 DispatchQueue.main.async {
-                    weakSelf?.image = image
-                    weakSelf?.delegate?.imageDidFinishDownloading(video: self, image: image)
+                    weakSelf.image = image
+                    weakSelf.delegate?.imageReceivedClosure(true, self, image)
                 }
                 
-            
-                
             } else {
-                weakSelf?.imageDownloadHasStarted = false
-                weakSelf?.initiateImageDownloadIfNeeded()
-                print("Something went wrong in the 'initiateImageDownload' function in a YoutubeVideo object name: \(weakSelf?.name ?? " !!! self is nil !!! ")")
+                weakSelf.initiateImageDownloadIfNeeded()
+                print("Something went wrong in the 'initiateImageDownload' function in a YoutubeVideo object name: \(weakSelf.name)")
             }
             
         }

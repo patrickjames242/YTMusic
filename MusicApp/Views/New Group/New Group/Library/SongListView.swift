@@ -350,14 +350,14 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         
     }
     
-    private func getIndexPathOf(song: Song) -> IndexPath?{
+    private func getIndexPathOf(song: DBSong) -> IndexPath?{
         var songIndexPath: IndexPath?
         var s = 0
         for songSection in officialSongsTuple.songs{
             
             var r = 0
             for song1 in songSection{
-                if song == song1{
+                if song1.isTheWrapperFor(DBObject: song){
                     songIndexPath = IndexPath(row: r, section: s)
                 }
                 r += 1
@@ -368,7 +368,7 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
     }
     
     func scrollToCellOfSong(_ song: Song){
-        let songIndexPath = self.getIndexPathOf(song: song)
+        let songIndexPath = self.getIndexPathOf(song: song.object)
         
         if songIndexPath == nil { return }
         tableView.selectRow(at: songIndexPath!, animated: true, scrollPosition: .middle)
@@ -461,11 +461,11 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         
-        let newSong = Song.wrap(object: anObject as! DBSong)
+        let object = anObject as! DBSong
 
         let oldSongs = dbSongsTuple.0
         
-        let formattedOldIndexPath = getIndexPathOf(song: newSong)
+        let formattedOldIndexPath = getIndexPathOf(song: object)
         
         let fetchedObjects = fetchedResultsController.fetchedObjects!
         let songObjects = Song.wrap(array: fetchedObjects)
@@ -475,7 +475,7 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         if officialSongsTuple.type == .search{return}
         
         
-        let formattedNewIndexPath = getIndexPathOf(song: newSong)
+        let formattedNewIndexPath = getIndexPathOf(song: object)
         
         
         

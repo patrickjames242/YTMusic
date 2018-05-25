@@ -17,24 +17,24 @@ class Screen: UIViewController, UITabBarDelegate{
     
     //MARK: - CHILD VIEW CONTROLLERS
     
-    var songView: SongListView_NavCon{
+    var songView: SongListView_NavCon {
         return AppManager.shared.songListNavCon
     }
 
 
-    var settingsView: MusicSettings_NavCon{
+    var settingsView: MusicSettings_NavCon {
         return AppManager.shared.musicSettingsNavCon
     }
     
-    var downloadsView: DownloadsView_NavCon{
+    var downloadsView: DownloadsView_NavCon {
         return AppManager.shared.downloadsView_NavCon
     }
     
-    var searchView: SearchTableView_NavCon{
+    var searchView: SearchTableView_NavCon {
         return AppManager.shared.searchNavCon
     }
     
-    var recentlyAddedView: RecentlyAdded_NavCon{
+    var recentlyAddedView: RecentlyAdded_NavCon {
         return AppManager.shared.recentlyAddedView_NavCon
     }
     

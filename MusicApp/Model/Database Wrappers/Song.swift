@@ -64,7 +64,20 @@ class Song: NSObject {
     }
     
     
+    func isTheWrapperFor(DBObject: DBSong) -> Bool{
+        
+        return object == DBObject
+        
+    }
     
+    static func isDownloaded(youtubeID: String) -> Bool{
+        for song in allSongs.values where song.youtubeID == youtubeID{
+            return true
+        }
+        
+        
+        return false
+    }
 
     
     static func deleteAll(completion: (() -> Void)? = nil){
@@ -252,10 +265,7 @@ class Song: NSObject {
         return nil
     }
 
-    var youtubeID: String?{
-        return object.ytID
-        
-    }
+    let youtubeID: String?
     
     /// This is not used outside of the Song and DownloadItem classes
     let object: DBSong
@@ -266,6 +276,7 @@ class Song: NSObject {
         self.image = UIImage(data: DB_Object.image!)!
         self.object = DB_Object
         self.uniqueID = DB_Object.dataIdentifier!
+        self.youtubeID = DB_Object.ytID
         
     }
     

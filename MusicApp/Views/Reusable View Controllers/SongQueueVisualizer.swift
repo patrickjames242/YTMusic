@@ -87,9 +87,9 @@ class SongQueueVisualizer: UITableViewController{
     
  
     
-    func songQueueDidChange(type: SongQueueChangeType, at indexes: [Int], newArray: [Song]){
+    func songQueueDidChange(type: SongQueueChangeType, at indexPaths: [IndexPath], newArray: [Song]){
 
-        let indexPaths = indexes.map{ IndexPath(row: $0, section: 0) }
+        
 
         
        tableView.beginUpdates()
@@ -151,7 +151,7 @@ class SongQueueVisualizer: UITableViewController{
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         songs.insert(songs.remove(at: sourceIndexPath.row), at: destinationIndexPath.row)
         
-        reorderingDelegate?.songWasReordered(song: songs[destinationIndexPath.row], oldIndex: sourceIndexPath.row, newIndex: destinationIndexPath.row)
+        reorderingDelegate?.songWasReordered(song: songs[destinationIndexPath.row], oldIndexPath: sourceIndexPath, newIndexPath: destinationIndexPath)
     }
     
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {

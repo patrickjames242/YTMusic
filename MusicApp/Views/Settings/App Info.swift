@@ -147,7 +147,7 @@ class AppInfoTableView: UITableViewController{
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
             
-            UserPreferences.removeAllItemsFromSearchHistory()
+            DBHistory.removeAllItemsFromSearchHistory()
 
             
         }

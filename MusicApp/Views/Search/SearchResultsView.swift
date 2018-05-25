@@ -89,7 +89,7 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     
     
     
-    static var currentViews = [SearchResultsTableView]()
+    private static var currentViews = [SearchResultsTableView]()
     
 
  
@@ -412,6 +412,7 @@ fileprivate protocol SearchResultsTableViewCellDelegate{
 
 fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, YoutubeVideoDelegate{
     
+    
 
     
     //MARK: - INIT, TABLE VIEW CELL
@@ -425,11 +426,47 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
         
         setUpViews()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongDeletedNotification(notification:)), name: SongWasDeletedNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongCreatedNotification(notification:)), name: NewSongWasCreatedNotification, object: nil)
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(respondToLongPress))
         addGestureRecognizer(longPressGesture)
     }
     
+    
+    @objc func respondToSongCreatedNotification(notification: Notification){
+        guard let currentVideo = currentVideo else {return}
+        if let song = notification.userInfo?[NewlyCreatedSongObjectKey] as? Song{
+            
+            if song.youtubeID! == currentVideo.videoID{
+                UIView.animate(withDuration: 0.3) {
+                    self.downloadedIndicator.alpha = 1
+                    self.downloadedIndicator_holderView.alpha = 1
+                }
+            }
+            
+        }
+        
+        
+    }
+    
+    
+    @objc func respondToSongDeletedNotification(notification: Notification){
+        guard let currentVideo = currentVideo else {return}
+        
+        let song = notification.userInfo![DeletedSongObjectKey]! as! Song
+        
+        if song.youtubeID == currentVideo.videoID{
+            UIView.animate(withDuration: 0.3) {
+                self.downloadedIndicator.alpha = 0
+                self.downloadedIndicator_holderView.alpha = 0
+            }
+            
+        }
+        
+        
+    }
     
     
     @objc private func respondToLongPress(gesture: UILongPressGestureRecognizer){
@@ -447,13 +484,18 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
     
     
     
-    
-
-    func imageDidFinishDownloading(video: YoutubeVideo, image: UIImage) {
-        guard let currentVideo = currentVideo else {return}
-        if video == currentVideo{ setImageViewWith(image: image) }
+    lazy var imageReceivedClosure = { (wasDownloaded: Bool, sender: YoutubeVideo, image: UIImage) in
+        
+        guard let currentVideo = self.currentVideo else {return}
+        
+        if !wasDownloaded{self.setImageViewWith(image: image, animated: false); return}
+        if sender === currentVideo { self.setImageViewWith(image: image, animated: true) }
         
     }
+
+    
+    
+    
     
     
     
@@ -462,14 +504,16 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
 
     func setCellWith(video: YoutubeVideo, delegate: SearchResultsTableViewCellDelegate){
         
-        
-        
-        currentVideo?.delegate = nil
-        video.delegate = self
-        currentVideo = video
-        resultsCellDelegate = delegate
-        
+
         myImageView.image = nil
+        currentVideo?.resignAsDelegate(self)
+        currentVideo = video
+        video.registerAsDelegate(self)
+        resultsCellDelegate = delegate
+    
+
+        
+        
         topTextLabel.text = video.name
         middleTextLabel.text = video.channel
         bottomTextLabel.text = video.views + " • " + video.date
@@ -477,18 +521,20 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
         
         
         
-        if let image = video.image{
-            myImageView.image = image
+        
+        if Song.isDownloaded(youtubeID: video.videoID){
+            downloadedIndicator_holderView.alpha = 1
+            downloadedIndicator.alpha = 1
         } else {
-            video.initiateImageDownloadIfNeeded()
+            downloadedIndicator_holderView.alpha = 0
+            downloadedIndicator.alpha = 0
         }
-        
-        
+
     }
     
     
     
-    func setImageViewWith(image: UIImage){
+    private func setImageViewWith(image: UIImage, animated: Bool){
         if myImageView.isAnimating {
             myImageView.stopAnimating()
         }
@@ -497,15 +543,16 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
         myImageView.alpha = 0
         myImageView.image = image
         
-        UIView.animate(withDuration: 0.3) {
-            
+        
+        if animated{
+            UIView.animate(withDuration: 0.3) {
+                self.myImageView.alpha = 1
+
+                
+            }
+        } else {
             self.myImageView.alpha = 1
-            
         }
-        
-        
-        
-        
     }
     
     
@@ -536,6 +583,29 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
         x.translatesAutoresizingMaskIntoConstraints = false
         x.alpha = 0
         return x
+    }()
+    
+    
+    private lazy var downloadedIndicator_holderView: UIView = {
+        let y = UIView()
+        
+        y.backgroundColor = THEME_COLOR(asker: self)
+        y.layer.cornerRadius = 5
+        y.layer.masksToBounds = true
+        y.alpha = 0
+        return y
+    }()
+    
+    private lazy var downloadedIndicator: UILabel = {
+        
+        let x = UILabel()
+        x.text = "Downloaded"
+        x.textColor = .white
+        
+        x.font = UIFont.boldSystemFont(ofSize: 13)
+        x.alpha = 0
+        return x
+        
     }()
 
     
@@ -610,6 +680,9 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
     
     override func interfaceColorDidChange(to color: UIColor) {
         threeDotButton.tintColor = color
+        
+        downloadedIndicator_holderView.backgroundColor = color
+        
     }
     
     private lazy var threeDotButton_ActivationArea: UIView = {
@@ -674,7 +747,16 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
         addSubview(timeStamp)
         addSubview(threeDotButton_ActivationArea)
         
+        addSubview(downloadedIndicator_holderView)
+        addSubview(downloadedIndicator)
         threeDotButton_ActivationArea.addSubview(threeDotButton)
+        
+        
+        
+        downloadedIndicator_holderView.pinAllSidesTo(downloadedIndicator, insets: UIEdgeInsets(allInsets: -3))
+        
+        
+        downloadedIndicator.pin(left: imageHolderView.leftAnchor, top: imageHolderView.topAnchor, insets: UIEdgeInsets(top: 8, left: 8))
         
         
         
@@ -744,42 +826,5 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

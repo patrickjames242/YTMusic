@@ -37,8 +37,8 @@ class SearchSuggestionsBrain: SearchHistoryDelegate{
         
         self.owner = owner
         self.currentSuggestionsType = .history
-        owner.searchSuggestions(didChangeTo: UserPreferences.searchHistory, type: .history)
-        UserPreferences.searchHistoryDelegate = self
+        owner.searchSuggestions(didChangeTo: DBHistory.searchHistory, type: .history)
+        DBHistory.searchHistoryDelegate = self
     }
     
     func allSongsWereRemovedFromSearchHistory() {
@@ -58,7 +58,7 @@ class SearchSuggestionsBrain: SearchHistoryDelegate{
     
     func userDidPressSearch(for text: String){
         
-        UserPreferences.addItemToSearchHistory(text)
+        DBHistory.addItemToSearchHistory(text)
         
         if currentSuggestionsType == .history{
             Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (timer) in
@@ -74,7 +74,7 @@ class SearchSuggestionsBrain: SearchHistoryDelegate{
     
     private func sendUpdatedHistory(){
         self.currentSuggestionsType = .history
-        owner.searchSuggestions(didChangeTo: UserPreferences.searchHistory, type: .history)
+        owner.searchSuggestions(didChangeTo: DBHistory.searchHistory, type: .history)
         
         
     }
@@ -95,7 +95,7 @@ class SearchSuggestionsBrain: SearchHistoryDelegate{
     
     func userDidRemoveEntry(text: String){
         
-        UserPreferences.removeItemFromSearchHistory(text)
+        DBHistory.removeItemFromSearchHistory(text)
         
         
     }

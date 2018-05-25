@@ -1,12 +1,13 @@
 //
-//  SearchHistoryEntry.swift
+//  SearchHistoryList.swift
 //  MusicApp
 //
-//  Created by Patrick Hanna on 5/4/18.
+//  Created by Patrick Hanna on 5/17/18.
 //  Copyright © 2018 Patrick Hanna. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
 
 
 fileprivate struct SearchHistoryEntry: Codable, Equatable{
@@ -30,7 +31,7 @@ class SearchHistoryList: Codable{
     
     private var list: [SearchHistoryEntry]
     
-
+    
     
     var entryList: [String]{
         sortList()
@@ -40,7 +41,7 @@ class SearchHistoryList: Codable{
     private func sortList(){
         
         list.sort { $0.date > $1.date }
-
+        
     }
     
     
@@ -114,26 +115,4 @@ class SearchHistoryList: Codable{
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

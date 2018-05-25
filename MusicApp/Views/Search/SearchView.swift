@@ -53,6 +53,7 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     
     override func interfaceColorDidChange(to color: UIColor) {
         searchController.searchBar.tintColor = color
+        segmentController.tintColor = color
     }
     
     
@@ -79,6 +80,7 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
         let searchBar = searchController.searchBar
+        
         searchBar.placeholder = "Tap here to search"
         let coverView = UIView()
         coverView.translatesAutoresizingMaskIntoConstraints = false
@@ -99,10 +101,37 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
         
         tableView.register(SearchSuggestionsCell.self, forCellReuseIdentifier: cellID)
         setBottomInsets()
-        
+        setUpSegmentedControllerView()
         
         NotificationCenter.default.addObserver(self, selector: #selector(respondToKeyboardChangeFrameNotification(notification:)), name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
     }
+    
+    
+    
+    func setUpSegmentedControllerView(){
+        
+        
+        
+    }
+    
+    
+    
+    private lazy var topSegmentedControllerView: UIView = {
+        let x = UIView()
+        
+        
+        segmentController.insertSegment(withTitle: "Youtube", at: 0, animated: false)
+        segmentController.insertSegment(withTitle: "Library", at: 1, animated: false)
+        segmentController.tintColor = THEME_COLOR(asker: self)
+        x.addSubview(segmentController)
+        segmentController.pinAllSidesTo(x, insets: UIEdgeInsets(allInsets: 10))
+        
+        return x
+        
+    }()
+    
+    let segmentController = UISegmentedControl()
+
     
     
     

@@ -33,6 +33,26 @@ class MyView: UIView {
 
 
 
+class PortraitViewController: UIViewController{
+    
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+        return .portrait
+    }
+    
+}
+
+class PortraitNavigationController: UINavigationController{
+    
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+        return .portrait
+    }
+    
+}
+
+
+
 extension UIColor {
     
     
@@ -134,6 +154,9 @@ extension CGSize {
 
 extension UIEdgeInsets{
     
+    init(allInsets: CGFloat){
+        self.init(top: allInsets, left: allInsets, bottom: allInsets, right: allInsets)
+    }
     
     init(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0){
         
@@ -276,12 +299,12 @@ extension UIView{
     }
     
     
-    func pinAllSidesTo(_ viewToPinTo: UIView){
+    func pinAllSidesTo(_ viewToPinTo: UIView, insets: UIEdgeInsets = UIEdgeInsets.zero){
         translatesAutoresizingMaskIntoConstraints = false
-        leftAnchor.constraint(equalTo: viewToPinTo.leftAnchor).isActive = true
-        rightAnchor.constraint(equalTo: viewToPinTo.rightAnchor).isActive = true
-        topAnchor.constraint(equalTo: viewToPinTo.topAnchor).isActive = true
-        bottomAnchor.constraint(equalTo: viewToPinTo.bottomAnchor).isActive = true
+        leftAnchor.constraint(equalTo: viewToPinTo.leftAnchor, constant: insets.left).isActive = true
+        rightAnchor.constraint(equalTo: viewToPinTo.rightAnchor, constant: -insets.right).isActive = true
+        topAnchor.constraint(equalTo: viewToPinTo.topAnchor, constant: insets.top).isActive = true
+        bottomAnchor.constraint(equalTo: viewToPinTo.bottomAnchor, constant: -insets.bottom).isActive = true
         
     }
     

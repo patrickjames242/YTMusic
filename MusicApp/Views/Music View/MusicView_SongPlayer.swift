@@ -271,7 +271,7 @@ extension MusicView: SongQueueDelegate{
         
         
         songPlayer.delegate = self
-        songPlayer.pan = UserPreferences.audioPanningPosition
+        songPlayer.pan = DBPanning.audioPanningPositionToUse
         
         if userHandPicked{ songQueue.songWasChosenByHand(song: song)}
         
@@ -528,12 +528,7 @@ extension MusicView: SongQueueDelegate{
         
         guard let player = songPlayer else {return}
         
-        if UserPreferences.audioPanningIsOn{
-            player.pan = UserPreferences.audioPanningPosition
-        } else {
-            player.pan = 0
-
-        }
+        player.pan = DBPanning.audioPanningPositionToUse
     }
     
     func deactivateAudioSession(){

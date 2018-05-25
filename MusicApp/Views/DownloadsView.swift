@@ -294,8 +294,13 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
         
     }
     
+    
+    
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         let object = anObject as! DBDownloadItem
+        
+        
         let oldIndexPath = getIndexPathFor(object: object)
         
         let downloads1 = DownloadItem.wrap(array: fetchedResultsController.fetchedObjects!)

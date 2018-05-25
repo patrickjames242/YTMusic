@@ -19,7 +19,7 @@ struct MenuBarControllerItem{
 
 
 
-class MenuBarViewController: UIViewController, UIScrollViewDelegate, MenuBarDelegate{
+class MenuBarViewController: PortraitViewController, UIScrollViewDelegate, MenuBarDelegate{
  
     init(items: [MenuBarControllerItem], titleText: String, showsDismissButton: Bool){
         self.showsDismissButton = showsDismissButton

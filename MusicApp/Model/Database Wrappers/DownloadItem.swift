@@ -70,12 +70,9 @@ enum DBDownloadItemStatus: String{
 
 
 
-class DownloadItem: Equatable{
+class DownloadItem: NSObject{
     
     
-    static func ==(lhs: DownloadItem, rhs: DownloadItem) -> Bool {
-        return lhs.uniqueID == rhs.uniqueID
-    }
     
     
  
@@ -101,13 +98,7 @@ class DownloadItem: Equatable{
 
     
     
-    func delete(){
-        deleteTimer.invalidate()
-        DownloadItem.allCurrentInstances[uniqueID] = nil
-        DBManager.delete(downloadItem: object)
-        
-        
-    }
+
     
     var name: String{ return object.name!}
     var channelName: String{ return object.channelName!}
@@ -267,18 +258,20 @@ class DownloadItem: Equatable{
     }
     
     
-    static private var allCurrentInstances = [String: DownloadItem]()
+    static private var allCurrentInstances = [DBDownloadItem: DownloadItem]()
     
     
     
     static func wrap(object: DBDownloadItem) -> DownloadItem? {
-        if let previousInstance = allCurrentInstances[object.uniqueID!]{
-            return previousInstance
-        } else {
-            guard let newItem = DownloadItem(DBObject: object) else {return nil}
-            allCurrentInstances[newItem.uniqueID] = newItem
-            return newItem
+        
+        if let previousObject = allCurrentInstances[object]{
+            return previousObject
         }
+        
+        guard let newItem = DownloadItem(DBObject: object) else {return nil}
+        allCurrentInstances[object] = newItem
+        return newItem
+        
     }
     
     static func wrap(array: [DBDownloadItem]) -> [DownloadItem]{
@@ -297,6 +290,12 @@ class DownloadItem: Equatable{
         return wrap(array: gottenObjects)
     }
     
+    
+    func delete(){
+        deleteTimer.invalidate()
+        DownloadItem.allCurrentInstances[object] = nil
+        DBManager.delete(downloadItem: object)
+    }
     
     
     
@@ -330,11 +329,13 @@ class DownloadItem: Equatable{
     
     
     private init?(DBObject: DBDownloadItem) {
+        if DBObject.uniqueID == nil{return nil}
         
         if DownloadItem.objectShouldBeDeleted(object: DBObject){
             DBManager.delete(downloadItem: DBObject)
             return nil
         }
+        
         
         self.image = UIImage(data: DBObject.image!)!
         self.object = DBObject
@@ -361,7 +362,8 @@ class DownloadItem: Equatable{
         case .cancelled:
             self._runTimeStatus = DownloadStatus.canceled(DBObject.dateFinished!)
         }
-        
+        super.init()
+
         startDeleteTimer()
 
     }
@@ -423,7 +425,7 @@ class DownloadItem: Equatable{
 
 
 
-fileprivate final class DBManager{
+fileprivate final class DBManager {
     
     private static let context = Database.context
     private static func saveContext() { Database.saveContext() }
@@ -516,16 +518,3 @@ fileprivate final class DBManager{
         saveContext()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -100,7 +100,6 @@ class AppManager: NSObject{
             
         }
         
-        ColorManager.changeInterfaceColor(to: .red)
  
         return screen
     }

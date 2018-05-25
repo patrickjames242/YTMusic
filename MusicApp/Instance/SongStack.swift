@@ -10,8 +10,8 @@ import UIKit
 
 
 protocol SongReorderingObserver: class{
-    func songWasReordered(song: Song, oldIndex: Int, newIndex: Int)
-    func songWasRemoved(song: Song, at index: Int)
+    func songWasReordered(song: Song, oldIndexPath: IndexPath, newIndexPath: IndexPath)
+    func songWasRemoved(song: Song, at indexPath: IndexPath)
 }
 
 
@@ -30,33 +30,30 @@ class SongStack: SongReorderingObserver{
     
     private var storage = [Song]()
     
-    
+    private var firstSongStartDate: Date?
     
     func getVisualizer(type: SongQueueVisualizerType) -> UIViewController{
-        let controller = SongQueueVisualizer(songs: self.getAll().reversed(), type: type, reorderingDelegate: self)
+        let controller = SongQueueVisualizer(songs: getAll(), type: type, reorderingDelegate: self)
         self.visualizer = controller
         
         return controller
     }
     
-    private func visualizedIndexTranslator(index: Int) -> Int{
-        return storage.lastItemIndex! - index
+ 
+    
+    
+    
+    
+    func songWasReordered(song: Song, oldIndexPath: IndexPath, newIndexPath: IndexPath) {
+        if storage.isEmpty{ firstSongStartDate = Date() }
+        storage.insert(storage.remove(at: oldIndexPath.row), at: newIndexPath.row)
     }
     
     
-    
-    
-    func songWasReordered(song: Song, oldIndex: Int, newIndex: Int) {
-        let oi = visualizedIndexTranslator(index: oldIndex)
-        let ni = visualizedIndexTranslator(index: newIndex)
+    func songWasRemoved(song: Song, at indexPath: IndexPath) {
         
-        storage.insert(storage.remove(at: oi), at: ni)
-    }
-    
-    
-    func songWasRemoved(song: Song, at index: Int) {
-        let newIndex = visualizedIndexTranslator(index: index)
-        storage.remove(at: newIndex)
+        storage.remove(at: indexPath.row)
+        if storage.isEmpty{ firstSongStartDate = nil }
     }
     
     
@@ -68,11 +65,13 @@ class SongStack: SongReorderingObserver{
     
     
     func fill(with songs: [Song]){
+        
+        firstSongStartDate = Date()
         storage = songs
         
-        let indexes = Array(songs.indices)
+        let indexes = Array(songs.indices).map{ IndexPath(row: $0, section: 0) }
         
-        visualizer?.songQueueDidChange(type: .fill, at: indexes, newArray: getAll().reversed())
+        visualizer?.songQueueDidChange(type: .fill, at: indexes, newArray: storage)
         
     }
     
@@ -87,23 +86,21 @@ class SongStack: SongReorderingObserver{
     
     
     func push(song: Song){
-        storage.append(song)
-        let newIndex = visualizedIndexTranslator(index: storage.lastItemIndex!)
-        
-        let newSongArray: [Song] = self.getAll().reversed()
-        
-        visualizer?.songQueueDidChange(type: .insert, at: [newIndex], newArray: newSongArray)
+        if storage.isEmpty{ firstSongStartDate = Date() }
+        storage.insert(song, at: 0)
+
+        visualizer?.songQueueDidChange(type: .insert, at: [IndexPath(row: 0, section: 0)], newArray: storage)
     }
     
+    
+    
+    
     func insertRandomly(song: Song){
-        
+        if storage.isEmpty{ firstSongStartDate = Date() }
         let randomIndex = Int(arc4random_uniform(UInt32(storage.count)))
-        
         storage.insert(song, at: randomIndex)
-        let visualizerIndex = visualizedIndexTranslator(index: randomIndex)
         
-        
-        visualizer?.songQueueDidChange(type: .insert, at: [visualizerIndex], newArray: getAll().reversed())
+        visualizer?.songQueueDidChange(type: .insert, at: [IndexPath(row: randomIndex, section: 0)], newArray: storage)
         
     }
     
@@ -117,18 +114,15 @@ class SongStack: SongReorderingObserver{
     
     func pop(){
         if storage.isEmpty { return }
-        
-        let index = storage.lastItemIndex!
-        let newIndex = visualizedIndexTranslator(index: index)
-        storage.remove(at: index)
-        
-        
-        visualizer?.songQueueDidChange(type: .delete, at: [newIndex], newArray: getAll().reversed())
+
+        storage.remove(at: 0)
+        if storage.isEmpty { firstSongStartDate = nil }
+        visualizer?.songQueueDidChange(type: .delete, at: [IndexPath(row: 0, section: 0)], newArray: storage)
     }
     
     func popAndReturn() -> Song? {
         if storage.isEmpty { return nil }
-        let itemToReturn = storage[storage.lastItemIndex!]
+        let itemToReturn = storage[0]
         pop()
         return itemToReturn
     }
@@ -136,10 +130,10 @@ class SongStack: SongReorderingObserver{
     
     func popSpecificSong(_ song: Song){
         if let index = storage.index(of: song){
-            let newIndex = visualizedIndexTranslator(index: index)
-            storage.remove(at: index)
             
-            visualizer?.songQueueDidChange(type: .delete, at: [newIndex], newArray: getAll().reversed())
+            storage.remove(at: index)
+            if storage.isEmpty { firstSongStartDate = nil }
+            visualizer?.songQueueDidChange(type: .delete, at: [IndexPath(row: index, section: 0)], newArray: storage)
             
         }
     }
@@ -152,7 +146,7 @@ class SongStack: SongReorderingObserver{
     
     func peek() -> Song?{
         if storage.isEmpty { return nil }
-        return storage[storage.lastItemIndex!]
+        return storage[0]
     }
     
     

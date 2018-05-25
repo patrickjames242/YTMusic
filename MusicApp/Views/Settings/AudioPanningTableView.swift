@@ -24,7 +24,7 @@ class AudioPanningSlider: UISlider{
         minimumValue = -1
         maximumValue = 1
         
-        setValue(UserPreferences.audioPanningPosition, animated: false)
+        setValue(DBPanning.currentAudioPanningPosition, animated: false)
         [leftLine, rightLine, middleLine, RLabel, LLabel].forEach{ addSubview($0)}
         
         leftLine.pin(centerX: leftAnchor, centerY: centerYAnchor)
@@ -124,7 +124,7 @@ class AudioPanningTableView: UITableViewController{
         
         
         super.init(style: .grouped)
-        if UserPreferences.audioPanningIsOn{
+        if DBPanning.audioPanningIsOn{
             cells.append([self.panningSliderCell])
         }
         
@@ -156,14 +156,14 @@ class AudioPanningTableView: UITableViewController{
         
         if sender.isOn{
             
-            UserPreferences.audioPanningIsOn = true
+            DBPanning.audioPanningIsOn = true
             cells.insert([panningSliderCell], at: 1)
             tableView.insertSections(IndexSet(integer: 1), with: .fade)
             tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .fade)
             
         } else {
             
-            UserPreferences.audioPanningIsOn = false
+            DBPanning.audioPanningIsOn = false
             cells.remove(at: 1)
             tableView.deleteSections(IndexSet(integer: 1), with: .fade)
             tableView.deleteRows(at: [IndexPath(row: 0, section: 1)], with: .fade)
@@ -198,7 +198,7 @@ class AudioPanningTableView: UITableViewController{
     
     @objc private func respondToSliderSliding(sender: UISlider){
         
-        UserPreferences.audioPanningPosition = sender.value
+        DBPanning.currentAudioPanningPosition = sender.value
         
         
     }
@@ -210,7 +210,7 @@ class AudioPanningTableView: UITableViewController{
             self.createCell(completion: { (cell) in
                 cell.textLabel?.text = "Toggle Audio Panning"
                 
-                toggle.setOn(UserPreferences.audioPanningIsOn, animated: false)
+                toggle.setOn(DBPanning.audioPanningIsOn, animated: false)
                 toggle.onTintColor = THEME_COLOR(asker: self)
                 toggle.addTarget(self, action: #selector(respondToSwitchSwitched(sender:)), for: .valueChanged)
                 cell.addSubview(toggle)
