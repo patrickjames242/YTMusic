@@ -12,19 +12,18 @@ import Foundation
 
 
 
-
-class PlaybackHistoryBrain: NSObject{
+fileprivate class PlaybackHistoryBrain: NSObject{
 
     private var historyDict = [Date: [Song]]()
     
     
     
-    
-    
+ 
+ 
     var orderedHistory: [(date: Date, songArray: [Song])]{
         return historyDict.sorted { $0.key > $1.key } as! [(date: Date, songArray: [Song])]
     }
-    
+ 
     
     
     
@@ -53,17 +52,21 @@ class PlaybackHistoryBrain: NSObject{
     func wrapStackWithHistory(currentStack: [Song], startDate: Date) -> (historyArray:[[Song]], stringArray: [String]){
         
         historyDict[startDate] = currentStack
+ 
+ 
         
-        
-        
-        
-        
+ 
+ 
         return (nestedHistoryArray, orderedHistoryStrings(currentStackDate: startDate))
-        
+ 
     }
+ 
     
-    
-    
+ 
     
 }
+ 
+
+
+
 

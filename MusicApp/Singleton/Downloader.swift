@@ -196,14 +196,20 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
         
     }
     
-    
-    func cancelDownloadOf(item: DownloadItem){
-        
+    /// This stops the download of the DownloadItem without changing its status to canceled.
+    func stopDownloadOf(item: DownloadItem){
         guard let task = getTaskForItem(item) else {return}
         
         task.cancel()
-        item.changeStatusTo(.canceled(Date()))
         downloadTaskDict[task] = nil
+
+    }
+    
+    /// This stops the download of the DownloadItem and changes its status to canceled.
+    func cancelDownloadOf(item: DownloadItem){
+        
+        stopDownloadOf(item: item)
+        item.changeStatusTo(.canceled(Date()))
         
     }
     

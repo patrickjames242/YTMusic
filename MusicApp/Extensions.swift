@@ -13,11 +13,39 @@ import SafariServices
 
 
 
+class WeakWrapper<Value: AnyObject>: NSObject{
+    
+    
+    
+    weak var value: Value?
+    
+    init(_ value: Value){
+        
+        self.value = value
+        
+        
+        
+    }
+    
+}
+
+extension Array where Element: WeakWrapper<AnyObject>{
+    
+    mutating func purgeNils(){
+        self = filter {$0.value != nil}
+    }
+    
+}
+
 
 
 class MyView: UIView {
     
     var layoutSubviewsAction: (() -> Void)?
+    var touchesDidBeginAction: (() -> Void)?
+    var touchesDidEndAction: (() -> Void)?
+    var touchesDidCancelAction: (() -> Void)?
+    
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -27,6 +55,35 @@ class MyView: UIView {
         }
         
     }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        if let action = touchesDidBeginAction{
+            action()
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        if let action = touchesDidEndAction{
+            action()
+        }
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        
+        if let action = touchesDidCancelAction{
+            action()
+        }
+    }
+    
+    
+    
+    
+    
     
     
 }
@@ -275,6 +332,17 @@ extension CGRect{
     
 }
 
+extension CGPoint{
+    
+    func offset(by x: CGFloat, y: CGFloat) -> CGPoint{
+        var newPoint = self
+        newPoint.x += x
+        newPoint.y += y
+        return newPoint
+    }
+    
+}
+
 
 extension UIView{
     
@@ -381,6 +449,63 @@ extension UIView{
     var halfOfHeight: CGFloat{
         return frame.height / 2
     }
+    
+}
+
+
+extension UILayoutGuide{
+    
+    func pin(left: NSLayoutXAxisAnchor? = nil,
+             right: NSLayoutXAxisAnchor? = nil,
+             top: NSLayoutYAxisAnchor? = nil,
+             bottom: NSLayoutYAxisAnchor? = nil,
+             centerX: NSLayoutXAxisAnchor? = nil,
+             centerY: NSLayoutYAxisAnchor? = nil,
+             width: NSLayoutDimension? = nil,
+             height: NSLayoutDimension? = nil,
+             size: CGSize? = nil,
+             insets: UIEdgeInsets = UIEdgeInsets.zero){
+        
+        
+        
+        if let left = left{
+            leftAnchor.constraint(equalTo: left, constant: insets.left).isActive = true
+        }
+        if let right = right{
+            rightAnchor.constraint(equalTo: right, constant: -insets.right).isActive = true
+        }
+        if let top = top{
+            topAnchor.constraint(equalTo: top, constant: insets.top).isActive = true
+        }
+        if let bottom = bottom{
+            bottomAnchor.constraint(equalTo: bottom, constant: -insets.bottom).isActive = true
+        }
+        if let centerX = centerX{
+            centerXAnchor.constraint(equalTo: centerX).isActive = true
+        }
+        if let centerY = centerY{
+            centerYAnchor.constraint(equalTo: centerY).isActive = true
+        }
+        if let height = height{
+            heightAnchor.constraint(equalTo: height).isActive = true
+        }
+        if let width = width{
+            widthAnchor.constraint(equalTo: width).isActive = true
+        }
+        
+        if let size = size {
+            
+            if size.width != 0{
+                widthAnchor.constraint(equalToConstant: size.width).isActive = true
+            }
+            if size.height != 0{
+                heightAnchor.constraint(equalToConstant: size.height).isActive = true
+            }
+            
+        }
+        
+    }
+    
     
 }
 

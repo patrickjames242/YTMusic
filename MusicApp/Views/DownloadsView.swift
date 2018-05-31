@@ -58,16 +58,12 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
         setBottomInset()
         tableView.separatorColor = .clear
         tableView.rowHeight = cellHeight
-        tableView.contentInset.top = -(separationInset / 2)
+//        tableView.contentInset.top = -(separationInset / 2)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(respondToTrashCanButtonPressed))
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: pasteButton)
         
-//
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Paste URL", style: .plain, target: self, action: #selector(respondToURLButton))
-//
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "paste"), style: .plain, target: self, action: #selector(respondToURLButton))
-        
+
         setUpFetchedResultsController()
     }
     
@@ -395,6 +391,19 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
     
     
     
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "REMOVE") { (action, indexPath2) in
+            self.downloads[indexPath2.row].delete()
+        }
+        
+        
+        return [deleteAction]
+    }
+    
+    
+    
     
     
 }
@@ -550,18 +559,19 @@ fileprivate class DownloadsTableViewCell: CircleInteractionResponseCell, Downloa
     
     private func getTimeStringFrom(date: Date) -> String{
         
-        let numberOfElapsedSeconds = -date.timeIntervalSinceNow
+        let seconds = Int(-date.timeIntervalSinceNow)
+        let minutes = Int(seconds / 60)
+        let hours = Int((Double(minutes) / 60.0).rounded())
+        let days = Int((Double(hours) / 24.0).rounded())
         
-        if numberOfElapsedSeconds < 60{
+        if seconds < 60{
             return "just now"
-            
-        } else if numberOfElapsedSeconds < (60 * 60){
-            let minutes = Int((numberOfElapsedSeconds / 60.0).rounded())
+        } else if minutes < 60{
             return "\(minutes) \(minutes > 1 ? "minutes" : "minute") ago"
-            
-        } else {
-            let hours = Int((numberOfElapsedSeconds / (60.0 * 60.0)).rounded())
+        } else if hours < 24{
             return "\(hours) \(hours > 1 ? "hours" : "hour") ago"
+        } else {
+            return "\(days) \(days > 1 ? "days" : "day") ago"
         }
         
     }

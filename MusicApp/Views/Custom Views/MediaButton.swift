@@ -152,14 +152,7 @@ public class MediaPlayingButton: UIButton{
     
     private func triggerButtonAnimationWith(endingImage: UIImage){
         
-        if UIApplication.shared.applicationState != .active{
-            controlImageView.image = endingImage
-            return
-            
-        }
-        
-        if controlImageView.isAnimating{controlImageView.stopAnimating()}
-        
+
         UIView.animate(withDuration: 0.15 , animations: {
             self.controlImageView.transform = CGAffineTransform(scaleX: self.imageDecreaseConstant, y: self.imageDecreaseConstant)
         }) { (success) in

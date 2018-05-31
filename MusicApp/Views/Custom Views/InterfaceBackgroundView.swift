@@ -18,8 +18,17 @@ class ScrollableContentBackgroundView: UIView{
         self.title = title
         self.message = message
         super.init(frame: CGRect.zero)
-        
+        objectsHolderView.alpha = 0
         setUpViews()
+    }
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        objectsHolderView.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+        UIView.animate(withDuration: 0.45) {
+            self.objectsHolderView.alpha = 1
+            self.objectsHolderView.transform = CGAffineTransform.identity
+        }
     }
     
     private var title: String
@@ -39,15 +48,24 @@ class ScrollableContentBackgroundView: UIView{
     }
     
     
+    private lazy var objectsHolderView: UIView = {
+        
+        let x = UIView()
+        
+        [topLabel, bottomLabel, buttonHolderView].forEach { x.addSubview($0) }
+        
+        topLabel.pin(top: x.topAnchor,centerX: x.centerXAnchor)
+        bottomLabel.pin(top: topLabel.bottomAnchor,centerX: x.centerXAnchor)
+        buttonHolderView.pin(top: bottomLabel.bottomAnchor,centerX: x.centerXAnchor, size: CGSize(width: 200, height: 40), insets: UIEdgeInsets(top: 20))
+        return x
+    }()
+    
+    
     private lazy var topLabel: UILabel = {
         let x = UILabel()
         x.text = title
         x.font = UIFont.boldSystemFont(ofSize: 20)
-
         return x
-        
-        
-        
     }()
     
     
@@ -56,12 +74,9 @@ class ScrollableContentBackgroundView: UIView{
         let x = UILabel()
         x.text = message
         x.textColor = .gray
-
         return x
-        
-        
-        
     }()
+    
     
     
     
@@ -101,11 +116,9 @@ class ScrollableContentBackgroundView: UIView{
     
     
     private func setUpViews(){
-        [topLabel, bottomLabel, buttonHolderView].forEach { addSubview($0) }
-
-        topLabel.pin(top: topAnchor,centerX: centerXAnchor, insets: UIEdgeInsets(top: 70))
-        bottomLabel.pin(top: topLabel.bottomAnchor,centerX: centerXAnchor,insets: UIEdgeInsets(top: 5))
-        buttonHolderView.pin(top: bottomLabel.bottomAnchor,centerX: centerXAnchor, size: CGSize(width: 200, height: 40), insets: UIEdgeInsets(top: 20))
+        addSubview(objectsHolderView)
+        objectsHolderView.pin(centerX: centerXAnchor, width: widthAnchor, size: CGSize(height: 120))
+        objectsHolderView.centerYAnchor.constraint(equalTo: topAnchor, constant: 135).isActive = true
     }
     
     

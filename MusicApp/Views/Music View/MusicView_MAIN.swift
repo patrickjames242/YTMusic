@@ -40,20 +40,20 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         layoutIfNeeded()
   
         clipsToBounds = true
-        
+
         addSubview(backGroundBluryView)
         addSubview(albumImage)
         setInitialAlbumCoverConstraints()
         addSubview(scrubbingSlider)
         
         
-        
         setUpViews()
-    
 
     
+        bringSubview(toFront: albumImage)
+    
         Variations.doOnIPhone {
-            addGestureRecognizer(goUpRecognizer)
+          minimizedObjectsHolderView.addGestureRecognizer(goUpRecognizer)
         }
         addGestureRecognizer(longPressGesture)
         
@@ -162,13 +162,14 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     
     lazy var topLine: UIView = {
         let x = UIView()
-        x.backgroundColor = UIColor(red: 0.783922, green: 0.780392, blue: 0.8, alpha: 1)
+        x.backgroundColor = .lightGray
         x.translatesAutoresizingMaskIntoConstraints = false
         return x
     }()
     
     lazy var minimizedProgressBar: ProgressIndicator = {
         let x = ProgressIndicator()
+        x.backgroundColor = .clear
         x.translatesAutoresizingMaskIntoConstraints = false
         return x
         
@@ -198,13 +199,9 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         x.translatesAutoresizingMaskIntoConstraints = false
       
         x.automaticallyAnimatesImageWhenTapped = false
-        x.action = {
-            self.carryOutPlayPauseButtonTarget()
-            self.changePlayPauseButtonImagesTo(self.songIsPlaying ? .pause : .play)
+        x.action = self.carryOutPlayPauseButtonTarget
             
- 
-            
-        }
+        
         return x
     }()
     
@@ -239,11 +236,26 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     
     
     lazy var minimizedObjectsHolderView: UIView = {
-        let x = UIView()
+        let x = MyView()
+        x.backgroundColor = .clear
+
+        func touchBegan(){
+            x.backgroundColor = UIColor(red: 215, green: 215, blue: 215)
+        }
         
+        func touchEnded(){
+            UIView.animate(withDuration: 0.3, animations: {
+                x.backgroundColor = .clear
+            })
+        }
+        
+        
+        
+        x.touchesDidBeginAction = touchBegan
+        x.touchesDidEndAction = touchEnded
+        x.touchesDidCancelAction = touchEnded
         
         x.translatesAutoresizingMaskIntoConstraints = false
-        x.backgroundColor = .clear
         
         x.addSubview(minimizedViewSongNameLabel)
         x.addSubview(minimizedMusicControlsStackView)
@@ -253,12 +265,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         let label = minimizedViewSongNameLabel
         let stackView = minimizedMusicControlsStackView
         let bar = minimizedProgressBar
-//
-//        topLine.topAnchor.constraint(equalTo: x.topAnchor).isActive = true
-//        topLine.leftAnchor.constraint(equalTo: x.leftAnchor).isActive = true
-//        topLine.rightAnchor.constraint(equalTo: x.rightAnchor).isActive = true
-//        topLine.heightAnchor.constraint(equalToConstant: 0.3).isActive = true
-//
+
 
         bar.topAnchor.constraint(equalTo: x.topAnchor).isActive = true
         bar.leftAnchor.constraint(equalTo: x.leftAnchor).isActive = true
@@ -273,6 +280,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         label.centerYAnchor.constraint(equalTo: x.centerYAnchor).isActive = true
         label.rightAnchor.constraint(equalTo: stackView.leftAnchor, constant: -5).isActive = true
 
+        topLine.pin(left: x.leftAnchor, right: x.rightAnchor, top: x.topAnchor, size: CGSize(height: 0.5))
 
     
         return x
@@ -430,10 +438,9 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         x.translatesAutoresizingMaskIntoConstraints = false
         x.action = {
             self.carryOutPlayPauseButtonTarget()
-            self.changePlayPauseButtonImagesTo(self.songIsPlaying ? .pause : .play)
-            
-     
         }
+     
+        
         x.automaticallyAnimatesImageWhenTapped = false
 
         return x
@@ -695,9 +702,9 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         // MARK: - SETUP VIEWS VISIBLE IN MINIMIZED STATE
         
         
+        
         addSubview(minimizedObjectsHolderView)
-        
-        
+
         
         minimizedObjectsHolderView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         minimizedObjectsHolderView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true

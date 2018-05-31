@@ -86,6 +86,7 @@
 		607709CB205955BA00CB5940 /* SongListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607709CA205955B900CB5940 /* SongListView.swift */; };
 		60989F26205DF4DD006E998B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60989F25205DF4DC006E998B /* Assets.xcassets */; };
 		60ACCB4720ACEDC5009344AE /* AudioPanning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ACCB4620ACEDC5009344AE /* AudioPanning.swift */; };
+		60AE9BA320BF4C4F00A54568 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE9BA220BF4C4F00A54568 /* CustomTabBar.swift */; };
 		60AFFA4E2084CF0000FC0C6B /* SongEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AFFA4D2084CF0000FC0C6B /* SongEditorViewController.swift */; };
 		60BF644C2059EA62001DE306 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BF644B2059EA62001DE306 /* DownloadsView.swift */; };
 		60C774BB20A63E1A00F24C0E /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C774BA20A63E1A00F24C0E /* DownloadItem.swift */; };
@@ -198,6 +199,7 @@
 		607709CA205955B900CB5940 /* SongListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SongListView.swift; path = "MusicApp/Views/New Group/New Group/Library/SongListView.swift"; sourceTree = SOURCE_ROOT; };
 		60989F25205DF4DC006E998B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		60ACCB4620ACEDC5009344AE /* AudioPanning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPanning.swift; sourceTree = "<group>"; };
+		60AE9BA220BF4C4F00A54568 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		60AFFA4D2084CF0000FC0C6B /* SongEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongEditorViewController.swift; sourceTree = "<group>"; };
 		60BF644B2059EA62001DE306 /* DownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
 		60C774BA20A63E1A00F24C0E /* DownloadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadItem.swift; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				6044CC4D209B2BEA00B5B1E3 /* ScrollBar.swift */,
 				6044CC4F209B2C9800B5B1E3 /* MenuBar.swift */,
 				60F2431520A7A00D007085E6 /* InterfaceBackgroundView.swift */,
+				60AE9BA220BF4C4F00A54568 /* CustomTabBar.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -644,6 +647,7 @@
 				603CE0AA2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallSpinFadeLoader.swift in Sources */,
 				603E13BF203BAB150010BCDB /* MusicView_Sliding.swift in Sources */,
 				603CE08B2065A50E00BDD5D6 /* NVActivityIndicatorShape.swift in Sources */,
+				60AE9BA320BF4C4F00A54568 /* CustomTabBar.swift in Sources */,
 				6069299A20990914008B0796 /* MenuBarViewController.swift in Sources */,
 				60EECB9D209EA24200853741 /* Ugly_YoutubeVideo_JSONParsing.swift in Sources */,
 				603CE08A2065A50E00BDD5D6 /* NVActivityIndicatorViewable.swift in Sources */,

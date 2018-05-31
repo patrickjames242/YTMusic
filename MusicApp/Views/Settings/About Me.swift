@@ -148,7 +148,7 @@ class AboutMeView: UIView {
 
 
 
-class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
+class AboutMeController: PortraitViewController, MFMailComposeViewControllerDelegate{
     
     
     override func viewDidLoad() {
@@ -373,7 +373,7 @@ class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
         button1.addTarget(self, action: #selector(respondToFacebookButtonPressed), for: .touchUpInside)
         button2.addTarget(self, action: #selector(respondToSnapChatButtonPressed), for: .touchUpInside)
         button3.addTarget(self, action: #selector(respondToWhatsAppButtonPressed), for: .touchUpInside)
-        button4.addTarget(self, action: #selector(respondToEmailButtonTapped), for: .touchUpInside)
+        button4.addTarget(self, action: #selector(respondToEmailButtonPressed), for: .touchUpInside)
         
         let x = UIStackView(arrangedSubviews: [button1, button2, button3, button4])
         x.axis = .horizontal
@@ -384,7 +384,7 @@ class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
     }()
     
     
-    @objc private func respondToEmailButtonTapped(){
+    @objc private func respondToEmailButtonPressed(){
         
         
         if MFMailComposeViewController.canSendMail(){
@@ -480,7 +480,7 @@ class AboutMeController: UIViewController, MFMailComposeViewControllerDelegate{
             
             let url = URL(string: "itms://itunes.apple.com/us/app/apple-store/id447188370?mt=8")!
             UIApplication.shared.open(url, completionHandler: { (success) in
-                if !success{
+                if !success {
                     AppManager.displayErrorMessage(target: self, message: "Something went wrong when trying to redirect you to the iTunes store.", completion: nil)
                 }
             })

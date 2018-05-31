@@ -538,7 +538,6 @@ class AppManager: NSObject{
         }
         
         let removeAction = UIAlertAction(title: "Remove", style: .destructive) { (action) in
-            downloader.cancelDownloadOf(item: downloadItem)
             downloadItem.delete()
         }
         

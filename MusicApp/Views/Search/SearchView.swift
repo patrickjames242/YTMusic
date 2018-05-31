@@ -245,7 +245,7 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     
     
     func performSearch(with text: String){
-        
+        searchController.searchBar.text = text
         suggestionBrain.userDidPressSearch(for: text)
         let newResultsController = SearchResultsTableView()
         newResultsController.setSearchResultsWithText(text)
@@ -348,23 +348,27 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     
     
     
-    
-    
-    
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        if searchSuggestions.type == .loaded{return nil}
-        
-        let deleteAction = UITableViewRowAction(style: .destructive, title: "Remove") { (action, indexPath2) in
+        if searchSuggestions.type == .loaded{return UISwipeActionsConfiguration()}
+
+        let handler: UIContextualActionHandler = { (action, view, completion) in
             tableView.beginUpdates()
-            tableView.deleteRows(at: [indexPath2], with: .automatic)
-            self.suggestionBrain.userDidRemoveEntry(text: self.searchSuggestions.strings[indexPath2.row])
-            self.searchSuggestions.strings.remove(at: indexPath2.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            self.suggestionBrain.userDidRemoveEntry(text: self.searchSuggestions.strings[indexPath.row])
+            self.searchSuggestions.strings.remove(at: indexPath.row)
             
             tableView.endUpdates()
+            
+            completion(true)
+           
         }
+        let action = UIContextualAction(style: UIContextualAction.Style.normal, title: "REMOVE", handler: handler)
+        action.backgroundColor = .red
         
-        return [deleteAction]
+        let config = UISwipeActionsConfiguration(actions: [action])
+        config.performsFirstActionWithFullSwipe = true
+        return config
     }
     
     

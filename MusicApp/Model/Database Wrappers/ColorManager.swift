@@ -71,7 +71,7 @@ fileprivate extension Array where Element: WeakColorful{
 
 fileprivate class ColorManager {
     
-    fileprivate static func addColorObserver(sender: Colorful){
+    static func addColorObserver(sender: Colorful){
         
         for observer in colorObservers where observer.value === sender{
             return
@@ -96,9 +96,7 @@ fileprivate class ColorManager {
     
     static func changeInterfaceColor(to color: UIColor){
         UIView.animate(withDuration: 0.5) {
-            for observer in colorObservers {
-                observer.value?.interfaceColorDidChange(to: color)
-            }
+            colorObservers.forEach { $0.value?.interfaceColorDidChange(to: color) }
         }
     }
 }

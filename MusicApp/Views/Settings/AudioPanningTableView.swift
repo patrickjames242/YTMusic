@@ -97,21 +97,37 @@ class AudioPanningSlider: UISlider{
         return x
         
     }()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError()
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -176,23 +192,14 @@ class AudioPanningTableView: UITableViewController{
     
     private lazy var panningSliderCell: UITableViewCell = {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "yama")
-        
         let slider = AudioPanningSlider()
-        
         cell.addSubview(slider)
         
-        
         let SLIDER_INSETS: CGFloat = 25
-        
         slider.pin(left: cell.leftAnchor, right: cell.rightAnchor, bottom: cell.bottomAnchor, insets: UIEdgeInsets(left: SLIDER_INSETS, bottom: 15, right: SLIDER_INSETS))
         
-        
         slider.addTarget(self, action: #selector(respondToSliderSliding(sender:)), for: .valueChanged)
-
-        
         return cell
-        
-        
     }()
     
     

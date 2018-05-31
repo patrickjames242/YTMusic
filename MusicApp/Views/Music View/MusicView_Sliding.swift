@@ -48,10 +48,14 @@ extension MusicView{
     
     func start_SyncingSliderPositionWithMusicPlaybackPosition(){
         timer.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
+        
+        
+        timer = Timer(timeInterval: 0.1, repeats: true, block: { (timer) in
             self.scrubbingSlider.syncSliderPositionWith(playBackPosition: self.songPlayer.currentTime)
             self.minimizedProgressBar.changeProgressTo(self.songPlayer.currentTime / self.songPlayer.duration)
         })
+        
+        RunLoop.current.add(timer, forMode: RunLoopMode.commonModes)
         
         
     }

@@ -11,7 +11,8 @@ import MediaPlayer
 import Foundation
 
 
-class Screen: UIViewController, UITabBarDelegate{
+class Screen: PortraitViewController, UITabBarDelegate, CustomTabBarDelegate{
+
     
     
     
@@ -46,13 +47,7 @@ class Screen: UIViewController, UITabBarDelegate{
     
     
     
-    
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
-        return UIInterfaceOrientationMask.portrait
-    }
-    
-    
+
     
     
     
@@ -67,7 +62,6 @@ class Screen: UIViewController, UITabBarDelegate{
         
         view.addSubview(holderView)
         view.addSubview(tabBar)
-        
         
         holderView.pinAllSidesTo(view)
         
@@ -206,55 +200,23 @@ class Screen: UIViewController, UITabBarDelegate{
     
     override func interfaceColorDidChange(to color: UIColor) {
         tabBar.tintColor = color
-        downloadsItem.badgeColor = color
     }
     
-    
-    private lazy var songsItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "note"), tag: 1)
-    
-    private lazy var searchItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "search"), tag: 2)
-    lazy var downloadsItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "downloadIcon"), tag: 3)
-    private lazy var settingsItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "settingsIcon") , tag: 4)
+
     
     
     
-    lazy var tabBar: UITabBar = {
-        let tabBarHeight = 49 + Variations.bottomAppInset
-        let x = UITabBar(frame:  CGRect(x: 0,
-                                        y: view.frame.height - tabBarHeight,
-                                        width: view.frame.width,
-                                        height: tabBarHeight))
-        x.isTranslucent = false
-        x.barTintColor = .white
+    let songItem = CustomTabBarItem(tag: 1, image: #imageLiteral(resourceName: "note"))
+    let searchItem = CustomTabBarItem(tag: 2, image: #imageLiteral(resourceName: "search"))
+    let downloadsItem = CustomTabBarItem(tag: 3, image: #imageLiteral(resourceName: "downloadIcon"), imagePadding: UIEdgeInsets(top: 6))
+    
+    let settingsItem = CustomTabBarItem(tag: 4, image: #imageLiteral(resourceName: "settingsIcon") )
+
+    
+    
+    lazy var tabBar: CustomTabBar = {
+        let x = CustomTabBar(items: [songItem, searchItem, downloadsItem, settingsItem], delegate: self)
         x.tintColor = THEME_COLOR(asker: self)
-        
-//        x.translatesAutoresizingMaskIntoConstraints = false
-        x.setItems([songsItem, searchItem, downloadsItem, settingsItem], animated: true)
-        let imageInsets = Variations.Screen.tabBarItemsBottomInset
-        
-        
-        downloadsItem.badgeColor = THEME_COLOR(asker: self)
-        songsItem.imageInsets.bottom = imageInsets
-        searchItem.imageInsets.bottom = imageInsets
-        downloadsItem.imageInsets.bottom = imageInsets
-        settingsItem.imageInsets.bottom = imageInsets
-        
-        
-        x.selectedItem = x.items![0]
-        x.delegate = self
-        
-        
-        
-        
-   
-        
-        
-        
-        
-        
-        
-        
-        
         return x
         
     }()
@@ -417,45 +379,34 @@ class Screen: UIViewController, UITabBarDelegate{
     
     //MARK: - SWITCHING BETWEEN TAB BAR ITEMS
     
-   
-    
-    private lazy var currentFrontViewTuple: (view: UIView, tag: Int) = (view: self.songsHolderView, tag: 0)
     
     
-    func showtabBarItem(tag: Int){
+    
+    
+    
+    func customTabBar(tabBar: CustomTabBar, userDidTap item: CustomTabBarItem) {
+        tabBar.setTouchesEnabled(to: false)
         
-        for item in tabBar.items!{
-        
-            if item.tag == tag{
-                tabBar.selectedItem = item
-                self.tabBar(tabBar, didSelect: item)
-            }
-            
+        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (timer) in
+            self.tabBar.setTouchesEnabled(to: true)
+            timer.invalidate()
         }
         
-        
-    }
-    
-    
-    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         let tag = item.tag
         enum Side{ case left, right }
         
         func animateNewViewEntrance(oldView: UIView, newView: UIView, from side: Side){
             
+            
             if oldView === newView {
                 if newView === searchView.view{
                     AppManager.shared.searchNavCon.popToRootViewController(animated: true)
+                } else if newView === settingsView.view{
+                    AppManager.shared.musicSettingsNavCon.popToRootViewController(animated: true)
                 }
                 
                 
-                
-                
-                
-                
-                
                 return
-                
             }
             
             holderView.bringSubview(toFront: shadeView)
@@ -464,6 +415,7 @@ class Screen: UIViewController, UITabBarDelegate{
             newView.alpha = 0
             newView.transform = CGAffineTransform(translationX: (side == .left) ? -170 : 170, y: 0)
             let oldViewEndingXPosition: CGFloat = (side == .left) ? 170 : -170
+            
             
             UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
                 oldView.alpha = 0
@@ -474,21 +426,16 @@ class Screen: UIViewController, UITabBarDelegate{
                 
                 
             }, completion: { (success) in
+                tabBar.isUserInteractionEnabled = true
                 self.currentFrontViewTuple = (newView, tag)
                 oldView.alpha = 1
                 oldView.transform = CGAffineTransform.identity
                 self.holderView.bringSubview(toFront: self.shadeView)
                 self.holderView.bringSubview(toFront: newView)
             })
-            
-            // FIX THIS LATER
-            
-//            let url = Bundle.main.path(forResource: "tap-mellow", ofType: "aif")
-//            let cfurl = NSURL(fileURLWithPath: url!)
-//            var soundID: SystemSoundID = 0
-//            AudioServicesCreateSystemSoundID(cfurl, &soundID)
-//            AudioServicesPlaySystemSound(soundID)
         }
+        
+        
         
         let viewDict: [Int: UIView] = [
             1: songsHolderView,
@@ -497,7 +444,7 @@ class Screen: UIViewController, UITabBarDelegate{
             4: settingsView.view
         ]
         
-       
+        
         
         let side: Side = (tag > currentFrontViewTuple.tag) ? .right : .left
         
@@ -507,6 +454,20 @@ class Screen: UIViewController, UITabBarDelegate{
     }
     
     
+    
+    
+   
+    
+    private lazy var currentFrontViewTuple: (view: UIView, tag: Int) = (view: self.songsHolderView, tag: 0)
+    
+    
+    func showtabBarItem(tag: Int){
+        tabBar.selectItem(with: tag)
+        self.customTabBar(tabBar: tabBar, userDidTap: tabBar.currentlySelectedItem!)
+        
+        
+    }
+
     
     
     

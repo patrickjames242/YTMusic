@@ -311,11 +311,10 @@ class RecentlyAddedView: UICollectionViewController, UICollectionViewDelegateFlo
 
 //MARK: - COLLECTION VIEW CELL
 
-class MyCollectionViewCell: UICollectionViewCell, SongObserver{
+class MyCollectionViewCell: CircleInteractionCollectionViewCell, SongObserver{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(highlightedView)
         addSubview(albumCover)
         addSubview(nowPlayingAnimator)
         addSubview(labelsStackView)
@@ -413,13 +412,7 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
         labelsStackView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         labelsStackView.topAnchor.constraint(equalTo: albumCover.bottomAnchor, constant: 5).isActive = true
         labelsStackView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        
-        highlightedView.topAnchor.constraint(equalTo: topAnchor, constant: -5).isActive = true
-        highlightedView.leftAnchor.constraint(equalTo: leftAnchor, constant: -5).isActive = true
-        highlightedView.rightAnchor.constraint(equalTo: rightAnchor, constant: 5).isActive = true
-        highlightedView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        
-        
+  
     }
 
     
@@ -496,30 +489,9 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
         return x
     }()
     
-    private lazy var highlightedView: UIView = {
-        let x = UIView()
-        x.translatesAutoresizingMaskIntoConstraints = false
-        x.backgroundColor = UIColor.lightGray
-        x.alpha = 0
-        x.layer.cornerRadius = 8
-        x.layer.masksToBounds = true
-        x.isUserInteractionEnabled = false
-        return x
-    }()
+
     
-    
-    
-    func highlight(){
-        UIView.animate(withDuration: 0.2, animations: {
-            self.highlightedView.alpha = 0.5
-        }) { (success) in
-            
-            
-            UIView.animate(withDuration: 1.5, animations: {
-                self.highlightedView.alpha = 0
-            })
-        }
-    }
+
     
     
     
@@ -537,6 +509,175 @@ class MyCollectionViewCell: UICollectionViewCell, SongObserver{
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+class CircleInteractionCollectionViewCell: UICollectionViewCell{
+    
+    
+
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+     
+        
+     
+     
+        addGestureRecognizer(circleInteractionGesture)
+        addSubview(highlightedView)
+        highlightedView.addSubview(interactionCircle)
+        
+        highlightedView.pinAllSidesTo(self, insets: UIEdgeInsets(top: -selectedViewOutset, left: -selectedViewOutset, right: -selectedViewOutset))
+        
+    }
+    
+    private let selectedViewOutset: CGFloat = 5
+
+    
+    
+    func highlight(){
+        makeHighlightedViewAppear { (success) in
+            self.makeHighlightedViewDisappear()
+        }
+    }
+    
+    
+    private lazy var highlightedView: UIView = {
+        let x = UIView()
+        x.translatesAutoresizingMaskIntoConstraints = false
+        x.backgroundColor = UIColor.lightGray.withAlphaComponent(0)
+        x.layer.cornerRadius = 8
+        x.layer.masksToBounds = true
+        x.isUserInteractionEnabled = false
+        return x
+    }()
+    
+    
+    
+    
+
+    
+    
+    private lazy var circleInteractionGesture = UITapGestureRecognizer(target: self, action: #selector(respondToUsersTap(gesture:)))
+    
+    
+    
+    @objc private func respondToUsersTap(gesture: UITapGestureRecognizer){
+        
+        if gesture.state != .ended {return}
+        
+        
+        let rawLocation = gesture.location(in: self)
+        let location = convert(rawLocation, to: highlightedView)
+        
+        interactionCircle.center = location
+        
+        bringSubview(toFront: highlightedView)
+        
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (timer) in
+            self.sendSubview(toBack: self.highlightedView)
+            timer.invalidate()
+        }
+        UIView.animate(withDuration: 0.5, animations: {
+            self.interactionCircle.transform = CGAffineTransform(scaleX: 1000, y: 1000)
+        }, completion: { (success) in
+            UIView.animate(withDuration: 0.4, animations: {
+                self.interactionCircle.alpha = 0
+            }, completion: { (success) in
+                
+                self.interactionCircle.alpha = 1
+                self.interactionCircle.transform = CGAffineTransform.identity
+            })
+            
+            
+            
+        })
+        
+        
+        cellTappedAction()
+        
+        
+    }
+    
+    private func cellTappedAction(){
+        
+        if let collectionView = superview as? UICollectionView, let indexPath = collectionView.indexPath(for: self){
+            
+            collectionView.delegate?.collectionView?(collectionView, didSelectItemAt: indexPath)
+            
+            
+        }
+        
+    }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        makeHighlightedViewAppear()
+        
+    }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        makeHighlightedViewDisappear()
+    }
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        makeHighlightedViewDisappear()
+    }
+    
+    private func makeHighlightedViewAppear(completion: ((Bool) -> Void)? = nil){
+        
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            
+            self.highlightedView.backgroundColor = self.highlightedView.backgroundColor?.withAlphaComponent(0.5)
+            
+            
+        }) { (success) in
+            if let completion = completion{
+                completion(success)
+            }
+        }
+    }
+    
+    private func makeHighlightedViewDisappear(){
+        
+        UIView.animate(withDuration: 1.5, animations: {
+            self.highlightedView.backgroundColor = self.highlightedView.backgroundColor?.withAlphaComponent(0)
+        })
+        
+    }
+    
+    
+    
+    
+    
+    private lazy var interactionCircle: UIView = {
+        let x = UIView()
+        x.frame.size.width = 0.5
+        x.frame.size.height = 0.5
+        x.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+        x.layer.cornerRadius = x.frame.size.width / 2
+        x.layer.masksToBounds = true
+        return x
+    }()
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     
     
 }

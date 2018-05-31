@@ -46,8 +46,7 @@ class Song: NSObject {
     private static var allSongs = [String: Song]()
     
     static func createNew(from downloadItem: DownloadItem, songData: Data) -> Song{
-        
-        
+
         let object = DBManager.createAndSaveNewDBSongObject(from: downloadItem.object, songData: songData)
         
         let newSong = wrap(object: object)
@@ -159,15 +158,15 @@ class Song: NSObject {
         DBManager.changeDBSongNamesToDefaults(object: object)
         NotificationCenter.default.post(name: SongNameDidChangeNotification, object: self)
     }
-    
+
     func changeNamesTo(title: String, artist: String){
-        
+
         DBManager.changeDBSongNames(object: object, name: title, artist: artist)
         NotificationCenter.default.post(name: SongNameDidChangeNotification, object: self)
     }
-    
-    
-    
+
+
+
     
     
     private var myObservers = [SongObserver]()

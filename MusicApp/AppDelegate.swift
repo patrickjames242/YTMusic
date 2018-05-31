@@ -19,13 +19,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         fixDatabaseMistakes()
         Song.fixDatabaseMistakes()
         
-        
+       
     
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = AppManager.shared.generateInterface()
 //        window?.rootViewController = BaseViewController()
         window?.makeKeyAndVisible()
         
+        let gr0 = window!.gestureRecognizers![0]
+        let gr1 = window!.gestureRecognizers![1]
+        gr0.delaysTouchesBegan = false
+        gr1.delaysTouchesBegan = false
         
         return true
     }

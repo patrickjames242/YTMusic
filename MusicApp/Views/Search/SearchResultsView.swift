@@ -32,7 +32,7 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
 
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        
+        tableView.action
         tableView.rowHeight = cellHeight
         tableView.separatorColor = .clear
         tableView.contentInset.top = -3
@@ -321,6 +321,25 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
             AppManager.shared.screen.present(controller, animated: true, completion: nil)
         }
 
+    }
+    
+    
+    
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        
+        let handler: UIContextualActionHandler = { (action, view, completion) in
+            
+            Downloader.main.beginDownloadOf(self.videos[indexPath.row])
+            completion(true)
+        }
+        let action = UIContextualAction(style: UIContextualAction.Style.normal, title: "DOWNLOAD", handler: handler)
+        action.backgroundColor = THEME_COLOR(asker: self)
+        
+        let config = UISwipeActionsConfiguration(actions: [action])
+        config.performsFirstActionWithFullSwipe = false
+        return config
     }
     
     

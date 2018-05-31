@@ -13,17 +13,11 @@ import UIKit
 protocol YoutubeVideoDelegate: class {
     
     var imageReceivedClosure: (_ wasDownloaded: Bool, YoutubeVideo, UIImage) -> Void { get }
-    
-    
+
 }
 
 
-struct YoutubeVideoThumbnailLink{
-    let lowQuality: URL
-    let mediumQuality: URL
-    let highQuality: URL
-    
-}
+
 
 
 class YoutubeVideo {
@@ -47,7 +41,6 @@ class YoutubeVideo {
         self.views = views
         self.date = date
         
-//        super.init()
         
         
         

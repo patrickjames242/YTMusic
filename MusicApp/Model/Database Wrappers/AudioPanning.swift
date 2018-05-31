@@ -14,9 +14,10 @@ class DBPanning{
     private static let audioPanningPositionKey = "audio Panning position"
     private static let audioPanningToggleKey = "audio panning toggle"
     
-    /// This is the value that is used for the AVAudioPlayer's pan variable
+    /// This is the value that is used to set the AVAudioPlayer's pan variable when a song is setup.
     static var audioPanningPositionToUse: Float{
         if !audioPanningIsOn{return 0}
+        
         return currentAudioPanningPosition
     }
     

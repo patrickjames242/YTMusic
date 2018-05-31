@@ -27,7 +27,7 @@ class ColorPicker: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         (.red, "Red"),
         (.black, "Black"),
         (.orange, "Orange"),
-        (.blue, "Blue"),
+        (UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), "Blue"),
         (.brown, "Brown"),
         (.cyan, "Cyan"),
         (.green, "Green"),
@@ -46,9 +46,9 @@ class ColorPicker: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         x.dataSource = self
         x.delegate = self
         for (num, item) in colors.enumerated(){
-            
             if item.color == DBColor.currentAppThemeColor{
                 x.selectRow(num, inComponent: 0, animated: false)
+                break
             }
             
         }
@@ -132,11 +132,11 @@ fileprivate class ColorPickerCell: UIView {
         return view
     }()
     
+    
+    
     private lazy var label: UILabel = {
         let x = UILabel()
-        
         return x
-        
     }()
     
     

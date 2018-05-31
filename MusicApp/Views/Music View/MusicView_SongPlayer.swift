@@ -134,10 +134,15 @@ extension MusicView: SongQueueDelegate{
 
         if songPlayer.isPlaying{ pauseMusic() }
         else { playMusic() }
+        
+        self.changePlayPauseButtonImagesTo(self.songIsPlaying ? .pause : .play)
+
     }
     @objc func carryOutFastForwardButtonTarget(){
         fastForwardMusic(playWhenFastForwarded: songPlayer.isPlaying)
     }
+    
+    
     
     
     @objc func respondToNowPlaying_Play_Button(){
@@ -511,6 +516,7 @@ extension MusicView: SongQueueDelegate{
         controller.playCommand.addTarget(self, action: #selector(respondToNowPlaying_Play_Button))
         controller.pauseCommand.addTarget(self, action: #selector(respondToNowPlaying_Pause_Button))
         controller.previousTrackCommand.addTarget(self, action: #selector(carryOutRewindingButtonTarget))
+        controller.togglePlayPauseCommand.addTarget(self, action: #selector(carryOutPlayPauseButtonTarget))
         controller.nextTrackCommand.addTarget(self, action: #selector(carryOutFastForwardButtonTarget))
         controller.changePlaybackPositionCommand.addTarget(self, action: #selector(respondToMPRemoteCommandCenter__ChangePositionCommand))
         
@@ -595,7 +601,7 @@ extension MusicView: SongQueueDelegate{
         controller.previousTrackCommand.removeTarget(self)
         controller.nextTrackCommand.removeTarget(self)
         controller.changePlaybackPositionCommand.removeTarget(self)
-        
+        controller.togglePlayPauseCommand.removeTarget(self)
         
         NotificationCenter.default.removeObserver(self, name: Notification.Name.AVAudioSessionRouteChange, object: nil)
         

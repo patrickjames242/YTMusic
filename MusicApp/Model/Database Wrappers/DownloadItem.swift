@@ -91,8 +91,7 @@ class DownloadItem: NSObject{
 
     deinit{
 
-        // precautionary measure...... because I've had bad experiences
-        deleteTimer.invalidate()
+        
         print("A downloadItem has been been deinitialized")
     }
 
@@ -292,7 +291,7 @@ class DownloadItem: NSObject{
     
     
     func delete(){
-        deleteTimer.invalidate()
+        Downloader.main.stopDownloadOf(item: self)
         DownloadItem.allCurrentInstances[object] = nil
         DBManager.delete(downloadItem: object)
     }
@@ -310,21 +309,9 @@ class DownloadItem: NSObject{
     }
     
     
-    private var deleteTimer = Timer()
     
     
     
-    private func startDeleteTimer(){
-        
-        deleteTimer = Timer.scheduledTimer(withTimeInterval: (60 * 20), repeats: true, block: { [weak weakSelf = self] (timer) in
-            guard let weakSelf = weakSelf else { timer.invalidate(); return }
-            
-            if DownloadItem.objectShouldBeDeleted(object: weakSelf.object){
-                weakSelf.delete()
-                timer.invalidate()
-            }
-        })
-    }
     
     
     
@@ -364,7 +351,7 @@ class DownloadItem: NSObject{
         }
         super.init()
 
-        startDeleteTimer()
+        
 
     }
 }

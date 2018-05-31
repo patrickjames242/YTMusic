@@ -137,7 +137,7 @@ extension MusicView{
     func liftUpMusicView(animationTime: Double){
         musicViewIsMinimized = false
         topNub.addGestureRecognizer(topNubGesture)
-        self.removeGestureRecognizer(goUpRecognizer)
+        minimizedObjectsHolderView.removeGestureRecognizer(goUpRecognizer)
         self.removeGestureRecognizer(longPressGesture)
  
         
@@ -204,9 +204,9 @@ extension MusicView{
         
         lengthOfPan = 0
         
-        self.removeGestureRecognizer(bringBackDownGesture)
-        self.addGestureRecognizer(goUpRecognizer)
-        self.addGestureRecognizer(longPressGesture)
+        removeGestureRecognizer(bringBackDownGesture)
+        minimizedObjectsHolderView.addGestureRecognizer(goUpRecognizer)
+        addGestureRecognizer(longPressGesture)
         topNub.removeGestureRecognizer(topNubGesture)
         
         albumImage.hideShadow(with: 0.2)
