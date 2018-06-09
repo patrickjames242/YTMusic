@@ -22,7 +22,7 @@ extension YoutubeVideo{
         guard let urlStr2 = urlStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {return nil}
         
         return URL(string: urlStr2)
-    }
+     }
     
     
     
@@ -44,12 +44,11 @@ extension YoutubeVideo{
             guard let liveBroadcastContent = snippet["liveBroadcastContent"] as? String else {return nil}
             if liveBroadcastContent == "live" {return nil}
             
+            guard let thumbnailInfo = snippet["thumbnails"] as? NSDictionary else {return nil}
+
             
-            let thumbnailURL: String! = {
-                
-                guard let thumbnailInfo = snippet["thumbnails"] as? NSDictionary else {return nil}
-                
-                
+            let highQuality_thumbnailString: String! = {
+            
                 if let thumbnailDict = thumbnailInfo["maxres"] as? NSDictionary,
                     let url = thumbnailDict["url"] as? String{
                     return url
@@ -62,10 +61,14 @@ extension YoutubeVideo{
                     let url = thumbnailDict["url"] as? String{
                     return url
                 }
+             
                 return nil
             }()
             
-            if thumbnailURL == nil{return nil}
+            if highQuality_thumbnailString == nil{return nil}
+            
+            guard let thumbnailDict = thumbnailInfo["high"] as? NSDictionary,
+                let lowQuality_thumbnailString = thumbnailDict["url"] as? String else { return nil }
             
             guard let title = snippet["title"] as? String else {return nil}
             guard let channelTitle = snippet["channelTitle"] as? String else {return nil}
@@ -80,8 +83,8 @@ extension YoutubeVideo{
             
             let formattedTimeString = getYoutubeFormattedDurationFrom(string: durationString)
             
-            guard let url = URL(string: thumbnailURL) else {return nil}
-            
+            guard let highQualUrl = URL(string: highQuality_thumbnailString) else {return nil}
+            guard let lowQualURL = URL(string: lowQuality_thumbnailString) else {return nil}
             
             
             
@@ -89,8 +92,7 @@ extension YoutubeVideo{
             
             
             
-            
-            self.init(name: title, videoID: id, channel: channelTitle, thumbnailLink: url , duration: formattedTimeString, views: formattedViewsString, date: date)
+            self.init(name: title, videoID: id, channel: channelTitle, thumbnailLink_highQuality: highQualUrl, thumbnailLink_lowQuality: lowQualURL, duration: formattedTimeString, views: formattedViewsString, date: date)
             
             
         } catch {
@@ -125,7 +127,6 @@ fileprivate func getYTFormattedPublishedAtDateString(from string: String) -> Str
     let weeks = days / 7.0
     let months = days / 30
     let years = days / 365.0
-    
     
     if seconds < 60{
         
@@ -163,7 +164,6 @@ fileprivate func getYTFormattedPublishedAtDateString(from string: String) -> Str
         return "\(years1) \(years1 == 1 ? "year" : "years") ago"
         
     }
-    
 }
 
 
@@ -189,7 +189,7 @@ fileprivate func getYTFormattedViewsFrom(numberOfViews: String) -> String{
     guard let viewsInt = Double(numberOfViews) else { return "000"}
     var stringToReturn = " "
     
-    // BILLIONS
+        // BILLIONS
     if viewsInt >= 1000000000{
         let x = viewsInt / 1000000000
         stringToReturn = String(format: "%.1f", x).replacingOccurrences(of: ".0", with: "") + "B views"

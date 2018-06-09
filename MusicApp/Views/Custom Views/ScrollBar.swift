@@ -81,8 +81,3 @@ class ScrollBar: UIView{
         fatalError("fool!")
     }
 }
-
-
-
-
-

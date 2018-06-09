@@ -8,15 +8,14 @@
 
 import UIKit
 import MediaPlayer
-//MARK: - TABLE VIEW CONTROLLER
 
 
 
 
 
-class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellDelegate {
+class SearchResultsTableView: SafeAreaObservantTableViewController, SearchResultsTableViewCellDelegate {
 
-    
+    private let searchResultsAmount = 50
 
     
     //MARK: - VIEW CONTROLLER LIFECYCLE
@@ -39,9 +38,14 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
         navigationItem.largeTitleDisplayMode = .never
         tableView.register(SearchResultsTableViewCell.self, forCellReuseIdentifier: cellID)
         
-        tableView.contentInset.bottom = AppManager.currentAppBottomInset + (separationInset / 2)
+        additionalSafeAreaInsets.bottom = AppManager.currentAppBottomInset + (separationInset / 2)
         
-        tableView.scrollIndicatorInsets.bottom = AppManager.currentAppBottomInset + (separationInset / 2)
+    }
+    
+    
+    
+    private func setUpBottomLoader(){
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,18 +55,7 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     }
     
     
-    override func viewDidDisappear(_ animated: Bool) {
-
-        if self.isMovingFromParentViewController{
-            let index = SearchResultsTableView.currentViews.index(of: self)
-            SearchResultsTableView.currentViews.remove(at: index!)
-            self.videos = []
-            tableView.reloadData()
-        
-        }
-        
-    }
-    
+ 
     
     
     
@@ -79,30 +72,18 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     
     init() {
         super.init(style: .plain)
-        SearchResultsTableView.currentViews.append(self)
     }
     
 
 
 
-    //MARK: -
     
     
     
-    private static var currentViews = [SearchResultsTableView]()
     
 
  
 
-    
-    static func setBottomInsets(){
-        for x in currentViews{
-            x.tableView.contentInset.bottom = AppManager.currentAppBottomInset + (separationInset / 2)
-            x.tableView.scrollIndicatorInsets.bottom = AppManager.currentAppBottomInset + (separationInset / 2)
-        }
-    }
-    
-    
     
     
     private let cellID = "cell id yeahhhhh"
@@ -176,9 +157,9 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     func setSearchResultsWithText(_ text: String){
         navigationItem.title = text
 
-        YTAPIManager.main.getYoutubeSearchResultsWith(searchText: text, amount: 50) { [weak weakSelf = self] (videos, error) in
+        YTAPIManager.main.getYoutubeSearchResultsWith(searchText: text, amount: searchResultsAmount) { [weak weakSelf = self] (youtubeResponse) in
             if let weakSelf = weakSelf {
-                weakSelf.dealWithYoutubeVideoQueryResults(resultingVideos: videos, error: error)
+                weakSelf.dealWithYoutubeVideoQueryResults(response: youtubeResponse)
             }
             
             
@@ -192,52 +173,69 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     
     //MARK: YOUTUBE API STUFF
     
+    private var currentResponse: YoutubeSearchResponse?
+    
+    
+    private func getAdditionalResults(){
+        guard let currentResponse = self.currentResponse else {return}
+        
+        YTAPIManager.main.getNextPageOfYoutubeSearchResults(using: currentResponse, amount: searchResultsAmount, completion: {self.dealWithYoutubeVideoQueryResults(response: $0, isAdditionalResults: true)})
+        
+    }
+    
     
     func setRelatedVideosTo(vidID: String){
         
-        YTAPIManager.main.getRelatedVidoesTo(vidID: vidID) { [weak weakSelf = self] (videoArray, error)  in
-            
+        YTAPIManager.main.getRelatedVidoesTo(vidID: vidID) { [weak weakSelf = self] (youtubeResponse)  in
             guard let weakSelf = weakSelf else {return}
-            
-            weakSelf.dealWithYoutubeVideoQueryResults(resultingVideos: videoArray, error: error)
+            weakSelf.dealWithYoutubeVideoQueryResults(response: youtubeResponse)
         }
-        
-        
     }
     
     
     
-    private func dealWithYoutubeVideoQueryResults(resultingVideos: [YoutubeVideo]?, error: Error?){
+    private func dealWithYoutubeVideoQueryResults(response: YoutubeSearchResponse, isAdditionalResults: Bool = false){
         removeProgressAnimator()
         
-        if error != nil{
-            AppManager.displayErrorMessage(target: self, message: error!.localizedDescription){
-        
+        if response.error != nil{
+            if isAdditionalResults{return}
+            AppManager.displayErrorMessage(target: self, message: response.error!.localizedDescription){
                 self.navigationController?.popViewController(animated: true)
             }
             return
         }
         
-        guard let unwrappedVideos = resultingVideos, !unwrappedVideos.isEmpty else {
-            
-            
+        checkForDoubleVideo(videos: response.videos, functionName: #function)
+    
+        if response.videos.isEmpty {
+            if isAdditionalResults{return}
             AppManager.displayErrorMessage(target: self, message: "There are no videos to display."){
-                
                 self.navigationController?.popViewController(animated: true)
-                
-                
             }
             return
         }
         
-        videos = unwrappedVideos
-        tableView.reloadData()
         
         
         
+        currentResponse = response
+
+        
+        if isAdditionalResults{
+            videos.append(contentsOf: response.videos)
+            let offset = tableView.contentOffset
+            tableView.reloadData()
+            tableView.contentOffset = offset
+        } else {
+            tableView.beginUpdates()
+
+            videos = response.videos
+            let newIndices = Array<Int>(videos.indices)
+            tableView.insertRows(at: newIndices.map{IndexPath.init(row: $0, section: 0)}, with: .fade)
+            tableView.endUpdates()
+
+        }
     }
-    
-    
     
     
     
@@ -304,7 +302,15 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     }
     
     
+    
+    
+    
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! SearchResultsTableViewCell
         
         cell.setCellWith(video: videos[indexPath.row], delegate: self)
@@ -343,7 +349,11 @@ class SearchResultsTableView: UITableViewController, SearchResultsTableViewCellD
     }
     
     
-    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == videos.lastItemIndex!{
+            self.getAdditionalResults()
+        }
+    }
     
     
     
@@ -429,7 +439,7 @@ fileprivate protocol SearchResultsTableViewCellDelegate{
 //MARK: - TABLE VIEW CELL
 
 
-fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, YoutubeVideoDelegate{
+fileprivate class SearchResultsTableViewCell: CircleInteractionTableViewCell, YoutubeVideoDelegate{
     
     
 
@@ -445,9 +455,9 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
         
         setUpViews()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongDeletedNotification(notification:)), name: SongWasDeletedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongDeletedNotification(notification:)), name: MNotifications.SongWasDeletedNotification, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongCreatedNotification(notification:)), name: NewSongWasCreatedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongCreatedNotification(notification:)), name: MNotifications.NewSongWasCreatedNotification, object: nil)
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(respondToLongPress))
         addGestureRecognizer(longPressGesture)
@@ -456,7 +466,7 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
     
     @objc func respondToSongCreatedNotification(notification: Notification){
         guard let currentVideo = currentVideo else {return}
-        if let song = notification.userInfo?[NewlyCreatedSongObjectKey] as? Song{
+        if let song = notification.userInfo?[MNotifications.NewlyCreatedSongObjectKey] as? Song{
             
             if song.youtubeID! == currentVideo.videoID{
                 UIView.animate(withDuration: 0.3) {
@@ -464,17 +474,14 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
                     self.downloadedIndicator_holderView.alpha = 1
                 }
             }
-            
         }
-        
-        
     }
     
     
     @objc func respondToSongDeletedNotification(notification: Notification){
         guard let currentVideo = currentVideo else {return}
         
-        let song = notification.userInfo![DeletedSongObjectKey]! as! Song
+        let song = notification.userInfo![MNotifications.DeletedSongObjectKey]! as! Song
         
         if song.youtubeID == currentVideo.videoID{
             UIView.animate(withDuration: 0.3) {
@@ -554,9 +561,9 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
     
     
     private func setImageViewWith(image: UIImage, animated: Bool){
-        if myImageView.isAnimating {
-            myImageView.stopAnimating()
-        }
+        
+        myImageView.stopAnimations()
+        
         
         
         myImageView.alpha = 0
@@ -845,5 +852,6 @@ fileprivate class SearchResultsTableViewCell: CircleInteractionResponseCell, You
     
     
 }
+
 
 

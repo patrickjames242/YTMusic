@@ -36,11 +36,11 @@ class SongQueue{
     init(){
         fillSongDictionary()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongDeletedNotification(notification:)), name: SongWasDeletedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongDeletedNotification(notification:)), name: MNotifications.SongWasDeletedNotification, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(respondToNewSongWasCreatedNotification(notification:)), name: NewSongWasCreatedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToNewSongWasCreatedNotification(notification:)), name: MNotifications.NewSongWasCreatedNotification, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(respondToUserPressedPlaySongNextNotification(notification:)), name: UserDidPressPlaySongNext, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToUserPressedPlaySongNextNotification(notification:)), name: MNotifications.UserDidPressPlaySongNext, object: nil)
     }
     
     
@@ -49,7 +49,7 @@ class SongQueue{
     
     @objc private func respondToUserPressedPlaySongNextNotification(notification: Notification){
         
-        let newSong = notification.userInfo![SelectedUpNextSongKey]! as! Song
+        let newSong = notification.userInfo![MNotifications.SelectedUpNextSongKey]! as! Song
         
         if let nextSong = upNextStack.peek(){
             if newSong == nextSong {return}
@@ -71,7 +71,7 @@ class SongQueue{
     @objc private func respondToSongDeletedNotification(notification: Notification){
         
         
-        let deletedSong = notification.userInfo![DeletedSongObjectKey]! as! Song
+        let deletedSong = notification.userInfo![MNotifications.DeletedSongObjectKey]! as! Song
         
         upNextStack.popSpecificSong(deletedSong)
         historyStack.popSpecificSong(deletedSong)
@@ -93,7 +93,7 @@ class SongQueue{
     @objc private func respondToNewSongWasCreatedNotification(notification: Notification){
         
         
-        let newSong = notification.userInfo![NewlyCreatedSongObjectKey]! as! Song
+        let newSong = notification.userInfo![MNotifications.NewlyCreatedSongObjectKey]! as! Song
         upNextStack.insertRandomly(song: newSong)
         
         

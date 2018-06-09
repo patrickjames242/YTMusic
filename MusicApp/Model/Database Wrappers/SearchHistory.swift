@@ -29,9 +29,7 @@ class DBHistory{
     static var searchHistoryDelegate: SearchHistoryDelegate?
     
     private static func deleteAllHistory(){
-        
         UserDefaults.standard.removeObject(forKey: searchHistoryKey)
-        
     }
     
     

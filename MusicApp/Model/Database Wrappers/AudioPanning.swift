@@ -52,7 +52,7 @@ class DBPanning{
         set{
             
             UserDefaults.standard.set(newValue, forKey: audioPanningToggleKey)
-            NotificationCenter.default.post(name: AudioPanningStateDidChangeNotification, object: nil, userInfo: nil)
+            MNotifications.sendAudioPanningStateDidChangeNotification()
         }
         
         
@@ -68,12 +68,11 @@ class DBPanning{
         let position1 = max(-1 , min( position, 1))
         
         defaults.set(position1, forKey: key)
-        NotificationCenter.default.post(name: AudioPanningStateDidChangeNotification, object: self)
+        MNotifications.sendAudioPanningStateDidChangeNotification()
     }
 }
 
 
 
 
-let AudioPanningStateDidChangeNotification = Notification.Name("AudioPanningDidChangeNotification")
 

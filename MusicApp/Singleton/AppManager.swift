@@ -64,8 +64,8 @@ class AppManager: NSObject{
     //MARK: - APP CONSTANTS
     static var screenWidth: CGFloat!
     static var appInsets: UIEdgeInsets!
-//    static var tabBarHeight: CGFloat = 49 + appInsets.bottom
-    static var minimizedMusicViewHeight: CGFloat = 70
+    static var tabBarHeight: CGFloat = 49
+    static var minimizedMusicViewHeight: CGFloat = 60
     
 //    static var defaultTintColor = THEME_COLOR(asker: self)
     static var currentAppBottomInset: CGFloat = 49
@@ -254,34 +254,22 @@ class AppManager: NSObject{
     
     func musicViewWasShown(){
         
-        
+        AppManager.currentAppBottomInset = AppManager.minimizedMusicViewHeight + AppManager.tabBarHeight
         self.musicViewIsVisible = true
-        setAppInsetsTo(49 + 70)
+        MNotifications.sendAppBottomSafeAreaInsetsDidChangeNotification(for: AppManager.currentAppBottomInset)
     }
     
     
     
     
     func musicViewWasHidden(){
-        
+        AppManager.currentAppBottomInset = AppManager.tabBarHeight
         musicViewIsVisible = false
-        setAppInsetsTo(49)
+        MNotifications.sendAppBottomSafeAreaInsetsDidChangeNotification(for: AppManager.currentAppBottomInset)
         
     }
     
     
-    private func setAppInsetsTo(_ constant: CGFloat){
-        
-        AppManager.currentAppBottomInset = constant
-        
-        downloadsView.setBottomInset()
-        songListView.setBottomInset()
-        musicSettings.setBottomInset()
-        searchView.setBottomInsets()
-        SearchResultsTableView.setBottomInsets()
-        recentlyAddedView.setBottomInset()
-        
-    }
     
     
     

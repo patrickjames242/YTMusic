@@ -9,14 +9,14 @@
 import UIKit
 
 
-class ColorPicker: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource{
+class ColorPicker: SafeAreaObservantViewController, UIPickerViewDelegate, UIPickerViewDataSource{
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .white
-        additionalSafeAreaInsets.bottom = AppManager.currentAppBottomInset
+        
         setUpViews()
         
     }
@@ -59,12 +59,8 @@ class ColorPicker: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
     
     
     private func setUpViews(){
-        
         view.addSubview(picker)
         picker.pin(centerX: view.safeAreaLayoutGuide.centerXAnchor, centerY: view.safeAreaLayoutGuide.centerYAnchor, size: CGSize(height: 375))
-        
-        
-        
     }
     
     
@@ -90,7 +86,6 @@ class ColorPicker: UIViewController, UIPickerViewDelegate, UIPickerViewDataSourc
         else { viewToReturn = ColorPickerCell() }
         
         viewToReturn.setWithColor(colors[row])
-        
         return viewToReturn
 
     }

@@ -11,7 +11,6 @@ import UIKit
 
 
 fileprivate struct SearchHistoryEntry: Codable, Equatable{
-    
     var text: String
     var date: Date
 }
@@ -35,7 +34,7 @@ class SearchHistoryList: Codable{
     
     var entryList: [String]{
         sortList()
-        return list.map{$0.text}
+        return list.map { $0.text }
     }
     
     private func sortList(){

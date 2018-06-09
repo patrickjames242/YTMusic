@@ -35,7 +35,7 @@ class SearchTableView_NavCon: UINavigationController{
 
 
 
-class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggestionsCellDelegate, SearchSuggestionsBrainDelegate{
+class SearchTableView: SafeAreaObservantTableViewController, UISearchBarDelegate, SearchSuggestionsCellDelegate, SearchSuggestionsBrainDelegate{
   
  
     private lazy var searchController = UISearchController(searchResultsController: nil)
@@ -53,7 +53,6 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     
     override func interfaceColorDidChange(to color: UIColor) {
         searchController.searchBar.tintColor = color
-        segmentController.tintColor = color
     }
     
     
@@ -100,40 +99,10 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
         suggestionBrain = SearchSuggestionsBrain(owner: self)
         
         tableView.register(SearchSuggestionsCell.self, forCellReuseIdentifier: cellID)
-        setBottomInsets()
-        setUpSegmentedControllerView()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(respondToKeyboardChangeFrameNotification(notification:)), name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
-    }
-    
-    
-    
-    func setUpSegmentedControllerView(){
-        
-        
         
     }
     
-    
-    
-    private lazy var topSegmentedControllerView: UIView = {
-        let x = UIView()
-        
-        
-        segmentController.insertSegment(withTitle: "Youtube", at: 0, animated: false)
-        segmentController.insertSegment(withTitle: "Library", at: 1, animated: false)
-        segmentController.tintColor = THEME_COLOR(asker: self)
-        x.addSubview(segmentController)
-        segmentController.pinAllSidesTo(x, insets: UIEdgeInsets(allInsets: 10))
-        
-        return x
-        
-    }()
-    
-    let segmentController = UISegmentedControl()
 
-    
-    
     
     
     private func setBackgroundView(){
@@ -179,7 +148,17 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     
     
     
-    private var searchSuggestions: (strings: [String], type: SuggestionsType) = ([], .history)
+    private var searchSuggestions: (strings: [String], type: SuggestionsType) = ([], .history){
+        didSet{
+            if searchSuggestions.strings.isEmpty{
+                setBackgroundView()
+                tableView.isScrollEnabled = false
+            } else {
+                tableView.backgroundView = nil
+                tableView.isScrollEnabled = true
+            }
+        }
+    }
     
     
     
@@ -197,13 +176,7 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
         
         searchSuggestions = (suggestions, type)
         
-        if suggestions.isEmpty{
-            setBackgroundView()
-            tableView.isScrollEnabled = false
-        } else {
-            tableView.backgroundView = nil
-            tableView.isScrollEnabled = true
-        }
+       
         
         
         tableView.reloadData()
@@ -289,48 +262,7 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     
     
     
-    
-    
-    
-    
-    
-    
-    //MARK: - KEYBOARD STUFF
 
-    
-    
-    
-    
-    
-    
-
-    private var bottomViewInset: CGFloat = 49
-    
-    
-    private var keyboardIsVisible = false
-    
-    @objc func respondToKeyboardChangeFrameNotification(notification: NSNotification){
-       let keyboardFrame = notification.userInfo!["UIKeyboardFrameEndUserInfoKey"] as! CGRect
-        
-        
-        if keyboardFrame.minY >= view.frame.height{
-            keyboardIsVisible = false
-            setBottomInsets()
-        } else {
-            keyboardIsVisible = true
-            tableView.contentInset.bottom = 0
-            tableView.scrollIndicatorInsets.bottom = 0
-        }
-    }
-    func setBottomInsets(){
-        self.tableView.contentInset.bottom = AppManager.currentAppBottomInset + 10
-        self.tableView.scrollIndicatorInsets.bottom = AppManager.currentAppBottomInset
-    }
-
-    
-    
-
-    
     
     
     
@@ -345,8 +277,7 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
     //MARK: - TABLE VIEW FUNCTIONS
     
     
-    
-    
+
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
@@ -363,13 +294,15 @@ class SearchTableView: UITableViewController, UISearchBarDelegate, SearchSuggest
             completion(true)
            
         }
-        let action = UIContextualAction(style: UIContextualAction.Style.normal, title: "REMOVE", handler: handler)
+        let action = UIContextualAction(style: UIContextualAction.Style.destructive, title: "REMOVE", handler: handler)
         action.backgroundColor = .red
         
         let config = UISwipeActionsConfiguration(actions: [action])
         config.performsFirstActionWithFullSwipe = true
         return config
     }
+    
+
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -422,7 +355,7 @@ fileprivate protocol SearchSuggestionsCellDelegate{
 
 //MARK: - TABLE VIEW CELL
 
-fileprivate final class SearchSuggestionsCell: CircleInteractionResponseCell{
+fileprivate final class SearchSuggestionsCell: CircleInteractionTableViewCell{
     
     
     //MARK: - INIT, TABLE VIEW CELL

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6002F049209B280E00360063 /* EArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6002F048209B280E00360063 /* EArray.swift */; };
+		60057AD920CB2A870024BFBC /* CustomViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60057AD820CB2A870024BFBC /* CustomViewControllers.swift */; };
+		60057ADB20CB30E30024BFBC /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60057ADA20CB30E30024BFBC /* Notifications.swift */; };
+		60057ADD20CB4E280024BFBC /* SongLibrarySearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60057ADC20CB4E280024BFBC /* SongLibrarySearchController.swift */; };
 		600F7E8A203E2030009CF6BF /* MusicView_SongPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600F7E89203E2030009CF6BF /* MusicView_SongPlayer.swift */; };
 		60164FF7203A21D400A6B2B6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60164FF6203A21D400A6B2B6 /* Extensions.swift */; };
 		601AF52B209E98B70014FA46 /* SongQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601AF522209E98B60014FA46 /* SongQueue.swift */; };
@@ -19,12 +22,12 @@
 		601AF531209E98B70014FA46 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601AF528209E98B70014FA46 /* AppManager.swift */; };
 		601AF532209E98B70014FA46 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601AF529209E98B70014FA46 /* Downloader.swift */; };
 		601BE46420ADA0F20042BB4F /* SearchHistoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601BE46320ADA0F20042BB4F /* SearchHistoryList.swift */; };
+		603218D020C0E1CD008998C5 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603218CF20C0E1CD008998C5 /* LibraryViewController.swift */; };
 		603CE0882065A50E00BDD5D6 /* NVActivityIndicatorAnimationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CE0512065A50E00BDD5D6 /* NVActivityIndicatorAnimationDelegate.swift */; };
 		603CE0892065A50E00BDD5D6 /* NVActivityIndicatorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CE0532065A50E00BDD5D6 /* NVActivityIndicatorPresenter.swift */; };
 		603CE08A2065A50E00BDD5D6 /* NVActivityIndicatorViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CE0542065A50E00BDD5D6 /* NVActivityIndicatorViewable.swift */; };
 		603CE08B2065A50E00BDD5D6 /* NVActivityIndicatorShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CE0552065A50E00BDD5D6 /* NVActivityIndicatorShape.swift */; };
 		603CE08C2065A50E00BDD5D6 /* NVActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CE0562065A50E00BDD5D6 /* NVActivityIndicatorView.swift */; };
-		603CE08D2065A50E00BDD5D6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 603CE0592065A50E00BDD5D6 /* Info.plist */; };
 		603CE08E2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallRotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CE05B2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallRotate.swift */; };
 		603CE08F2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallGridPulse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CE05C2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallGridPulse.swift */; };
 		603CE0902065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallClipRotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CE05D2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallClipRotate.swift */; };
@@ -89,6 +92,7 @@
 		60AE9BA320BF4C4F00A54568 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE9BA220BF4C4F00A54568 /* CustomTabBar.swift */; };
 		60AFFA4E2084CF0000FC0C6B /* SongEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AFFA4D2084CF0000FC0C6B /* SongEditorViewController.swift */; };
 		60BF644C2059EA62001DE306 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BF644B2059EA62001DE306 /* DownloadsView.swift */; };
+		60C5389620C1EAAE00919E3F /* CircleInteractionCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C5389520C1EAAE00919E3F /* CircleInteractionCells.swift */; };
 		60C774BB20A63E1A00F24C0E /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C774BA20A63E1A00F24C0E /* DownloadItem.swift */; };
 		60C959CD20922B7D00DA0E9C /* ProgresSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C959CC20922B7D00DA0E9C /* ProgresSlider.swift */; };
 		60E827D2207907E600B896F3 /* tap-mellow.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60E827D1207907E500B896F3 /* tap-mellow.aif */; };
@@ -118,6 +122,9 @@
 
 /* Begin PBXFileReference section */
 		6002F048209B280E00360063 /* EArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EArray.swift; sourceTree = "<group>"; };
+		60057AD820CB2A870024BFBC /* CustomViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewControllers.swift; sourceTree = "<group>"; };
+		60057ADA20CB30E30024BFBC /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		60057ADC20CB4E280024BFBC /* SongLibrarySearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongLibrarySearchController.swift; sourceTree = "<group>"; };
 		600F7E89203E2030009CF6BF /* MusicView_SongPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView_SongPlayer.swift; sourceTree = "<group>"; };
 		60164FF6203A21D400A6B2B6 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		601AF522209E98B60014FA46 /* SongQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongQueue.swift; sourceTree = "<group>"; };
@@ -129,13 +136,13 @@
 		601AF528209E98B70014FA46 /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		601AF529209E98B70014FA46 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		601BE46320ADA0F20042BB4F /* SearchHistoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryList.swift; sourceTree = "<group>"; };
+		603218CF20C0E1CD008998C5 /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		603CE0512065A50E00BDD5D6 /* NVActivityIndicatorAnimationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationDelegate.swift; sourceTree = "<group>"; };
 		603CE0532065A50E00BDD5D6 /* NVActivityIndicatorPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorPresenter.swift; sourceTree = "<group>"; };
 		603CE0542065A50E00BDD5D6 /* NVActivityIndicatorViewable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorViewable.swift; sourceTree = "<group>"; };
 		603CE0552065A50E00BDD5D6 /* NVActivityIndicatorShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorShape.swift; sourceTree = "<group>"; };
 		603CE0562065A50E00BDD5D6 /* NVActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorView.swift; sourceTree = "<group>"; };
 		603CE0582065A50E00BDD5D6 /* NVActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NVActivityIndicatorView.h; sourceTree = "<group>"; };
-		603CE0592065A50E00BDD5D6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		603CE05B2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallRotate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationBallRotate.swift; sourceTree = "<group>"; };
 		603CE05C2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallGridPulse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationBallGridPulse.swift; sourceTree = "<group>"; };
 		603CE05D2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallClipRotate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationBallClipRotate.swift; sourceTree = "<group>"; };
@@ -202,6 +209,7 @@
 		60AE9BA220BF4C4F00A54568 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		60AFFA4D2084CF0000FC0C6B /* SongEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongEditorViewController.swift; sourceTree = "<group>"; };
 		60BF644B2059EA62001DE306 /* DownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
+		60C5389520C1EAAE00919E3F /* CircleInteractionCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleInteractionCells.swift; sourceTree = "<group>"; };
 		60C774BA20A63E1A00F24C0E /* DownloadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadItem.swift; sourceTree = "<group>"; };
 		60C959CC20922B7D00DA0E9C /* ProgresSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgresSlider.swift; sourceTree = "<group>"; };
 		60E827D1207907E500B896F3 /* tap-mellow.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tap-mellow.aif"; sourceTree = "<group>"; };
@@ -263,6 +271,8 @@
 		6002F03D209AB53200360063 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				603218CF20C0E1CD008998C5 /* LibraryViewController.swift */,
+				60057ADC20CB4E280024BFBC /* SongLibrarySearchController.swift */,
 				607709CA205955B900CB5940 /* SongListView.swift */,
 				60F95A3020685D860019AA27 /* RecentlyAddedView.swift */,
 			);
@@ -307,6 +317,7 @@
 		6002F044209AB6E800360063 /* Reusable View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				60057AD820CB2A870024BFBC /* CustomViewControllers.swift */,
 				60AFFA4D2084CF0000FC0C6B /* SongEditorViewController.swift */,
 				6043DF1020977D780068101F /* SongQueueVisualizer.swift */,
 				6069299920990914008B0796 /* MenuBarViewController.swift */,
@@ -325,6 +336,7 @@
 				6044CC4F209B2C9800B5B1E3 /* MenuBar.swift */,
 				60F2431520A7A00D007085E6 /* InterfaceBackgroundView.swift */,
 				60AE9BA220BF4C4F00A54568 /* CustomTabBar.swift */,
+				60C5389520C1EAAE00919E3F /* CircleInteractionCells.swift */,
 			);
 			path = "Custom Views";
 			sourceTree = "<group>";
@@ -355,7 +367,6 @@
 			isa = PBXGroup;
 			children = (
 				603CE0582065A50E00BDD5D6 /* NVActivityIndicatorView.h */,
-				603CE0592065A50E00BDD5D6 /* Info.plist */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -444,6 +455,7 @@
 			children = (
 				604E0DD72034953200F0A5B8 /* AppDelegate.swift */,
 				60164FF6203A21D400A6B2B6 /* Extensions.swift */,
+				60057ADA20CB30E30024BFBC /* Notifications.swift */,
 				6002F043209AB67100360063 /* Model */,
 				6002F03A209AB4C900360063 /* Mechanisms */,
 				6002F039209AB4BD00360063 /* Views */,
@@ -560,7 +572,6 @@
 				60989F26205DF4DD006E998B /* Assets.xcassets in Resources */,
 				604E0DE52034953200F0A5B8 /* LaunchScreen.storyboard in Resources */,
 				60E827D2207907E600B896F3 /* tap-mellow.aif in Resources */,
-				603CE08D2065A50E00BDD5D6 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,14 +599,18 @@
 				6074467C2040B27500702FB6 /* Song.swift in Sources */,
 				60F95A3120685D860019AA27 /* RecentlyAddedView.swift in Sources */,
 				60AFFA4E2084CF0000FC0C6B /* SongEditorViewController.swift in Sources */,
+				60057AD920CB2A870024BFBC /* CustomViewControllers.swift in Sources */,
 				601AF52F209E98B70014FA46 /* Variations.swift in Sources */,
 				60164FF7203A21D400A6B2B6 /* Extensions.swift in Sources */,
 				603CE0932065A50E00BDD5D6 /* NVActivityIndicatorAnimationLineScalePulseOut.swift in Sources */,
+				60057ADD20CB4E280024BFBC /* SongLibrarySearchController.swift in Sources */,
 				603CE0942065A50E00BDD5D6 /* NVActivityIndicatorAnimationLineSpinFadeLoader.swift in Sources */,
 				603CE0982065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallBeat.swift in Sources */,
 				603CE0972065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallZigZag.swift in Sources */,
 				6044CC50209B2C9800B5B1E3 /* MenuBar.swift in Sources */,
+				60C5389620C1EAAE00919E3F /* CircleInteractionCells.swift in Sources */,
 				603CE0AC2065A50E00BDD5D6 /* NVActivityIndicatorAnimationLineScalePulseOutRapid.swift in Sources */,
+				603218D020C0E1CD008998C5 /* LibraryViewController.swift in Sources */,
 				603E13C1203BAB600010BCDB /* MusicView_Frames.swift in Sources */,
 				601BE46420ADA0F20042BB4F /* SearchHistoryList.swift in Sources */,
 				603CE0962065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallScale.swift in Sources */,
@@ -616,6 +631,7 @@
 				603CE09F2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBlank.swift in Sources */,
 				6044AC4D20AB0DB900E013F5 /* SongStack.swift in Sources */,
 				603CE0A22065A50E00BDD5D6 /* NVActivityIndicatorAnimationTriangleSkewSpin.swift in Sources */,
+				60057ADB20CB30E30024BFBC /* Notifications.swift in Sources */,
 				603CE0882065A50E00BDD5D6 /* NVActivityIndicatorAnimationDelegate.swift in Sources */,
 				60F2431620A7A00D007085E6 /* InterfaceBackgroundView.swift in Sources */,
 				603CE09B2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallClipRotatePulse.swift in Sources */,

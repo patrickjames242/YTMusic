@@ -15,7 +15,7 @@ protocol SongReorderingObserver: class{
 }
 
 
-enum SongQueueChangeType{
+enum SongQueueChangeType {
     
     case insert, delete, fill
     
@@ -32,7 +32,7 @@ class SongStack: SongReorderingObserver{
     
     private var firstSongStartDate: Date?
     
-    func getVisualizer(type: SongQueueVisualizerType) -> UIViewController{
+    func getVisualizer(type: SongQueueVisualizerType) -> UIViewController {
         let controller = SongQueueVisualizer(songs: getAll(), type: type, reorderingDelegate: self)
         self.visualizer = controller
         
@@ -51,9 +51,8 @@ class SongStack: SongReorderingObserver{
     
     
     func songWasRemoved(song: Song, at indexPath: IndexPath) {
-        
         storage.remove(at: indexPath.row)
-        if storage.isEmpty{ firstSongStartDate = nil }
+        if storage.isEmpty { firstSongStartDate = nil }
     }
     
     
@@ -69,7 +68,7 @@ class SongStack: SongReorderingObserver{
         firstSongStartDate = Date()
         storage = songs
         
-        let indexes = Array(songs.indices).map{ IndexPath(row: $0, section: 0) }
+        let indexes = Array(songs.indices).map { IndexPath(row: $0, section: 0) }
         
         visualizer?.songQueueDidChange(type: .fill, at: indexes, newArray: storage)
         
@@ -132,7 +131,6 @@ class SongStack: SongReorderingObserver{
         if let index = storage.index(of: song){
             
             storage.remove(at: index)
-            if storage.isEmpty { firstSongStartDate = nil }
             visualizer?.songQueueDidChange(type: .delete, at: [IndexPath(row: index, section: 0)], newArray: storage)
             
         }

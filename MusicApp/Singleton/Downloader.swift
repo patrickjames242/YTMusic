@@ -11,6 +11,12 @@ import Foundation
 import UserNotifications
 import AVFoundation
 
+
+
+
+
+
+
 fileprivate let sharedDownloaderInstance = Downloader()
 
 class Downloader: NSObject, URLSessionDownloadDelegate{
@@ -83,11 +89,12 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
             }
             
             DispatchQueue.main.sync {
-                let newSong = Song.createNew(from: downloadItem, songData: data)
-                self.displayDownloadFinishedNotification()
-                
-                downloadItem.changeStatusTo(.finished(newSong, Date()))
-                self.downloadTaskDict[downloadTask] = nil
+                Song.createNew(from: downloadItem, songData: data){(song) in
+                    self.displayDownloadFinishedNotification()
+                    
+                    downloadItem.changeStatusTo(.finished(song, Date()))
+                    self.downloadTaskDict[downloadTask] = nil
+                }
             }
             
             
@@ -240,7 +247,9 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
     
     
     
-    lazy var session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
+    private var session: URLSession{
+        return URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
+    }
     
     
     
@@ -281,7 +290,7 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
         
         let task = session.downloadTask(with: url)
         
-        URLSession.shared.dataTask(with: video.thumbnailLink) { (data, response, error) in
+        URLSession.shared.dataTask(with: video.thumbnailLink_highQuality) { (data, response, error) in
             if error != nil{
                 print("There was an error in the 'beginDownloadOf' function in Downloader.swift: \(error!)")
                 return

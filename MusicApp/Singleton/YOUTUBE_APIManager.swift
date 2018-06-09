@@ -12,6 +12,19 @@ import MediaPlayer
 import UserNotifications
 
 
+func checkForDoubleVideo(videos: [YoutubeVideo], functionName: String){
+    
+//    for video in videos{
+//        let filteredVids = videos.filter{$0.videoID == video.videoID}
+//        
+//        if filteredVids.count > 1{
+//            print(functionName + " has attempted to return \(filteredVids.count) repeated videos. Here is the video that was repeated: \(video.name)")
+//        }
+//    }
+    
+    
+}
+
 
 // Learned how to do this from https://www.spaceotechnologies.com/fetch-youtube-videos-integrate-youtube-api-ios-app/
 
@@ -23,6 +36,18 @@ import UserNotifications
 
 
 
+
+struct YoutubeSearchResponse{
+    
+    let videos: [YoutubeVideo]
+    let moreResultsCode: String?
+    let error: Error?
+    let searchText: String?
+    
+}
+
+
+
 class YTAPIManager: NSObject {
     static var main = YTAPIManager()
     
@@ -31,12 +56,14 @@ class YTAPIManager: NSObject {
     
     
     
+
+    
     
     
     // MARK: - GET RELATED VIDEOS
     
     
-    func getRelatedVidoesTo(vidID: String, completion: @escaping ([YoutubeVideo]?, Error?) -> Void){
+    func getRelatedVidoesTo(vidID: String, completion: @escaping (YoutubeSearchResponse) -> Void){
         
         
         
@@ -45,32 +72,14 @@ class YTAPIManager: NSObject {
         
         
         guard let urlString = strURL.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlFragmentAllowed), let url = URL(string: urlString) else {
-            completion(nil, nil)
+            completion(YoutubeSearchResponse(videos: [], moreResultsCode: nil, error: nil, searchText: nil))
             return
         }
         
         
         
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            
-            if error != nil{
-                print("There was an error in the 'getRelatedVidoesTo' function in the Youtube api manager class. \(error!)")
-                completion(nil, error!)
-                return
-            }
+        activateYoutubeSearchDataTask(with: url, searchText: nil, completion: {completion($0)})
         
-            self.parseJSONFromYoutubeSearchResults(data: data!, completion: { (videoArray) in
-                
-                DispatchQueue.main.sync {
-                    
-                    
-                    completion(videoArray, nil)
-                }
-            })
-          
-        }
-        
-        task.resume()
         
     }
     
@@ -104,6 +113,8 @@ class YTAPIManager: NSObject {
                 return
             }
             
+            checkForDoubleVideo(videos: videoArray, functionName: #function)
+            
             
             Downloader.main.beginDownloadOf(videoArray.first!)
             
@@ -116,18 +127,51 @@ class YTAPIManager: NSObject {
     
     //MARK: - GET YOUTUBE SEARCH RESULTS
     
-    func getYoutubeSearchResultsWith(searchText: String, amount: Int, completion: @escaping ([YoutubeVideo]?, Error?) -> Void){
+    
+    
+    
+    
+    
+    
+    func getNextPageOfYoutubeSearchResults(using previousResponse: YoutubeSearchResponse, amount: Int, completion: @escaping (YoutubeSearchResponse) -> Void){
+        
+        guard let searchText = previousResponse.searchText, let pageToken = previousResponse.moreResultsCode else {
+            completion(YoutubeSearchResponse(videos: [], moreResultsCode: previousResponse.moreResultsCode, error: nil, searchText: previousResponse.searchText))
+            return
+        }
+        
+        
+        let url = prepareVideoSearchURLWith(amount: amount, searchText: searchText, previousNextPageToken: pageToken)
+        
+        activateYoutubeSearchDataTask(with: url, searchText: searchText, completion: {completion($0)})
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    func getYoutubeSearchResultsWith(searchText: String, amount: Int, completion: @escaping (YoutubeSearchResponse) -> Void){
         
         let url = prepareVideoSearchURLWith(amount: amount, searchText: searchText)
         
+        activateYoutubeSearchDataTask(with: url, searchText: searchText, completion: {completion($0)})
         
+        
+    }
+    
+    
+    private func activateYoutubeSearchDataTask(with url: URL, searchText: String?, completion: @escaping (YoutubeSearchResponse) -> Void){
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             
             if error != nil{
                 DispatchQueue.main.sync {
-                    completion(nil, error)
+                    completion(YoutubeSearchResponse(videos: [], moreResultsCode: nil, error: error, searchText: searchText))
                     
                 }
                 return
@@ -135,23 +179,18 @@ class YTAPIManager: NSObject {
             
             
             if let data = data {
-                self.parseJSONFromYoutubeSearchResults(data: data, completion: { (videos) in
+                self.parseJSONFromYoutubeSearchResults(data: data, completion: { (videos, nextPageToken)  in
                     
                     DispatchQueue.main.sync {
-                        
-                        if videos.isEmpty{
-                            
-                            completion(nil, nil)
-                        } else {
-                            completion(videos, nil)
-                        }
+                        checkForDoubleVideo(videos: videos, functionName: #function)
+                        completion(YoutubeSearchResponse(videos: videos, moreResultsCode: nextPageToken, error: nil, searchText: searchText))
                     }
                 })
             } else {
                 DispatchQueue.main.sync {
                     
-                    completion(nil, nil)}
-                }
+                    completion(YoutubeSearchResponse(videos: [], moreResultsCode: nil, error: nil, searchText: searchText))}
+            }
             
             }.resume()
     }
@@ -159,7 +198,7 @@ class YTAPIManager: NSObject {
     
     
     
-    private func prepareVideoSearchURLWith(amount: Int, searchText: String) -> URL{
+    private func prepareVideoSearchURLWith(amount: Int, searchText: String, previousNextPageToken: String? = nil) -> URL{
         
         func countryCode() -> NSString{
             let local = NSLocale.current as NSLocale
@@ -171,7 +210,7 @@ class YTAPIManager: NSObject {
         
         
 
-        let strURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=\(amount)&order=Relevance&q=\(searchText)&regionCode=\(countryCode())&type=video&key=\(APIKey)" as NSString
+        let strURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=\(amount)&order=Relevance&q=\(searchText)&regionCode=\(countryCode())&type=video&key=\(APIKey)\((previousNextPageToken != nil) ? "&pageToken=\(previousNextPageToken!)" : "" )" as NSString
 
 
         
@@ -182,16 +221,16 @@ class YTAPIManager: NSObject {
     
     
     
-    enum JSONParsingError: Error{ case couldNotParse}
     
-    private func parseJSONFromYoutubeSearchResults(data: Data, completion: @escaping ([YoutubeVideo]) -> Void) {
+    private func parseJSONFromYoutubeSearchResults(data: Data, completion: @escaping ([YoutubeVideo], _ moreResultsCode: String?) -> Void) {
         
         
         
         
         do{
-            guard let result = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary else {completion([]); return}
-            guard let info = result["items"] as? Array<NSDictionary> else {completion([]); return}
+            guard let result = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary else {completion([], nil); return}
+            guard let info = result["items"] as? Array<NSDictionary> else {completion([], nil); return}
+            let nextPageToken = result["nextPageToken"] as? String
             let youtubeIDs = EArray<String>()
             
             youtubeIDs.irateThrough(array: info) { (item) -> String? in
@@ -204,12 +243,13 @@ class YTAPIManager: NSObject {
             
             
             getVideosFromYT_IDs(youtubeIDs.elements) { (videos) in
-                completion(videos)
+                checkForDoubleVideo(videos: videos, functionName: #function)
+                completion(videos, nextPageToken)
             }
             
         } catch {
 
-            completion([])
+            completion([], nil)
         }
     }
 
@@ -229,7 +269,7 @@ class YTAPIManager: NSObject {
                     
                     let videos = videosToReturn.sorted { $0.1 < $1.1}.filter{$0.0 != nil}.map{$0.0!}
                     
-                    
+                    checkForDoubleVideo(videos: videos, functionName: #function)
                     completion(videos)
                 }
             }
@@ -294,7 +334,6 @@ class YTAPIManager: NSObject {
     
     
     
-    //MARK: - GET AUTO COMPLETE SUGGESTIONS
     
     
     

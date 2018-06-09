@@ -87,18 +87,19 @@ extension MusicView {
     
     
     
-    
+    var albumCoverTopInset: CGFloat{
+        return 5
+    }
     
     
     
     func setInitialAlbumCoverConstraints(){
         
-        let INSET: CGFloat = 10
         
-        albumCover_topConstraint = albumImage.topAnchor.constraint(equalTo: topAnchor, constant: INSET)
+        albumCover_topConstraint = albumImage.topAnchor.constraint(equalTo: topAnchor, constant: albumCoverTopInset)
         albumCover_topConstraint.isActive = true
         
-        albumCover_leftConstraint = albumImage.leftAnchor.constraint(equalTo: leftAnchor, constant: INSET)
+        albumCover_leftConstraint = albumImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 10)
         albumCover_leftConstraint.isActive = true
         
         albumCover_heightConstraint = albumImage.heightAnchor.constraint(equalToConstant: 0)
@@ -124,7 +125,7 @@ extension MusicView {
         albumCover_centerXConstraint.isActive = false
         albumCover_leftConstraint.isActive = true
         
-        albumCover_topConstraint.constant = 10
+        albumCover_topConstraint.constant = albumCoverTopInset
         albumCoverSize = minimizedAlbumCover_Size
         layoutIfNeeded()
     }
@@ -198,10 +199,9 @@ extension MusicView {
     
     
     var minimizedAlbumCover_Size: CGSize{
-        let inset: CGFloat = 10
         
         
-        let height = AppManager.minimizedMusicViewHeight - (inset * 2)
+        let height = AppManager.minimizedMusicViewHeight - (albumCoverTopInset * 2)
         let width = height
         return CGSize(width: width, height: height)
         

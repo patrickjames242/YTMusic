@@ -13,8 +13,9 @@ class CustomTabBarItem {
     
     var tag: Int
     var image: UIImage
-    var userInfo: [String: Any]
     var imagePadding: UIEdgeInsets
+    var viewController: UIViewController
+    
     var badgeValue: String?{
         didSet{
             if let action = badgeValueChangedAction{
@@ -23,12 +24,17 @@ class CustomTabBarItem {
         }
     }
     
+    
+    var view: UIView{
+        return viewController.view
+    }
+    
     fileprivate var badgeValueChangedAction: ((String?) -> Void)?
     
-    init(tag: Int, image: UIImage, userInfo: [String: Any] = [:], imagePadding: UIEdgeInsets = UIEdgeInsets.zero){
+    init(tag: Int, image: UIImage, viewController: UIViewController, imagePadding: UIEdgeInsets = UIEdgeInsets.zero){
+        self.viewController = viewController
         self.tag = tag
         self.image = image
-        self.userInfo = userInfo
         self.imagePadding = imagePadding
     }
     
@@ -40,7 +46,7 @@ class CustomTabBarItem {
 
 
 protocol CustomTabBarDelegate: class{
-    func customTabBar(tabBar: CustomTabBar, userDidTap item: CustomTabBarItem)
+    func customTabBar(tabBar: CustomTabBar, itemWasSelected newItem: CustomTabBarItem, oldItem: CustomTabBarItem?, animationFinishedBlock: @escaping () -> Void)
 }
 
 
@@ -88,7 +94,6 @@ class CustomTabBar: UIView,  CustomTabBarImageViewDelegate{
         topLine.pin(left: leftAnchor, right: rightAnchor, top: topAnchor, size: CGSize(height: 0.5))
         
         setUpImagesStackView(for: items)
-        isMultipleTouchEnabled = false
     }
     
     
@@ -103,7 +108,6 @@ class CustomTabBar: UIView,  CustomTabBarImageViewDelegate{
 
         imagesStackView.distribution = .fillEqually
         imagesStackView.axis = .horizontal
-        imagesStackView.isMultipleTouchEnabled = false
         addSubview(imagesStackView)
         
         
@@ -116,20 +120,19 @@ class CustomTabBar: UIView,  CustomTabBarImageViewDelegate{
             imageViews.append(imageView)
             
         }
-        guard let firstItem = items.first else {return}
-        selectItem(with: firstItem.tag)
-        currentlySelectedItem = firstItem
+        
+        if let firstItem = imageViews.first{
+            currentlySelectedItem = items.first!
+            firstItem.select()
+        }
         
     
     }
     
-    func setTouchesEnabled(to enabled: Bool){
-        imagesStackView.isUserInteractionEnabled = enabled
-        
-        
-    }
+    private var currentlySelectedItem: CustomTabBarItem?
     
-    private(set) var currentlySelectedItem: CustomTabBarItem?
+
+    
     
     func selectItem(with tag: Int){
         guard let item = items.filter({$0.tag == tag}).first else { return }
@@ -138,13 +141,28 @@ class CustomTabBar: UIView,  CustomTabBarImageViewDelegate{
         imageView.select()
         
         imageViews.filter{$0 !== imageView}.forEach{$0.deSelect()}
+        let oldItem = currentlySelectedItem
         currentlySelectedItem = item
+        
+        let completionBlock = {
+            self.imagesStackView.isUserInteractionEnabled = true
+        }
+        
+        imagesStackView.isUserInteractionEnabled = false
+        
+        let timer = Timer(timeInterval: 1.5, repeats: false) { (timer) in
+            self.imagesStackView.isUserInteractionEnabled = true
+            timer.invalidate()
+        }
+        
+        RunLoop.current.add(timer, forMode: .commonModes)
+        
+        delegate?.customTabBar(tabBar: self, itemWasSelected: item, oldItem: oldItem, animationFinishedBlock: completionBlock)
     }
     
     
     fileprivate func buttonTapped(imageView: CustomTabBarImageView, item: CustomTabBarItem) {
         selectItem(with: item.tag)
-        delegate?.customTabBar(tabBar: self, userDidTap: item)
         
     }
     
@@ -267,9 +285,6 @@ fileprivate class CustomTabBarImageView: UIView{
             self.badge.transform = CGAffineTransform.identity
             self.badge.alpha = 0
         }
-        
-        
-        
     }
     
     private var isSelected = false

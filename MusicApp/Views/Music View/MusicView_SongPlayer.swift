@@ -294,8 +294,10 @@ extension MusicView: SongQueueDelegate{
         self.currentlyPlayingSong = song
 
         
-        NotificationCenter.default.removeObserver(self, name: SongNameDidChangeNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongNameDidChangeNotification), name: SongNameDidChangeNotification, object: currentlyPlayingSong!)
+        NotificationCenter.default.removeObserver(self, name: MNotifications.SongNameDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToSongNameDidChangeNotification), name: MNotifications.SongNameDidChangeNotification, object: currentlyPlayingSong!)
+        
+        
         
         if playWhenSetted == true {
             self.playMusic()
@@ -526,7 +528,7 @@ extension MusicView: SongQueueDelegate{
         NotificationCenter.default.addObserver(self, selector: #selector(respondTo__AVAudioSessionInteruption__Notification(notification:)), name: Notification.Name.AVAudioSessionInterruption, object: nil)
         
         
-        NotificationCenter.default.addObserver(self, selector: #selector(respondToAudioPanningStateChangeNotification), name: AudioPanningStateDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(respondToAudioPanningStateChangeNotification), name: MNotifications.AudioPanningStateDidChangeNotification, object: nil)
         
     }
     
@@ -607,10 +609,10 @@ extension MusicView: SongQueueDelegate{
         
         NotificationCenter.default.removeObserver(self, name: Notification.Name.AVAudioSessionInterruption, object: nil)
         
-        NotificationCenter.default.removeObserver(self, name: SongNameDidChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: MNotifications.SongNameDidChangeNotification, object: nil)
         
         
-        NotificationCenter.default.removeObserver(self, name: AudioPanningStateDidChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: MNotifications.AudioPanningStateDidChangeNotification, object: nil)
         
 
     }

@@ -463,7 +463,7 @@ public final class NVActivityIndicatorView: UIView {
     }
 
     /**
-     Start animating.
+     Start animating. This is for the custom animations library I put in the project.
      */
     public final func startAnimating() {
         isHidden = false
@@ -473,7 +473,7 @@ public final class NVActivityIndicatorView: UIView {
     }
 
     /**
-     Stop animating.
+     Stop animating. This is for the custom animations library I put in the project.
      */
     public final func stopAnimating() {
         isHidden = true

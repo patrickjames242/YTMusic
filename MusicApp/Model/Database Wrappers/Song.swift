@@ -13,16 +13,6 @@ import AVFoundation
 
 
 
-let SongNameDidChangeNotification = Notification.Name("SongNameDidChange")
-let SongWasDeletedNotification = Notification.Name("SongWasDeleted")
-let DeletedSongObjectKey = "DeletedSong"
-
-let NewSongWasCreatedNotification = Notification.Name("NewSongWasCreated")
-let NewlyCreatedSongObjectKey = "NewSong"
-
-let UserDidPressPlaySongNext = Notification.Name("UserWantsToPlaySongNext")
-let SelectedUpNextSongKey = "UpNextSong"
-
 
 
 
@@ -45,21 +35,17 @@ class Song: NSObject {
     
     private static var allSongs = [String: Song]()
     
-    static func createNew(from downloadItem: DownloadItem, songData: Data) -> Song{
-
-        let object = DBManager.createAndSaveNewDBSongObject(from: downloadItem.object, songData: songData)
-        
-        let newSong = wrap(object: object)
-        
-        
-        
-        NotificationCenter.default.post(name: NewSongWasCreatedNotification, object: newSong, userInfo: [NewlyCreatedSongObjectKey : newSong])
-        
-        
-        
-        return newSong
-        
-        
+    static func createNew(from downloadItem: DownloadItem, songData: Data, completion: @escaping (Song) -> Void){
+       
+        DBManager.createAndSaveNewDBSongObject(from: downloadItem.object, songData: songData){ (dbSong) in
+            
+            
+            let newSong = wrap(object: dbSong)
+            
+            completion(newSong)
+            
+            MNotifications.sendNewSongWasCreatedNotification(for: newSong)
+        }
     }
     
     
@@ -86,7 +72,7 @@ class Song: NSObject {
                 allSongs[song.uniqueID] = nil
                 DBManager.delete(song: song.object)
                 DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: SongWasDeletedNotification, object: song, userInfo: [DeletedSongObjectKey : song])
+                    MNotifications.sendSongWasDeletedNotification(for: song)
                     
                 }
             }
@@ -132,14 +118,11 @@ class Song: NSObject {
         return collectionToReturn.elements
     }
     
-    
-    static func ==(lhs: Song, rhs: Song) -> Bool {
-        return lhs.uniqueID == rhs.uniqueID
-    }
+
     
     
     func playNext(){
-        NotificationCenter.default.post(name: UserDidPressPlaySongNext, object: self, userInfo: [SelectedUpNextSongKey : self])
+        MNotifications.sendUserDidPressPlaySongNextNotification(for: self)
         
         
     }
@@ -151,18 +134,18 @@ class Song: NSObject {
         Song.allSongs[self.uniqueID] = nil
         DBManager.delete(song: object)
         
-        NotificationCenter.default.post(name: SongWasDeletedNotification, object: self, userInfo: [DeletedSongObjectKey : self])
+        MNotifications.sendSongWasDeletedNotification(for: self)
     }
     
     func changeNamesToDefaults(){
         DBManager.changeDBSongNamesToDefaults(object: object)
-        NotificationCenter.default.post(name: SongNameDidChangeNotification, object: self)
+        MNotifications.sendSongNameDidChangeNotification(for: self)
     }
 
     func changeNamesTo(title: String, artist: String){
 
         DBManager.changeDBSongNames(object: object, name: title, artist: artist)
-        NotificationCenter.default.post(name: SongNameDidChangeNotification, object: self)
+        MNotifications.sendSongNameDidChangeNotification(for: self)
     }
 
 
@@ -361,28 +344,32 @@ fileprivate final class DBManager{
     
     
     
-    static func createAndSaveNewDBSongObject(from downloadItem: DBDownloadItem, songData: Data) -> DBSong{
+    static func createAndSaveNewDBSongObject(from downloadItem: DBDownloadItem, songData: Data, completion: @escaping (DBSong) -> Void){
+        DispatchQueue.global(qos: .userInitiated).async {
+            let identifier = NSUUID().uuidString
+            
+            let newDBSong = DBSong(context: context)
+            newDBSong.dataIdentifier = identifier
+            newDBSong.name = downloadItem.name
+            newDBSong.image = downloadItem.image
+            newDBSong.artistName = downloadItem.channelName
+            newDBSong.date = Date()
+            newDBSong.ytID = downloadItem.ytID
+            newDBSong.defaultName = downloadItem.name!
+            newDBSong.defaultArtistName = downloadItem.channelName!
+            
+            
+            let newDBDAta = DBData(context: DBManager.context)
+            newDBDAta.data = songData
+            newDBDAta.identifier = identifier
+            DispatchQueue.main.async {
+                saveContext()
+                completion(newDBSong)
+            }
+            
+        }
         
-        let identifier = NSUUID().uuidString
-        
-        let newDBSong = DBSong(context: context)
-        newDBSong.dataIdentifier = identifier
-        newDBSong.name = downloadItem.name
-        newDBSong.image = downloadItem.image
-        newDBSong.artistName = downloadItem.channelName
-        newDBSong.date = Date()
-        newDBSong.ytID = downloadItem.ytID
-        newDBSong.defaultName = downloadItem.name!
-        newDBSong.defaultArtistName = downloadItem.channelName!
-        
-        
-        let newDBDAta = DBData(context: DBManager.context)
-        newDBDAta.data = songData
-        newDBDAta.identifier = identifier
-        
-        
-        saveContext()
-        return newDBSong
+  
     }
     
     

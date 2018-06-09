@@ -12,6 +12,25 @@ import SafariServices
 
 
 
+class MSelector{
+    
+    
+    @objc private func doAction(){
+        self.action()
+    }
+    
+    private var action: (() -> Void)!
+    
+    func create(_ action: @escaping () -> Void) -> Selector{
+        
+        self.action = action
+        
+        return #selector(doAction)
+    }
+    
+}
+
+
 
 class WeakWrapper<Value: AnyObject>: NSObject{
     
@@ -90,23 +109,7 @@ class MyView: UIView {
 
 
 
-class PortraitViewController: UIViewController{
-    
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
-        return .portrait
-    }
-    
-}
 
-class PortraitNavigationController: UINavigationController{
-    
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
-        return .portrait
-    }
-    
-}
 
 
 
@@ -366,6 +369,13 @@ extension UIView{
         set { frame.bottomSide = newValue }
     }
     
+    func stopAnimations(){
+        self.subviews.forEach{$0.stopAnimations()}
+        self.layer.removeAllAnimations()
+     
+    }
+    
+    
     
     func pinAllSidesTo(_ viewToPinTo: UIView, insets: UIEdgeInsets = UIEdgeInsets.zero){
         translatesAutoresizingMaskIntoConstraints = false
@@ -432,6 +442,8 @@ extension UIView{
     
     
     
+    
+    
     var centerInFrame: CGPoint{
         
         return center
@@ -451,6 +463,7 @@ extension UIView{
     }
     
 }
+
 
 
 extension UILayoutGuide{
@@ -503,6 +516,13 @@ extension UILayoutGuide{
             }
             
         }
+        
+    }
+    func pinAllSidesTo(_ viewToPinTo: UIView, insets: UIEdgeInsets = UIEdgeInsets.zero){
+        leftAnchor.constraint(equalTo: viewToPinTo.leftAnchor, constant: insets.left).isActive = true
+        rightAnchor.constraint(equalTo: viewToPinTo.rightAnchor, constant: -insets.right).isActive = true
+        topAnchor.constraint(equalTo: viewToPinTo.topAnchor, constant: insets.top).isActive = true
+        bottomAnchor.constraint(equalTo: viewToPinTo.bottomAnchor, constant: -insets.bottom).isActive = true
         
     }
     

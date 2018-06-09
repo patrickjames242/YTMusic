@@ -17,8 +17,8 @@ class AppInfoTableView: UITableViewController{
         super.init(style: .grouped)
         
         navigationItem.largeTitleDisplayMode = .never
-        NotificationCenter.default.addObserver(self, selector: #selector(initiateStatistics), name: SongWasDeletedNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(initiateStatistics), name: NewSongWasCreatedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(initiateStatistics), name: MNotifications.SongWasDeletedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(initiateStatistics), name: MNotifications.NewSongWasCreatedNotification, object: nil)
     }
 
 

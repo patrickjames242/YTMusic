@@ -51,7 +51,7 @@ class SongListView_NavCon: UINavigationController{
 
 //MARK: - SONG LIST VIEW
 
-class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate{
+class SongListView: SafeAreaObservantTableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate{
     
     let cellID = "The Best cell everrrrr!!!!!"
     let headerID = "the Best HEADER EVERRRR!!!!! 😁😁"
@@ -72,9 +72,9 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.title = "Songs"
+        navigationItem.hidesSearchBarWhenScrolling = false
+    
         
-        
-        setBottomInset()
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(respondToLongPressGesture(gesture:)))
         view.addGestureRecognizer(longPressGesture)
@@ -97,7 +97,8 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         
         tableView.rowHeight = 58
         tableView.separatorInset.left = CellConstants.separatorLeftInset
-        
+        tableView.keyboardDismissMode = .onDrag
+
         
         
         
@@ -120,12 +121,11 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
         searchController.searchBar.tintColor = THEME_COLOR(asker: self)
         searchController.searchBar.delegate = self
         searchController.delegate = self
+        searchController.hidesNavigationBarDuringPresentation = false
         
         
         
         
-        
-        tableView.keyboardDismissMode = .onDrag
         let searchBar = searchController.searchBar
         
         let coverView = UIView()
@@ -176,17 +176,30 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
     enum SongListType{ case all, search}
     
     var officialSongsTuple = (songs: [[Song]](), sectionNames: [String](), type: SongListType.all){
-        didSet{
-            if officialSongsTuple.songs.isEmpty && officialSongsTuple.type == .all{
-                tableView?.backgroundView = ScrollableContentBackgroundView(title: "Your Library Is Empty 😭", message: "Add songs from Youtube to fill your library!")
-                tableView?.isScrollEnabled = false
-                navigationItem.searchController = nil
+        willSet{
+            
+            if newValue.songs.isEmpty{
+                
+                
+                if newValue.type == .all{
+                    tableView?.backgroundView = ScrollableContentBackgroundView(title: "Your Library Is Empty 😭", message: "Add songs from Youtube to fill your library!", animated: (officialSongsTuple.type != newValue.type))
+                } else if newValue.type == .search{
+                    tableView?.backgroundView = ScrollableContentBackgroundView(title: nil, message: "No songs matched your search text 😞.", buttonText: nil, animated: (officialSongsTuple.type != newValue.type))
+                }
+                
+                
+                
+                //                tableView?.isScrollEnabled = false
+                //                navigationItem.searchController = nil
             } else {
-                navigationItem.searchController = searchController
+                //                navigationItem.searchController = searchController
                 tableView?.backgroundView = nil
-                tableView?.isScrollEnabled = true
+                //                tableView?.isScrollEnabled = true
             }
+            
+            
         }
+        
     }
     
     var searchSongsTuple = ([[Song]](), [String]()){
@@ -343,12 +356,6 @@ class SongListView: UITableViewController, NSFetchedResultsControllerDelegate, U
     
     
 
-    func setBottomInset(){
-        
-        self.tableView.contentInset.bottom = AppManager.currentAppBottomInset
-        self.tableView.scrollIndicatorInsets.bottom = AppManager.currentAppBottomInset
-        
-    }
     
     private func getIndexPathOf(song: DBSong) -> IndexPath?{
         var songIndexPath: IndexPath?
@@ -652,7 +659,7 @@ final fileprivate class CellConstants{
 
 //MARK: - TABLE VIEW CELL
 
-class MyTableViewCell: CircleInteractionResponseCell, SongObserver{
+class MyTableViewCell: CircleInteractionTableViewCell, SongObserver{
     
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -875,148 +882,4 @@ class MyTableViewCell: CircleInteractionResponseCell, SongObserver{
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class CircleInteractionResponseCell: UITableViewCell{
-    
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        clipsToBounds = true
-        
-        let selectedView = UIView()
-        selectedView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
-        
-        
-        self.selectedBackgroundView = selectedView
-        addGestureRecognizer(circleInteractionGesture)
-        addSubview(interactionCircle)
-        sendSubview(toBack: interactionCircle)
-
-    }
-    
-    lazy var circleInteractionGesture = UITapGestureRecognizer(target: self, action: #selector(respondToUsersTap(gesture:)))
-
- 
-    
-    @objc private func respondToUsersTap(gesture: UITapGestureRecognizer){
-        
-        
-   
-        
-        let location = gesture.location(in: self)
-        interactionCircle.center = location
-        
-        
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            self.interactionCircle.transform = CGAffineTransform(scaleX: 1500, y: 1500)
-        }, completion: { (true) in
-            UIView.animate(withDuration: 0.2, animations: {
-                self.interactionCircle.alpha = 0
-            }, completion: { (true) in
-                self.interactionCircle.alpha = 1
-                self.interactionCircle.transform = CGAffineTransform.identity
-            })
-            
-            
-            
-        })
-        
-     
-        performCellTappedAction()
-       
-        
-    }
-    
-    func performCellTappedAction(){
-        
-        if let table = superview as? UITableView, let indexPath = table.indexPath(for: self){
-            
-            
-            table.delegate?.tableView?(table, didSelectRowAt: indexPath)
-            
-        }
-        
-    }
-    
-
-
-    
-    private lazy var interactionCircle: UIView = {
-       let x = UIView()
-        x.frame.size.width = 0.5
-        x.frame.size.height = 0.5
-        x.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
-        x.layer.cornerRadius = x.frame.size.width / 2
-        x.layer.masksToBounds = true
-        return x
-    }()
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    
-}
-
-
-
-
-
-
-
-
-
-
 

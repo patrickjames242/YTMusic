@@ -10,6 +10,14 @@ import UIKit
 
 
 
+
+
+
+
+
+
+
+
 protocol YoutubeVideoDelegate: class {
     
     var imageReceivedClosure: (_ wasDownloaded: Bool, YoutubeVideo, UIImage) -> Void { get }
@@ -29,14 +37,15 @@ class YoutubeVideo {
     let views: String
     let date: String
     
-    let thumbnailLink: URL
+    let thumbnailLink_highQuality: URL
+    let thumbnailLink_lowQuality: URL
     
-    init(name: String, videoID: String, channel: String, thumbnailLink: URL, duration: String, views: String, date: String) {
-        
+    init(name: String, videoID: String, channel: String, thumbnailLink_highQuality: URL,thumbnailLink_lowQuality: URL, duration: String, views: String, date: String) {
+        self.thumbnailLink_highQuality = thumbnailLink_highQuality
+        self.thumbnailLink_lowQuality = thumbnailLink_lowQuality
         self.name = name
         self.videoID = videoID
         self.channel = channel
-        self.thumbnailLink = thumbnailLink
         self.duration = duration
         self.views = views
         self.date = date
@@ -94,7 +103,7 @@ class YoutubeVideo {
         
         imageDownloadIsInProgress = true
         
-        let task = URLSession.shared.dataTask(with: thumbnailLink) { [weak weakSelf = self](data, response, error) in
+        let task = URLSession.shared.dataTask(with: thumbnailLink_lowQuality) { [weak weakSelf = self](data, response, error) in
             guard let weakSelf = weakSelf else {return}
             weakSelf.imageDownloadIsInProgress = false
             

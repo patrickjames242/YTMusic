@@ -32,13 +32,12 @@ class MusicSettings_NavCon: UINavigationController {
 
 
 
-class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
+class MusicSettings: SafeAreaObservantTableViewController, MFMailComposeViewControllerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.title = "Settings"
-        setBottomInset()
     }
     
     func create(completion: (UITableViewCell) -> Void) -> UITableViewCell{
@@ -118,12 +117,7 @@ class MusicSettings: UITableViewController, MFMailComposeViewControllerDelegate{
         "Why not tell your friends and family! It's a great app after all!"
     ]
     
-    
-    func setBottomInset(){
-        self.tableView.contentInset.bottom = AppManager.currentAppBottomInset
-        self.tableView.scrollIndicatorInsets.bottom = AppManager.currentAppBottomInset
-    }
-    
+
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

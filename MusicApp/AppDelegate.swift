@@ -23,14 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = AppManager.shared.generateInterface()
-//        window?.rootViewController = BaseViewController()
         window?.makeKeyAndVisible()
         
-        let gr0 = window!.gestureRecognizers![0]
-        let gr1 = window!.gestureRecognizers![1]
-        gr0.delaysTouchesBegan = false
-        gr1.delaysTouchesBegan = false
-        
+        window!.gestureRecognizers!.remove(at: 0)
+        window!.gestureRecognizers!.remove(at: 0)
         return true
     }
     

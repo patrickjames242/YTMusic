@@ -242,19 +242,19 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         func touchBegan(){
             x.backgroundColor = UIColor(red: 215, green: 215, blue: 215)
         }
-        
+
         func touchEnded(){
             UIView.animate(withDuration: 0.3, animations: {
                 x.backgroundColor = .clear
             })
         }
-        
-        
-        
+
+
+
         x.touchesDidBeginAction = touchBegan
         x.touchesDidEndAction = touchEnded
         x.touchesDidCancelAction = touchEnded
-        
+
         x.translatesAutoresizingMaskIntoConstraints = false
         
         x.addSubview(minimizedViewSongNameLabel)

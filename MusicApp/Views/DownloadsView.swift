@@ -44,7 +44,7 @@ class DownloadsView_NavCon: UINavigationController{
 //MARK: - VIEW CONTROLLER
 
 
-class DownloadsViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class DownloadsViewController: SafeAreaObservantTableViewController, NSFetchedResultsControllerDelegate {
     
     private let cellID = "the best cell everjalskdjf;kasd"
     
@@ -55,10 +55,8 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
         navigationItem.title = "Downloads"
         navigationItem.largeTitleDisplayMode = .always
         tableView.register(DownloadsTableViewCell.self, forCellReuseIdentifier: cellID)
-        setBottomInset()
         tableView.separatorColor = .clear
         tableView.rowHeight = cellHeight
-//        tableView.contentInset.top = -(separationInset / 2)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(respondToTrashCanButtonPressed))
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: pasteButton)
@@ -182,14 +180,7 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
     
     
     
-    
-    
-    func setBottomInset(){
-        self.tableView.contentInset.bottom = AppManager.currentAppBottomInset + (separationInset / 2)
-        self.tableView.scrollIndicatorInsets.bottom = AppManager.currentAppBottomInset
-    }
-    
-
+  
     
     
     var downloads = [DownloadItem](){
@@ -242,7 +233,7 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
         
         
         let downloadItems = DownloadItem.wrap(array: fetchedResultsController.fetchedObjects!)
-        self.downloads = sortDownloads(downloadItems)
+        self.downloads = downloadItems
         tableView.reloadData()
         
         fetchedResultsController.delegate = self
@@ -250,66 +241,24 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
     }
     
     
-    
-    private func sortDownloads(_ downloads: [DownloadItem]) -> [DownloadItem]{
-        return downloads.sorted { (item1, item2) -> Bool in
-            
-            let date1: Date
-            let date2: Date
-            
-            if let endDate = item1.endDate {
-                date1 = endDate
-            } else { date1 = item1.startDate }
-            
-            if let endDate = item2.endDate {
-                date2 = endDate
-            } else { date2 = item2.startDate }
-            
-            return date1 > date2
-        }
-    }
+
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
-    
-    private func getIndexPathFor(object: DBDownloadItem) -> IndexPath?{
-        
-        var x = 0
-        for downloadItem in downloads{
-            
-            if downloadItem.isTheWrapperFor(object: object){
-                return IndexPath(row: x, section: 0)
-            }
-            
-            x += 1
-        }
-        return nil
-        
-        
-        
-    }
+
     
     
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        let object = anObject as! DBDownloadItem
+
         
-        
-        let oldIndexPath = getIndexPathFor(object: object)
-        
-        let downloads1 = DownloadItem.wrap(array: fetchedResultsController.fetchedObjects!)
-        self.downloads = sortDownloads(downloads1)
-        
-        let newIndexPath = getIndexPathFor(object: object)
-        
-        
-        
+        self.downloads = DownloadItem.wrap(array: controller.fetchedObjects! as! [DBDownloadItem])
         switch type{
             
         case .delete:
-            if let oldIndexPath = oldIndexPath{
+            if let oldIndexPath = indexPath{
                 tableView.deleteRows(at: [oldIndexPath], with: .right)
 
             }
@@ -319,12 +268,12 @@ class DownloadsViewController: UITableViewController, NSFetchedResultsController
 
             }
         case .move:
-            if let oldindexpath = oldIndexPath, let newIndexPath = newIndexPath{
+            if let oldindexpath = indexPath, let newIndexPath = newIndexPath{
                 tableView.moveRow(at: oldindexpath, to: newIndexPath)
 
             }
         case .update:
-            if let oldIndexPath = oldIndexPath{
+            if let oldIndexPath = indexPath{
                 tableView.reloadRows(at: [oldIndexPath], with: .fade)
 
             }
@@ -453,7 +402,7 @@ fileprivate protocol DownloadCellDelegate: class{
 
 // MARK: - TABLE VIEW CELL
 
-fileprivate class DownloadsTableViewCell: CircleInteractionResponseCell, DownloadItemDelegate{
+fileprivate class DownloadsTableViewCell: CircleInteractionTableViewCell, DownloadItemDelegate{
     
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -718,7 +667,6 @@ fileprivate class DownloadsTableViewCell: CircleInteractionResponseCell, Downloa
     
     @objc private func respondToThreeDotButtonTapped(){
         
-//        threeButtonDelegate?.userDidPressThreeDotButtonOn(currentDownloadItem!)
         
         AppManager.shared.displayActionMenuFor(downloadItem: currentDownloadItem!)
         

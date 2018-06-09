@@ -12,7 +12,7 @@ import UIKit
 
 
 
-class AudioPanningSlider: UISlider{
+fileprivate class AudioPanningSlider: UISlider{
     
     init(){
         super.init(frame: CGRect.zero)
@@ -204,10 +204,7 @@ class AudioPanningTableView: UITableViewController{
     
     
     @objc private func respondToSliderSliding(sender: UISlider){
-        
         DBPanning.currentAudioPanningPosition = sender.value
-        
-        
     }
     
     

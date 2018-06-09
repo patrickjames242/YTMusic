@@ -85,7 +85,7 @@ class DownloadItem: NSObject{
     
     /// This is not used outside of the Song and DownloadItem classes
     
-   let object: DBDownloadItem
+    let object: DBDownloadItem
     
 
 
@@ -150,6 +150,8 @@ class DownloadItem: NSObject{
             Database.saveContext()
         }
     }
+    
+    
     
     
     

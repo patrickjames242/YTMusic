@@ -13,26 +13,53 @@ import UIKit
 
 class ScrollableContentBackgroundView: UIView{
     
+    private var animated: Bool
     
-    init(title: String, message: String){
+    init(title: String?, message: String?, buttonText: String? = "Search YouTube", animated: Bool = true){
+        self.animated = animated
+      
+        
         self.title = title
         self.message = message
         super.init(frame: CGRect.zero)
+        
+        
+        if title == nil{
+            topLabel.alpha = 0
+        }
+        if message == nil{
+            bottomLabel.alpha = 0
+        }
+        if buttonText == nil{
+            buttonHolderView.alpha = 0
+        }
+        
         objectsHolderView.alpha = 0
         setUpViews()
     }
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        objectsHolderView.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
-        UIView.animate(withDuration: 0.45) {
+  
+        objectsHolderView.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
+        
+        
+        let block = {
             self.objectsHolderView.alpha = 1
             self.objectsHolderView.transform = CGAffineTransform.identity
         }
+        
+       
+        
+        if self.animated{
+            UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.4, options: .curveLinear, animations: block)
+        } else {
+            block()
+        }
     }
     
-    private var title: String
-    private var message: String
+    private var title: String?
+    private var message: String?
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -55,7 +82,7 @@ class ScrollableContentBackgroundView: UIView{
         [topLabel, bottomLabel, buttonHolderView].forEach { x.addSubview($0) }
         
         topLabel.pin(top: x.topAnchor,centerX: x.centerXAnchor)
-        bottomLabel.pin(top: topLabel.bottomAnchor,centerX: x.centerXAnchor)
+        bottomLabel.pin(left: x.leftAnchor, right: x.rightAnchor, top: topLabel.bottomAnchor,insets: UIEdgeInsets(top: 5, left: 15, right: 15))
         buttonHolderView.pin(top: bottomLabel.bottomAnchor,centerX: x.centerXAnchor, size: CGSize(width: 200, height: 40), insets: UIEdgeInsets(top: 20))
         return x
     }()
@@ -73,6 +100,8 @@ class ScrollableContentBackgroundView: UIView{
     private lazy var bottomLabel: UILabel = {
         let x = UILabel()
         x.text = message
+        x.textAlignment = .center
+        x.numberOfLines = 0
         x.textColor = .gray
         return x
     }()

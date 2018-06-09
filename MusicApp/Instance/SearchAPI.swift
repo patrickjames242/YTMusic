@@ -92,30 +92,7 @@ class Searcher{
                 }
                 return
             }
-            
-            
-//
-//            var bestKeyword = (" ", 0)
-//            for item in (Array(self.recentSearches.keys) as [String]){
-//                if trimmedSearchText.starts(with: item) && {
-//                    bestKeyword = item
-//                }
-//            }
-//
-//            if bestKeyword != " "{
-//
-//                let newSongAray = self.recentSearches[bestKeyword]!
-//
-//                DispatchQueue.main.sync {
-//                    completion(self.loopThrough(newSongAray, for: trimmedSearchText))
-//                }
-//                return
-//            }
-//
-//
-            
-            
-            
+
             DispatchQueue.main.sync {
                 completion(self.loopThrough(self.currentArray, for: trimmedSearchText))
                 
