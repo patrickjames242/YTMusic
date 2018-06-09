@@ -12,29 +12,8 @@ import SafariServices
 
 
 
-class MSelector{
-    
-    
-    @objc private func doAction(){
-        self.action()
-    }
-    
-    private var action: (() -> Void)!
-    
-    func create(_ action: @escaping () -> Void) -> Selector{
-        
-        self.action = action
-        
-        return #selector(doAction)
-    }
-    
-}
-
-
-
 class WeakWrapper<Value: AnyObject>: NSObject{
-    
-    
+
     
     weak var value: Value?
     

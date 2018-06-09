@@ -30,7 +30,6 @@ class SongStack: SongReorderingObserver{
     
     private var storage = [Song]()
     
-    private var firstSongStartDate: Date?
     
     func getVisualizer(type: SongQueueVisualizerType) -> UIViewController {
         let controller = SongQueueVisualizer(songs: getAll(), type: type, reorderingDelegate: self)
@@ -45,14 +44,12 @@ class SongStack: SongReorderingObserver{
     
     
     func songWasReordered(song: Song, oldIndexPath: IndexPath, newIndexPath: IndexPath) {
-        if storage.isEmpty{ firstSongStartDate = Date() }
         storage.insert(storage.remove(at: oldIndexPath.row), at: newIndexPath.row)
     }
     
     
     func songWasRemoved(song: Song, at indexPath: IndexPath) {
         storage.remove(at: indexPath.row)
-        if storage.isEmpty { firstSongStartDate = nil }
     }
     
     
@@ -65,13 +62,11 @@ class SongStack: SongReorderingObserver{
     
     func fill(with songs: [Song]){
         
-        firstSongStartDate = Date()
         storage = songs
         
         let indexes = Array(songs.indices).map { IndexPath(row: $0, section: 0) }
         
         visualizer?.songQueueDidChange(type: .fill, at: indexes, newArray: storage)
-        
     }
     
     
@@ -85,7 +80,6 @@ class SongStack: SongReorderingObserver{
     
     
     func push(song: Song){
-        if storage.isEmpty{ firstSongStartDate = Date() }
         storage.insert(song, at: 0)
 
         visualizer?.songQueueDidChange(type: .insert, at: [IndexPath(row: 0, section: 0)], newArray: storage)
@@ -95,7 +89,6 @@ class SongStack: SongReorderingObserver{
     
     
     func insertRandomly(song: Song){
-        if storage.isEmpty{ firstSongStartDate = Date() }
         let randomIndex = Int(arc4random_uniform(UInt32(storage.count)))
         storage.insert(song, at: randomIndex)
         
@@ -115,7 +108,6 @@ class SongStack: SongReorderingObserver{
         if storage.isEmpty { return }
 
         storage.remove(at: 0)
-        if storage.isEmpty { firstSongStartDate = nil }
         visualizer?.songQueueDidChange(type: .delete, at: [IndexPath(row: 0, section: 0)], newArray: storage)
     }
     

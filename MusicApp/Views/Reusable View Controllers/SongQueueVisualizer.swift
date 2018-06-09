@@ -122,7 +122,7 @@ class SongQueueVisualizer: UITableViewController{
 
     
     
-    @objc func respondtoDismissButtonTapped(){
+    @objc private  func respondtoDismissButtonTapped(){
         
         self.dismiss(animated: true, completion: nil)
         

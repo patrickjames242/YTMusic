@@ -11,9 +11,6 @@ import UIKit
 
 
 
-
-
-
 fileprivate class CircleInteractor{
     
     private var view = UIView()
@@ -87,30 +84,32 @@ fileprivate class CircleInteractor{
     }
     
     func respondToTouchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if isRespondingToTap{return}
+        if isRespondingToTap { return }
         fadeHighLightedView_Out()
     }
         
 
     
     func respondToTouchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if isRespondingToTap{return}
+        if isRespondingToTap { return }
         fadeHighLightedView_Out()
         animateCircle(at: touches.first!.location(in: view))
     }
     
     
+    
+    
     private func fadeHighlightView_In(){
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
             self.highlightView.alpha = 0.3
-        }
+        })
     }
     
     
     private func fadeHighLightedView_Out(){
-        UIView.animate(withDuration: 0.4) {
+        UIView.animate(withDuration: 0.4, delay: 0, options: .allowUserInteraction, animations: {
             self.highlightView.alpha = 0
-        }
+        })
     }
     
     
@@ -131,29 +130,25 @@ fileprivate class CircleInteractor{
     
     private func flashHighlightedViewForTap(){
         self.highlightView.alpha = 0
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
             self.highlightView.alpha = 0.3
-        }){ (success) in
+
+        }) { (success) in
             
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
                 self.highlightView.alpha = 0
                 self.isRespondingToTap = false
             })
-            
         }
-        
     }
     
     private func animateCircle(at point: CGPoint){
         self.circle.alpha = 0.4
         circle.center = point
-        UIView.animate(withDuration: 0.4, animations: {
-            
+        UIView.animate(withDuration: 0.4, delay: 0, options: .allowUserInteraction, animations: {
             self.circle.transform = CGAffineTransform(scaleX: self.circleToScale, y: self.circleToScale)
-            
         })
-        
-        UIView.animate(withDuration: 0.3, delay: 0.2, animations: {
+        UIView.animate(withDuration: 0.3, delay: 0.2, options: .allowUserInteraction, animations: {
             self.circle.alpha = 0
         }, completion: { (success) in
             self.circle.transform = CGAffineTransform.identity
@@ -190,12 +185,6 @@ fileprivate class CircleInteractor{
         highlightView.pinAllSidesTo(view)
         
     }
-    
-    
-    
-    
-    
-    
 }
 
 
@@ -275,12 +264,13 @@ class CircleInteractionCollectionViewCell: UICollectionViewCell{
         return UIEdgeInsets(allInsets: -5)
     }
     
-    
     func highLight(){
         circleInteractor.highLight()
     }
     
+
     
+
     override func addSubview(_ view: UIView) {
         super.addSubview(view)
         super.bringSubview(toFront: viewToShowInteraction)
@@ -340,7 +330,7 @@ class CircleInteractionTableViewCell: UITableViewCell{
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         if selected{
-                circleInteractor.highLight()
+            circleInteractor.highLight()
         }
         
     }
@@ -383,13 +373,4 @@ class CircleInteractionTableViewCell: UITableViewCell{
         fatalError("init coder has not been implemented")
     }
 }
-
-
-
-
-
-
-
-
-
 

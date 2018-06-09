@@ -170,11 +170,6 @@ class SongQueue{
         return controller
         
         
-    }
-    
-    
-    
-    
-    
+    } 
 }
 

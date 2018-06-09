@@ -63,7 +63,7 @@
 		603CE0AE2065A50E00BDD5D6 /* NVActivityIndicatorAnimationOrbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CE07B2065A50E00BDD5D6 /* NVActivityIndicatorAnimationOrbit.swift */; };
 		603E13BC203BA9510010BCDB /* MusicView_MAIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E13BB203BA9510010BCDB /* MusicView_MAIN.swift */; };
 		603E13BF203BAB150010BCDB /* MusicView_Sliding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E13BE203BAB150010BCDB /* MusicView_Sliding.swift */; };
-		603E13C1203BAB600010BCDB /* MusicView_Frames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E13C0203BAB600010BCDB /* MusicView_Frames.swift */; };
+		603E13C1203BAB600010BCDB /* MuiscView_Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E13C0203BAB600010BCDB /* MuiscView_Constraints.swift */; };
 		603E1F91204376C2006164E7 /* Screen_MusicViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603E1F90204376C2006164E7 /* Screen_MusicViewDelegate.swift */; };
 		6043DF1120977D780068101F /* SongQueueVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6043DF1020977D780068101F /* SongQueueVisualizer.swift */; };
 		6044AC4D20AB0DB900E013F5 /* SongStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6044AC4C20AB0DB900E013F5 /* SongStack.swift */; };
@@ -95,7 +95,6 @@
 		60C5389620C1EAAE00919E3F /* CircleInteractionCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C5389520C1EAAE00919E3F /* CircleInteractionCells.swift */; };
 		60C774BB20A63E1A00F24C0E /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C774BA20A63E1A00F24C0E /* DownloadItem.swift */; };
 		60C959CD20922B7D00DA0E9C /* ProgresSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C959CC20922B7D00DA0E9C /* ProgresSlider.swift */; };
-		60E827D2207907E600B896F3 /* tap-mellow.aif in Resources */ = {isa = PBXBuildFile; fileRef = 60E827D1207907E500B896F3 /* tap-mellow.aif */; };
 		60EECB9D209EA24200853741 /* Ugly_YoutubeVideo_JSONParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EECB9C209EA24200853741 /* Ugly_YoutubeVideo_JSONParsing.swift */; };
 		60EECBA2209FA10100853741 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EECBA1209FA10100853741 /* SettingsView.swift */; };
 		60EECBA4209FA12800853741 /* About Me.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EECBA3209FA12800853741 /* About Me.swift */; };
@@ -178,7 +177,7 @@
 		603CE07B2065A50E00BDD5D6 /* NVActivityIndicatorAnimationOrbit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationOrbit.swift; sourceTree = "<group>"; };
 		603E13BB203BA9510010BCDB /* MusicView_MAIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView_MAIN.swift; sourceTree = "<group>"; };
 		603E13BE203BAB150010BCDB /* MusicView_Sliding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView_Sliding.swift; sourceTree = "<group>"; };
-		603E13C0203BAB600010BCDB /* MusicView_Frames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView_Frames.swift; sourceTree = "<group>"; };
+		603E13C0203BAB600010BCDB /* MuiscView_Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuiscView_Constraints.swift; sourceTree = "<group>"; };
 		603E1F90204376C2006164E7 /* Screen_MusicViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen_MusicViewDelegate.swift; sourceTree = "<group>"; };
 		6043DF1020977D780068101F /* SongQueueVisualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongQueueVisualizer.swift; sourceTree = "<group>"; };
 		6044AC4C20AB0DB900E013F5 /* SongStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongStack.swift; sourceTree = "<group>"; };
@@ -212,7 +211,6 @@
 		60C5389520C1EAAE00919E3F /* CircleInteractionCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleInteractionCells.swift; sourceTree = "<group>"; };
 		60C774BA20A63E1A00F24C0E /* DownloadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadItem.swift; sourceTree = "<group>"; };
 		60C959CC20922B7D00DA0E9C /* ProgresSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgresSlider.swift; sourceTree = "<group>"; };
-		60E827D1207907E500B896F3 /* tap-mellow.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tap-mellow.aif"; sourceTree = "<group>"; };
 		60EECB9C209EA24200853741 /* Ugly_YoutubeVideo_JSONParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ugly_YoutubeVideo_JSONParsing.swift; sourceTree = "<group>"; };
 		60EECBA1209FA10100853741 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		60EECBA3209FA12800853741 /* About Me.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "About Me.swift"; sourceTree = "<group>"; };
@@ -294,7 +292,7 @@
 			children = (
 				603E13BB203BA9510010BCDB /* MusicView_MAIN.swift */,
 				603E13BE203BAB150010BCDB /* MusicView_Sliding.swift */,
-				603E13C0203BAB600010BCDB /* MusicView_Frames.swift */,
+				603E13C0203BAB600010BCDB /* MuiscView_Constraints.swift */,
 				607661E3203BADFA00F63138 /* MusicView_Animation.swift */,
 				600F7E89203E2030009CF6BF /* MusicView_SongPlayer.swift */,
 			);
@@ -470,7 +468,6 @@
 				605876A920406447003E4799 /* Colors.swift */,
 				604E0DDE2034953200F0A5B8 /* MusicApp.xcdatamodeld */,
 				603CE0502065A50E00BDD5D6 /* NVActivityIndicatorView */,
-				60E827D1207907E500B896F3 /* tap-mellow.aif */,
 				604E0DE32034953200F0A5B8 /* LaunchScreen.storyboard */,
 				60989F25205DF4DC006E998B /* Assets.xcassets */,
 				604E0DE62034953200F0A5B8 /* Info.plist */,
@@ -571,7 +568,6 @@
 			files = (
 				60989F26205DF4DD006E998B /* Assets.xcassets in Resources */,
 				604E0DE52034953200F0A5B8 /* LaunchScreen.storyboard in Resources */,
-				60E827D2207907E600B896F3 /* tap-mellow.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -611,7 +607,7 @@
 				60C5389620C1EAAE00919E3F /* CircleInteractionCells.swift in Sources */,
 				603CE0AC2065A50E00BDD5D6 /* NVActivityIndicatorAnimationLineScalePulseOutRapid.swift in Sources */,
 				603218D020C0E1CD008998C5 /* LibraryViewController.swift in Sources */,
-				603E13C1203BAB600010BCDB /* MusicView_Frames.swift in Sources */,
+				603E13C1203BAB600010BCDB /* MuiscView_Constraints.swift in Sources */,
 				601BE46420ADA0F20042BB4F /* SearchHistoryList.swift in Sources */,
 				603CE0962065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallScale.swift in Sources */,
 				601AF530209E98B70014FA46 /* Database_CoreData.swift in Sources */,

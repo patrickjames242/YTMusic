@@ -246,7 +246,6 @@ class DownloadItem: NSObject{
             
             self._endDate = date
             self._storageStatus = .cancelled
-            
         default:
             if self._storageStatus != .changing{
                 self._storageStatus = .changing
@@ -254,6 +253,7 @@ class DownloadItem: NSObject{
         }
         
         self._runTimeStatus = newStatus
+        
         delegate?.DLStatusDidChangeTo(newStatus)
         
     }

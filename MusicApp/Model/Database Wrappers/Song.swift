@@ -350,11 +350,11 @@ fileprivate final class DBManager{
             
             let newDBSong = DBSong(context: context)
             newDBSong.dataIdentifier = identifier
-            newDBSong.name = downloadItem.name
-            newDBSong.image = downloadItem.image
-            newDBSong.artistName = downloadItem.channelName
+            newDBSong.name = downloadItem.name!
+            newDBSong.image = downloadItem.image!
+            newDBSong.artistName = downloadItem.channelName!
             newDBSong.date = Date()
-            newDBSong.ytID = downloadItem.ytID
+            newDBSong.ytID = downloadItem.ytID!
             newDBSong.defaultName = downloadItem.name!
             newDBSong.defaultArtistName = downloadItem.channelName!
             

@@ -537,8 +537,9 @@ fileprivate class DownloadsTableViewCell: CircleInteractionTableViewCell, Downlo
     
     func setWithDownloadItem(_ item: DownloadItem){
         
-        
-        currentDownloadItem?.delegate = nil
+        if currentDownloadItem?.delegate === self{
+            currentDownloadItem?.delegate = nil
+        }
         currentDownloadItem = nil
         item.delegate = self
         currentDownloadItem = item

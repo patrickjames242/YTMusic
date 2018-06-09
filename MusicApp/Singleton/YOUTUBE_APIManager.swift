@@ -262,7 +262,7 @@ class YTAPIManager: NSObject {
 
     
     private func getVideosFromYT_IDs(_ IDs: [String], completion: @escaping ([YoutubeVideo]) -> Void){
-        
+        if IDs.isEmpty{completion([]); return}
         var videosToReturn = [(YoutubeVideo?, Int)](){
             didSet{
                 if videosToReturn.count >= IDs.count{

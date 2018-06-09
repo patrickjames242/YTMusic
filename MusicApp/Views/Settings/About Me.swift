@@ -452,7 +452,7 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
     
     @objc private func respondToContactCancelButtonTapped(){
         
-        navController!.dismiss(animated: true, completion: nil)
+        navController.dismiss(animated: true, completion: nil)
     }
     
     
@@ -501,8 +501,6 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
     
 
     @objc private func respondtoDismissButtonPressed(){
-        
-        
         dismiss(animated: true, completion: nil)
         
     }
@@ -522,36 +520,15 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
         
         view.addSubview(topView)
         view.addSubview(bottomView)
-        
         view.addSubview(closeButton)
         view.addSubview(socialMediaStackView)
-        
-        
         view.addSubview(scrollView)
      
-        
-        
         closeButton.pin(right: view.rightAnchor, top: view.safeAreaLayoutGuide.topAnchor, size: CGSize(width: 70, height: 30), insets: UIEdgeInsets(top: 10, right: 20))
-    
-        
         topView.pin(left: view.leftAnchor, right: view.rightAnchor, top: view.topAnchor, bottom: closeButton.bottomAnchor, insets: UIEdgeInsets(bottom: -20))
-        
-   
         socialMediaStackView.pin(left: view.leftAnchor, right: view.rightAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, insets: UIEdgeInsets(left: 25, bottom: 25, right: 25))
-        
-        
         bottomView.pin(left: view.leftAnchor, right: view.rightAnchor, top: socialMediaStackView.topAnchor, bottom: view.bottomAnchor,insets: UIEdgeInsets(top: -25))
-        
-        
-        
         scrollView.pin(left: view.leftAnchor, right: view.rightAnchor, top: topView.bottomAnchor, bottom: bottomView.topAnchor)
-        
-        
-        
-        
-        
-        
-        
     }
     
     
@@ -560,86 +537,6 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -674,8 +571,6 @@ fileprivate class SocialMediaButton: UIButton{
         
         super.init(frame: CGRect.zero)
         socialMediaImage.image = UIImage(named: type.rawValue)
-//        socialMediaImage.image = UIImage(named: "facebook")
-
         setUpViews()
     }
     
@@ -725,25 +620,42 @@ fileprivate class SocialMediaButton: UIButton{
     
     
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
+    
+    private func animateButtonIn(){
         
-  
         
         UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseIn, animations: {
             self.socialMediaImageHolder.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
-            
-        }) { (success) in
-
-            UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseOut, animations: {
-                self.socialMediaImageHolder.transform = CGAffineTransform.identity
-
-            })
-            
-            
-        }
+        })
         
+    }
+    
+    private func animateButtonOut(){
         
+        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseOut, animations: {
+            self.socialMediaImageHolder.transform = CGAffineTransform.identity
+            
+        })
+        
+    }
+    
+    
+    
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        animateButtonIn()
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        animateButtonOut()
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        animateButtonOut()
     }
     
 
@@ -771,28 +683,4 @@ fileprivate class SocialMediaButton: UIButton{
         fatalError("Fool!")
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

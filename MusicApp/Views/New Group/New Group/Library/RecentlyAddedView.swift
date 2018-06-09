@@ -61,8 +61,8 @@ class RecentlyAddedView: SafeAreaObservantCollectionViewController, UICollection
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.title = "Recently Added"
         
-        collectionView?.contentInset = UIEdgeInsets(top: distanceBetweenColumns - 13, left: 0, bottom: AppManager.currentAppBottomInset, right: 0)
-        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: distanceBetweenColumns - 13, left: 0, bottom: AppManager.currentAppBottomInset, right: 0)
+        collectionView?.contentInset = UIEdgeInsets(top: distanceBetweenColumns - 13, left: 0, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: distanceBetweenColumns - 13, left: 0,right: 0)
         collectionView?.backgroundColor = .white
         collectionView?.register(MyCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
         setUpFetchedResultsController()
@@ -107,37 +107,26 @@ class RecentlyAddedView: SafeAreaObservantCollectionViewController, UICollection
     
     
     func scrollToCellOfSong(_ song: Song){
-        var x = 0
-        for song1 in songs{
+        
+        for (x, song1) in songs.enumerated(){
             
             if song1 == song{
                 let indexPath = IndexPath(item: x, section: 0)
-                collectionView?.selectItem(at: indexPath, animated: true, scrollPosition: .centeredVertically)
+                collectionView?.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 
-                var numberOfTimes = 0
-                
-                func check(){
-                    numberOfTimes += 1
-                    if let cell = collectionView?.cellForItem(at: indexPath) as? MyCollectionViewCell{
-                        cell.highLight()
-                        
-                    } else {
-                        if numberOfTimes >= 10 { return }
-                        
-                        // this is done because there may not be a collection view cell at the index path at the point at which the collection view is scrolling to the cell.
-                        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { (timer) in
-                            check()
-                        }
-                    }
+                let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (timer) in
+                    guard let collection = self.collectionView?.cellForItem(at: indexPath) as? CircleInteractionCollectionViewCell else { return }
+                    collection.highLight()
+                    timer.invalidate()
                 }
-                
-                check()
+                Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { (timer2) in
+                    timer.invalidate(); timer2.invalidate()
+                }
+                RunLoop.current.add(timer, forMode: .commonModes)
                 return
+                
             }
-            
-            x += 1
         }
-        
     }
     
     
@@ -171,7 +160,7 @@ class RecentlyAddedView: SafeAreaObservantCollectionViewController, UICollection
     }
     
     func getIndexPath(for song: Song) -> IndexPath?{
-        for song1 in songs where song1 == song{
+        for song1 in songs where song1 === song{
             if let index = songs.index(of: song){
                 return IndexPath(row: index, section: 0)
             }
@@ -192,11 +181,7 @@ class RecentlyAddedView: SafeAreaObservantCollectionViewController, UICollection
             
             self.songs = newSongs
             
-            
-            
             switch type{
-
-
             case .delete:
                 self.collectionView?.deleteItems(at: [indexPath!])
             case .update:
@@ -207,12 +192,7 @@ class RecentlyAddedView: SafeAreaObservantCollectionViewController, UICollection
                 self.collectionView?.moveItem(at: indexPath!, to: newIndexPath!)
 
             }
-            
-            
         }, completion: nil)
-        
-      
-        
     }
     
     

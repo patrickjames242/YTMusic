@@ -52,9 +52,8 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     
         bringSubview(toFront: albumImage)
     
-        Variations.doOnIPhone {
-          minimizedObjectsHolderView.addGestureRecognizer(goUpRecognizer)
-        }
+        minimizedObjectsHolderView.addGestureRecognizer(goUpRecognizer)
+        
         addGestureRecognizer(longPressGesture)
         
         setUpConstraints()
@@ -143,12 +142,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     @objc func setUpConstraints(){
         
         
-        backGroundBluryView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        backGroundBluryView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        backGroundBluryView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        backGroundBluryView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        
-        
+
     }
     
     
@@ -700,6 +694,13 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         
         
         // MARK: - SETUP VIEWS VISIBLE IN MINIMIZED STATE
+        
+        
+        backGroundBluryView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        backGroundBluryView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        backGroundBluryView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        backGroundBluryView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        
         
         
         

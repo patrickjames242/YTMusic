@@ -9,6 +9,10 @@
 import UIKit
 
 
+
+
+
+
 class LibraryViewController: UIViewController {
     
     
@@ -20,7 +24,6 @@ class LibraryViewController: UIViewController {
     }
     
     func page(){
-        
         let desiredOffset: CGPoint
         
         if scrollView.contentOffset.x > 0{
@@ -29,9 +32,10 @@ class LibraryViewController: UIViewController {
             desiredOffset = CGPoint(x: scrollView.contentSize.width / 2, y: 0)
         }
         
-        UIView.animate(withDuration: 0.2) {
+        
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveLinear, animations: {
             self.scrollView.contentOffset = desiredOffset
-        }
+        })
         
     }
     
