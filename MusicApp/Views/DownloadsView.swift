@@ -20,11 +20,11 @@ class DownloadsView_NavCon: UINavigationController{
         navigationBar.prefersLargeTitles = true
         navigationBar.isTranslucent = false
         navigationBar.shadowImage = UIImage()
-        viewControllers.append(AppManager.shared.downloadsView)
+        viewControllers.append(mainView)
         navigationBar.tintColor = THEME_COLOR(asker: self)
     }
     
-    
+    private let mainView = DownloadsViewController()
     
     override func interfaceColorDidChange(to color: UIColor) {
         navigationBar.tintColor = color

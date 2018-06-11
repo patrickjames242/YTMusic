@@ -12,6 +12,7 @@ import Foundation
 
 
 class Screen: PortraitViewController, CustomTabBarDelegate{
+
     
     
     
@@ -19,22 +20,12 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
     //MARK: - CHILD VIEW CONTROLLERS
     
     
-    private let libraryView = LibraryViewController()
-    
+    let libraryView = LibraryViewController()
+    let settingsView = MusicSettings_NavCon()
+    let downloadsView = DownloadsView_NavCon()
+    let searchView = SearchTableView_NavCon()
 
-    var settingsView: MusicSettings_NavCon {
-        return AppManager.shared.musicSettingsNavCon
-    }
-    
-    var downloadsView: DownloadsView_NavCon {
-        return AppManager.shared.downloadsView_NavCon
-    }
-    
-    var searchView: SearchTableView_NavCon {
-        return AppManager.shared.searchNavCon
-    }
-    
-    
+    lazy var nowPlayingView = NowPlayingViewController(parent: self)
     
     
     
@@ -64,29 +55,42 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
 
         view.backgroundColor = .black
         
+        view.bringSubview(toFront: tabBar)
+        
         delegate_Stuff_To_Be_Done_In_ViewDidLoad()
         
         
-        
-        
     }
     
     
+    // MARK: - SHOW / HIDE THE TAB BAR
     
     
     
+    func showTabBar(){
+        UIView.animate(withDuration: 0.3) {
+            self.tabBar.transform = CGAffineTransform.identity
+            self.view.layoutIfNeeded()
+            
+        }
+    }
     
+    func dismissTabBar(){
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+            self.tabBar.transform = CGAffineTransform(translationX: 0, y: self.tabBar.frame.height)
+            self.view.layoutIfNeeded()
+            
+        }
+        
+    }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-  
-        AppManager.appInsets = view.safeAreaInsets
+    var desiredStatusBarStyle: UIStatusBarStyle = .default
 
-        view.addSubview(AppManager.shared.musicView)
-        view.bringSubview(toFront: tabBar)
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return desiredStatusBarStyle
     }
-    
-    
     
     
     
@@ -182,28 +186,10 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
 
 
 
-    // MARK: - SHOW / HIDE THE TAB BAR
     
     
     
-    func showTabBar(){
-        UIView.animate(withDuration: 0.3) {
-            self.tabBar.transform = CGAffineTransform.identity
-            self.view.layoutIfNeeded()
-            
-        }
-    }
-    
-    func dismissTabBar(){
-       
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-            self.tabBar.transform = CGAffineTransform(translationX: 0, y: self.tabBar.frame.height)
-            self.view.layoutIfNeeded()
-            
-        }
-        
-    }
+
 
     
     
@@ -223,9 +209,9 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
         
         if newView === oldView {
             if newView === searchView.view{
-                AppManager.shared.searchNavCon.popToRootViewController(animated: true)
+                searchView.popToRootViewController(animated: true)
             } else if newView === settingsView.view{
-                AppManager.shared.musicSettingsNavCon.popToRootViewController(animated: true)
+                settingsView.popToRootViewController(animated: true)
             } else if newView === libraryView.view{
                 libraryView.page()
             }

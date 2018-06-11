@@ -142,32 +142,7 @@ func youtubeURL(from videoID: String) -> URL?{
 
 
 
-class MySafariViewController: SFSafariViewController{
-    
-    
-    var actionToCompleteUponDismisal: (() -> Void)?
-    
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        
-        
-        let action = {
-            
-            if let action1 = self.actionToCompleteUponDismisal{
-                action1()
-            }
-            
-            if let action2 = completion{
-                action2()
-            }
-        }
-        
-        super.dismiss(animated: flag, completion: action)
-        
-        
-    }
-    
-    
-}
+
 
 
 

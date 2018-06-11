@@ -16,7 +16,7 @@ import AVFoundation
 
 
 
-extension MusicView: SongQueueDelegate{
+extension NowPlayingViewController: SongQueueDelegate{
     
     
     //MARK: - HANDLE MEDIA PLAYER CONTROL ACTIONS
@@ -512,6 +512,8 @@ extension MusicView: SongQueueDelegate{
         controller.previousTrackCommand.isEnabled = true
         controller.nextTrackCommand.isEnabled = true
         controller.changePlaybackPositionCommand.isEnabled = true
+        
+        
         
         
         

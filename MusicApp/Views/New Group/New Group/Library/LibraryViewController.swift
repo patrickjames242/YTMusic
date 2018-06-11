@@ -16,11 +16,18 @@ import UIKit
 class LibraryViewController: UIViewController {
     
     
-    var songView: UIViewController{
-        return AppManager.shared.songListNavCon
+    let songView = SongListView_NavCon()
+    let recentlyAddedView = RecentlyAdded_NavCon()
+    
+    
+    private var leftViewIsVisible: Bool{
+        return scrollView.contentOffset.x == 0
     }
-    var recentlyAddedView: UIViewController {
-        return AppManager.shared.recentlyAddedView_NavCon
+    
+    
+    func scrollToCellOf(song: Song){
+        if leftViewIsVisible{ recentlyAddedView.scrollToCellOf(song: song) }
+        else { songView.scrollToCellOf(song: song) }
     }
     
     func page(){

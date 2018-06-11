@@ -9,6 +9,11 @@
 import UIKit
 import CoreData
 
+
+var APP_INSETS = UIEdgeInsets.zero
+
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,12 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        fixDatabaseMistakes()
-        Song.fixDatabaseMistakes()
         
-       
-    
         window = UIWindow(frame: UIScreen.main.bounds)
+        APP_INSETS = window!.safeAreaInsets
         window?.rootViewController = AppManager.shared.generateInterface()
         window?.makeKeyAndVisible()
         
@@ -33,16 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     
-    
-    func fixDatabaseMistakes(){
-        let searchHistoryKey = "the key for the search history"
-        UserDefaults.standard.removeObject(forKey: searchHistoryKey)
-        
-        
-        
-        
-        
-    }
+
     
     
     

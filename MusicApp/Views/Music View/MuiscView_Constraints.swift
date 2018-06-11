@@ -11,58 +11,71 @@ import AVFoundation
 import MediaPlayer
 
 
-extension MusicView {
+extension NowPlayingViewController {
     
 
-    func setUpInitialViewPosition_Constraints(){
-        guard let superview = superview else { return }
-        leftAnchor.constraint(equalTo: superview.leftAnchor).isActive = true
-        rightAnchor.constraint(equalTo: superview.rightAnchor).isActive = true
+    
+    
+    func constrainSelfToParent(){
+        parentView.layoutIfNeeded()
         
-        heightAnchor.constraint(equalTo: superview.heightAnchor, constant: -endingMusicViewFrameSpaceFromTop - AppManager.appInsets.top).isActive = true
         
-        topAnchorPositionConstraint = topAnchor.constraint(equalTo: superview.topAnchor, constant: superview.frame.height)
-        topAnchorPositionConstraint.isActive = true
+        if let leftAnchor = leftAnchorConstraint{
+            leftAnchor.isActive = false
+        }
+        if let rightAnchor = rightAnchorConstraint{
+            rightAnchor.isActive = false
+        }
+        if let heightAnchor = heightAnchorConstraint{
+            heightAnchor.isActive = false
+        }
+        if let topAnchor = topAnchorConstraint{
+            topAnchor.isActive = false
+        }
+        
+        
+        leftAnchorConstraint = view.leftAnchor.constraint(equalTo: parentView.leftAnchor)
+        rightAnchorConstraint = view.rightAnchor.constraint(equalTo: parentView.rightAnchor)
+        heightAnchorConstraint = view.heightAnchor.constraint(equalTo: parentView.heightAnchor, constant: -APP_INSETS.top - endingMusicViewFrameSpaceFromTop)
+        topAnchorConstraint = view.topAnchor.constraint(equalTo: parentView.topAnchor, constant: parentView.frame.height)
+        
+        leftAnchorConstraint.isActive = true
+        rightAnchorConstraint.isActive = true
+        heightAnchorConstraint.isActive = true
+        topAnchorConstraint.isActive = true
+        parentView.layoutIfNeeded()
     }
     
     func set_makeMyselfInvisible_Constraints(){
-        guard let superview = superview else {return}
-        superview.layoutIfNeeded()
-        topAnchorPositionConstraint.constant = superview.frame.height
-        
+        parentView.layoutIfNeeded()
+        topAnchorConstraint.constant = parentView.frame.height
+        parentView.layoutIfNeeded()
         
     }
     
     
     
     func setMinimizedConstraints() {
-        guard let superview = superview else { return }
-        superview.layoutIfNeeded()
-        let minimizedViewHeight = AppManager.minimizedMusicViewHeight + AppManager.shared.screen.tabBar.frame.height
-        topAnchorPositionConstraint.constant = superview.frame.height - minimizedViewHeight
-        superview.layoutIfNeeded()
+        
+        parentView.layoutIfNeeded()
+        let minimizedViewHeight = AppManager.minimizedMusicViewHeight + AppManager.tabBarHeight
+        topAnchorConstraint.constant = parentView.frame.height - minimizedViewHeight
+        parentView.layoutIfNeeded()
     }
     
     
     
     func setMaximizedConstraints() {
-        guard let superview = superview else { return }
-
-        let maximizedTopSpace = endingMusicViewFrameSpaceFromTop + AppManager.appInsets.top
-        topAnchorPositionConstraint.constant = maximizedTopSpace
-        superview.layoutIfNeeded()
+        let maximizedTopSpace = endingMusicViewFrameSpaceFromTop + APP_INSETS.top
+        topAnchorConstraint.constant = maximizedTopSpace
+        parentView.layoutIfNeeded()
 
     }
 
     func userDraggedMusicViewBy(_ points: CGFloat) {
-        guard let constraint = topAnchorPositionConstraint else { return }
-        guard let superview = superview else { return }
-
-
-        let minimumTopSpace = endingMusicViewFrameSpaceFromTop + AppManager.appInsets.top
-        
-        constraint.constant = max(constraint.constant + points, minimumTopSpace)
-        superview.layoutIfNeeded()
+        let minimumTopSpace = endingMusicViewFrameSpaceFromTop + APP_INSETS.top
+        topAnchorConstraint.constant = max(topAnchorConstraint.constant + points, minimumTopSpace)
+        parentView.layoutIfNeeded()
     }
     
 
@@ -96,10 +109,10 @@ extension MusicView {
     func setInitialAlbumCoverConstraints(){
         
         
-        albumCover_topConstraint = albumImage.topAnchor.constraint(equalTo: topAnchor, constant: albumCoverMinimizedTopInset)
+        albumCover_topConstraint = albumImage.topAnchor.constraint(equalTo: view.topAnchor, constant: albumCoverMinimizedTopInset)
         albumCover_topConstraint.isActive = true
         
-        albumCover_leftConstraint = albumImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 10)
+        albumCover_leftConstraint = albumImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10)
         albumCover_leftConstraint.isActive = true
         
         albumCover_heightConstraint = albumImage.heightAnchor.constraint(equalToConstant: 0)
@@ -113,10 +126,10 @@ extension MusicView {
         
         
         
-        albumCover_centerXConstraint = albumImage.centerXAnchor.constraint(equalTo: centerXAnchor)
+        albumCover_centerXConstraint = albumImage.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         
         
-        layoutIfNeeded()
+        view.layoutIfNeeded()
     }
     
     
@@ -127,7 +140,7 @@ extension MusicView {
         
         albumCover_topConstraint.constant = albumCoverMinimizedTopInset
         albumCoverSize = minimizedAlbumCover_Size
-        layoutIfNeeded()
+        view.layoutIfNeeded()
     }
     
     
@@ -166,7 +179,7 @@ extension MusicView {
         }
         
         
-        layoutIfNeeded()
+        view.layoutIfNeeded()
     }
     
     
@@ -215,7 +228,7 @@ extension MusicView {
     
     var maximizedAlbumCoverSize_Paused_NotSliding: CGSize{
         
-        let minFrameWidth = min(superview!.frame.width, superview!.frame.height)
+        let minFrameWidth = min(parentView.frame.width, parentView.frame.height)
         
         let width = minFrameWidth - (maximizedAlbumCoverInset * 2)
         let height = width - albumDifferenceFactor
@@ -230,7 +243,7 @@ extension MusicView {
         
         let decreaseConstant: CGFloat = 0.9
         
-        let minFrameWidth = min(superview!.frame.width, superview!.frame.height)
+        let minFrameWidth = min(parentView.frame.width, parentView.frame.height)
     
         let width = (minFrameWidth - (maximizedAlbumCoverInset * 2)) * decreaseConstant
         let height = (width - albumDifferenceFactor) * decreaseConstant
@@ -239,7 +252,7 @@ extension MusicView {
     }
     
     var maximizedAlbumCoverSize_Playing_NotSliding: CGSize{
-        let minFrameWidth = min(superview!.frame.width, superview!.frame.height)
+        let minFrameWidth = min(parentView.frame.width, parentView.frame.height)
         
         let width = minFrameWidth - (maximizedAlbumCoverInset * 2)
         let height = width - albumDifferenceFactor

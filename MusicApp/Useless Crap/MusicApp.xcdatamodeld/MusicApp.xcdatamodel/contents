@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17C67b" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14270.9" systemVersion="17E199" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DBData" representedClassName="DBData" syncable="YES" codeGenerationType="class">
         <attribute name="data" attributeType="Binary" syncable="YES"/>
         <attribute name="identifier" attributeType="String" syncable="YES"/>
@@ -21,7 +21,6 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="defaultArtistName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="defaultName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="duration" optional="YES" attributeType="Double" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="image" attributeType="Binary" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="ytID" optional="YES" attributeType="String" syncable="YES"/>
@@ -30,6 +29,6 @@
     <elements>
         <element name="DBData" positionX="-189" positionY="-124" width="128" height="73"/>
         <element name="DBDownloadItem" positionX="-128" positionY="-477" width="128" height="178"/>
-        <element name="DBSong" positionX="-506" positionY="-337" width="128" height="193"/>
+        <element name="DBSong" positionX="-506" positionY="-337" width="128" height="180"/>
     </elements>
 </model>

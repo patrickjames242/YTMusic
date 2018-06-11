@@ -6,38 +6,29 @@
 //  Copyright © 2018 Patrick Hanna. All rights reserved.
 //
 import UIKit
-extension Screen: MusicViewDelegate{
-    
-    
-    
-    
-    
-    
-    
-  
-    
-    
+extension Screen: NowPlayingViewControllerDelegate{
+
     
     
     
     func delegate_Stuff_To_Be_Done_In_ViewDidLoad(){
-        AppManager.shared.musicView.delegate = self
+        self.nowPlayingView.delegate = self
         
     }
     
-
+    
     var holderViewSideInsets: CGFloat{
         return 10
     }
     
     var holderViewTopInset: CGFloat{
-        return 7 + AppManager.appInsets.top
+        return 7 + APP_INSETS.top
     }
     
     
     
     private var holderViewMinimizedFrame: CGRect{
-
+        
         return CGRect(x: holderViewSideInsets,
                       y: holderViewTopInset,
                       width: view.frame.width - (holderViewSideInsets * 2),
@@ -48,8 +39,10 @@ extension Screen: MusicViewDelegate{
     
     //MARK: - MUSIC VIEW DELEGATE METHODS
     
-    func userDid_Maximize_MusicView(){
+    func userDidMaximizeNowPlayingView(){
         
+        self.desiredStatusBarStyle = .lightContent
+        setNeedsStatusBarAppearanceUpdate()
         self.snapshotView = self.holderView.snapshotView(afterScreenUpdates: true)
         self.holderView.addSubview(self.snapshotView)
         
@@ -64,18 +57,19 @@ extension Screen: MusicViewDelegate{
             
             self.holderView.transform = scaleTransform.translatedBy(x: 0, y: remainingSpace)
             
-       
+            
             
             self.holderView.layer.cornerRadius = 10
             self.holderView.alpha = 0.7
         }, completion: nil)
         self.dismissTabBar()
-
-    
+        
+        
     }
     
-    func userDid_Minimize_MusicView() {
-        
+    func userDidMinimizeNowPlayingView() {
+        self.desiredStatusBarStyle = .default
+        setNeedsStatusBarAppearanceUpdate()
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             
             self.holderView.center = self.view.centerInFrame
@@ -88,18 +82,18 @@ extension Screen: MusicViewDelegate{
             self.snapshotView = nil
         }, completion: nil)
         self.showTabBar()
-
-    
+        
+        
     }
     
     
     
     
-
     
     
     
-   
+    
+    
     
     
 }

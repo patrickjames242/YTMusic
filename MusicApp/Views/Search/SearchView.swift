@@ -16,7 +16,7 @@ class SearchTableView_NavCon: UINavigationController{
         navigationBar.isTranslucent = false
         navigationBar.shadowImage = UIImage()
         navigationBar.tintColor = THEME_COLOR(asker: self)
-        viewControllers.append(AppManager.shared.searchView)
+        viewControllers.append(SearchTableView())
         
         
     }
@@ -43,10 +43,7 @@ class SearchTableView: SafeAreaObservantTableViewController, UISearchBarDelegate
     private let cellID = "cell id yeahhhhh"
 
     
-    
-    
-    
-    
+   
     
     
     

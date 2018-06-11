@@ -14,27 +14,6 @@ import SafariServices
 
 
 
-// MARK: - TOP LEVEL VIEW CONTROLLER INSTANCES
-fileprivate let sharedMusicView = MusicView(frame: CGRect.zero)
-fileprivate let sharedScreen = Screen()
-
-fileprivate let sharedSongListNavCon = SongListView_NavCon()
-fileprivate let sharedSongListView = SongListView()
-
-fileprivate let sharedMusicSettingsNavCon = MusicSettings_NavCon()
-fileprivate let sharedMusicSettings = MusicSettings(style: .grouped)
-
-fileprivate let sharedSearchNavCon = SearchTableView_NavCon()
-fileprivate let sharedSearchView = SearchTableView()
-
-fileprivate let sharedDownloadsViewNavCon = DownloadsView_NavCon()
-fileprivate let sharedDownloadsView = DownloadsViewController()
-
-fileprivate let sharedRecentlyAddedNavCon = RecentlyAdded_NavCon()
-fileprivate let sharedRecentlyAddedView = RecentlyAddedView(collectionViewLayout: UICollectionViewFlowLayout())
-
-
-
 
 
 
@@ -63,11 +42,9 @@ class AppManager: NSObject{
     
     //MARK: - APP CONSTANTS
     static var screenWidth: CGFloat!
-    static var appInsets: UIEdgeInsets!
     static var tabBarHeight: CGFloat = 49
     static var minimizedMusicViewHeight: CGFloat = 60
     
-//    static var defaultTintColor = THEME_COLOR(asker: self)
     static var currentAppBottomInset: CGFloat = 49
     
     
@@ -121,60 +98,12 @@ class AppManager: NSObject{
     
     //MARK: - APP VIEW CONTROLLERS
     
-    var musicView: MusicView {
-        return sharedMusicView }
-    var screen: Screen {
-        return sharedScreen }
+    lazy var screen = Screen()
     
     
-    
-    var songListNavCon: SongListView_NavCon {
-        return sharedSongListNavCon }
-    var songListView: SongListView {
-        return sharedSongListView }
-    
-    
-    
- 
-
-    
-    var musicSettingsNavCon: MusicSettings_NavCon{
-        return sharedMusicSettingsNavCon
+    private var musicView: NowPlayingViewController{
+        return screen.nowPlayingView
     }
-    var musicSettings: MusicSettings{
-        return sharedMusicSettings
-    }
-    
-    
-    var searchNavCon: SearchTableView_NavCon{
-        return sharedSearchNavCon
-    }
-    var searchView: SearchTableView{
-        return sharedSearchView
-    }
-    
-    
-    var downloadsView_NavCon: DownloadsView_NavCon{
-        return sharedDownloadsViewNavCon
-    }
-    var downloadsView: DownloadsViewController{
-        return sharedDownloadsView
-    }
-    
-    
-    var recentlyAddedView_NavCon: RecentlyAdded_NavCon{
-        return sharedRecentlyAddedNavCon
-    }
-    var recentlyAddedView: RecentlyAddedView{
-        return sharedRecentlyAddedView
-        
-    }
-    
-    
-    
-    
-    
-    
     
     
     
@@ -362,8 +291,7 @@ class AppManager: NSObject{
         guard let song = item.song else {return}
         
         AppManager.shared.screen.showtabBarItem(tag: 1)
-        AppManager.shared.songListView.scrollToCellOfSong(song)
-        AppManager.shared.recentlyAddedView.scrollToCellOfSong(song)
+        AppManager.shared.screen.libraryView.scrollToCellOf(song: song)
         
     }
     
@@ -581,16 +509,10 @@ class AppManager: NSObject{
         
         
         
-        
-        let previousStatusBarStatus = UIApplication.shared.statusBarStyle
-        UIApplication.shared.statusBarStyle = .default
-        let webView = MySafariViewController(url: url)
+      
+        let webView = SFSafariViewController(url: url)
         webView.preferredControlTintColor = CURRENT_THEME_COLOR
-        webView.actionToCompleteUponDismisal = {
-            
-            UIApplication.shared.statusBarStyle = previousStatusBarStatus
-            
-        }
+        
         return webView
     }
     

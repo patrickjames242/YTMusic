@@ -345,12 +345,17 @@ fileprivate final class DBManager{
     
     
     static func createAndSaveNewDBSongObject(from downloadItem: DBDownloadItem, songData: Data, completion: @escaping (DBSong) -> Void){
+        
+        
+        
         DispatchQueue.global(qos: .userInitiated).async {
             let identifier = NSUUID().uuidString
             
             let newDBSong = DBSong(context: context)
-            newDBSong.dataIdentifier = identifier
+            
             newDBSong.name = downloadItem.name!
+            newDBSong.dataIdentifier = identifier
+            
             newDBSong.image = downloadItem.image!
             newDBSong.artistName = downloadItem.channelName!
             newDBSong.date = Date()
@@ -368,6 +373,11 @@ fileprivate final class DBManager{
             }
             
         }
+        
+        
+        
+            
+        
         
   
     }
@@ -539,74 +549,6 @@ fileprivate final class DBManager{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-extension Song{
-    
-    
-    static func fixDatabaseMistakes(){
-        
-        return
-        
-        let durationSetKey = "DURATION_SET"
-        
-        if UserDefaults.standard.bool(forKey: durationSetKey) == true { return }
-        
-        for song in Song.getAll(){
-            
-            do{
-                
-                let player = try AVAudioPlayer(data: song.data)
-                
-                song.object.duration = player.duration
-                Database.saveContext()
-                
-            } catch {
-                
-                song.delete()
-                print("There was an error when trying to extract the duration from a song: \(song.name)")
-                continue
-                
-            }
-            
-            
-        }
-        
-        UserDefaults.standard.set(true, forKey: durationSetKey)
-    }
-    
-    
-    
-}
 
 
 

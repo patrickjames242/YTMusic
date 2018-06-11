@@ -22,16 +22,24 @@ class SongListView_NavCon: UINavigationController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
+        
         navigationBar.isTranslucent = false
         navigationBar.prefersLargeTitles = true
         navigationBar.tintColor = THEME_COLOR(asker: self)
-        viewControllers.append(AppManager.shared.songListView)
+        viewControllers.append(mainViewController)
         navigationBar.shadowImage = UIImage()
 
         
         
     }
     
+    func scrollToCellOf(song: Song){
+        mainViewController.scrollToCellOfSong(song)
+    }
+    
+    private var mainViewController = SongListView()
     
     override func interfaceColorDidChange(to color: UIColor) {
         navigationBar.tintColor = color

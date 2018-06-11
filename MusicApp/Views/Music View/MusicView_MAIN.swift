@@ -10,15 +10,16 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-protocol MusicViewDelegate{
-    
-    func userDid_Maximize_MusicView()
-    func userDid_Minimize_MusicView()
+
+
+protocol NowPlayingViewControllerDelegate: class{
+    func userDidMinimizeNowPlayingView()
+    func userDidMaximizeNowPlayingView()
 }
 
-class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
+class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioPlayerDelegate{
     
-    var delegate: MusicViewDelegate?
+
     
     var songQueue: SongQueue!
     
@@ -33,33 +34,56 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         return false
     }
     
-    override func didMoveToSuperview() {
-        translatesAutoresizingMaskIntoConstraints = false
-        setUpInitialViewPosition_Constraints()
-        
-        layoutIfNeeded()
-  
-        clipsToBounds = true
+    var vcParent: UIViewController
+    var parentView: UIView{
+        return vcParent.view
+    }
+    
+    
+    init(parent: UIViewController){
+        self.vcParent = parent
+        super.init(nibName: nil, bundle: nil)
+        vcParent.addChildViewController(self)
+        parentView.addSubview(self.view)
+        constrainSelfToParent()
 
-        addSubview(backGroundBluryView)
-        addSubview(albumImage)
+    }
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init coder has not been implemented")
+    }
+    
+    weak var delegate: NowPlayingViewControllerDelegate?
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+
+        view.layoutIfNeeded()
+        
+        view.clipsToBounds = true
+        
+        view.addSubview(backGroundBluryView)
+        view.addSubview(albumImage)
         setInitialAlbumCoverConstraints()
-        addSubview(scrubbingSlider)
+        view.addSubview(scrubbingSlider)
         
         
         setUpViews()
-
-    
-        bringSubview(toFront: albumImage)
-    
+        
+        
+        view.bringSubview(toFront: albumImage)
+        
         minimizedObjectsHolderView.addGestureRecognizer(goUpRecognizer)
         
-        addGestureRecognizer(longPressGesture)
-        
-        setUpConstraints()
-     
+        view.addGestureRecognizer(longPressGesture)
     }
     
+
     
 
     
@@ -81,10 +105,12 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     
    
    
-    var topAnchorPositionConstraint: NSLayoutConstraint!
+    var topAnchorConstraint: NSLayoutConstraint!
+    var leftAnchorConstraint: NSLayoutConstraint!
+    var rightAnchorConstraint: NSLayoutConstraint!
+    var heightAnchorConstraint: NSLayoutConstraint!
     
     
-  
     
     var elasticDistance: CGFloat = 150
     
@@ -139,11 +165,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
     }()
     
     
-    @objc func setUpConstraints(){
-        
-        
 
-    }
     
     
     
@@ -696,20 +718,20 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         // MARK: - SETUP VIEWS VISIBLE IN MINIMIZED STATE
         
         
-        backGroundBluryView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        backGroundBluryView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        backGroundBluryView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        backGroundBluryView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        backGroundBluryView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        backGroundBluryView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        backGroundBluryView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        backGroundBluryView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
         
         
         
-        addSubview(minimizedObjectsHolderView)
+        view.addSubview(minimizedObjectsHolderView)
 
         
-        minimizedObjectsHolderView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        minimizedObjectsHolderView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        minimizedObjectsHolderView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        minimizedObjectsHolderView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        minimizedObjectsHolderView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        minimizedObjectsHolderView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         minimizedObjectsHolderView.heightAnchor.constraint(equalToConstant: AppManager.minimizedMusicViewHeight).isActive = true
         
         
@@ -719,16 +741,16 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         // MARK: - SETUP VIEWS VISIBLE IN MAXIMIZED STATE
 
         
-        addSubview(topNub)
-        addSubview(textInfoStackView)
-        addSubview(mediaButtonHolderView)
-        addSubview(volumeSliderHolderView)
-        addSubview(bottomBarHolderView)
+        view.addSubview(topNub)
+        view.addSubview(textInfoStackView)
+        view.addSubview(mediaButtonHolderView)
+        view.addSubview(volumeSliderHolderView)
+        view.addSubview(bottomBarHolderView)
         
         
         
-        topNub.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        topNub.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        topNub.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        topNub.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         topNub.widthAnchor.constraint(equalToConstant: 60).isActive = true
         topNub.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
@@ -759,7 +781,7 @@ class MusicView: UIView, CustomSliderDelegate, AVAudioPlayerDelegate{
         
         
         
-        bottomBarHolderView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -(AppManager.appInsets.bottom + 15)).isActive = true
+        bottomBarHolderView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(APP_INSETS.bottom + 15)).isActive = true
         
         bottomBarHolderView.leftAnchor.constraint(equalTo: scrubbingSlider.leftAnchor).isActive = true
         bottomBarHolderView.rightAnchor.constraint(equalTo: scrubbingSlider.rightAnchor).isActive = true

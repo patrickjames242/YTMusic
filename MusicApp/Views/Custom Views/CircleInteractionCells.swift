@@ -100,7 +100,7 @@ fileprivate class CircleInteractor{
     
     
     private func fadeHighlightView_In(){
-        UIView.animate(withDuration: 0.5, delay: 0, options: .allowUserInteraction, animations: {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
             self.highlightView.alpha = 0.3
         })
     }

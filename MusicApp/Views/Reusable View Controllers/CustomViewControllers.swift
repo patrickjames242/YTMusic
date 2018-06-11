@@ -8,7 +8,29 @@
 
 import UIKit
 
-class PortraitViewController: UIViewController{
+
+class ViewDidLayoutSubviewsViewController: UIViewController{
+    
+    private var subviewsWereAlreadyLaidOut = false
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if self.subviewsWereAlreadyLaidOut == false{
+            self.firstTimeTheViewLaysOutItsSubviews()
+            self.subviewsWereAlreadyLaidOut = true
+        }
+        
+    }
+    
+    func firstTimeTheViewLaysOutItsSubviews(){
+        
+    }
+    
+    
+}
+
+
+class PortraitViewController: ViewDidLayoutSubviewsViewController{
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
         return .portrait
     }

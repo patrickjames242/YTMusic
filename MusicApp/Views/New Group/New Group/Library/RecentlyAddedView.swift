@@ -21,8 +21,14 @@ class RecentlyAdded_NavCon: UINavigationController{
         navigationBar.isTranslucent = false
         navigationBar.prefersLargeTitles = true
         navigationBar.tintColor = THEME_COLOR(asker: self)
-        viewControllers.append(AppManager.shared.recentlyAddedView)
+        viewControllers.append(mainViewController)
     }
+    
+    func scrollToCellOf(song: Song){
+        mainViewController.scrollToCellOfSong(song)
+    }
+    
+    private let mainViewController = RecentlyAddedView(collectionViewLayout: UICollectionViewFlowLayout())
     
     override func interfaceColorDidChange(to color: UIColor) {
         navigationBar.tintColor = color
@@ -168,7 +174,7 @@ class RecentlyAddedView: SafeAreaObservantCollectionViewController, UICollection
         return nil
     }
     
-    
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
        
         
@@ -180,7 +186,7 @@ class RecentlyAddedView: SafeAreaObservantCollectionViewController, UICollection
             let newSongs = Song.wrap(array: controller.fetchedObjects! as! [DBSong])
             
             self.songs = newSongs
-            
+
             switch type{
             case .delete:
                 self.collectionView?.deleteItems(at: [indexPath!])
@@ -193,21 +199,13 @@ class RecentlyAddedView: SafeAreaObservantCollectionViewController, UICollection
 
             }
         }, completion: nil)
+        
+        
+        
+        
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     
     

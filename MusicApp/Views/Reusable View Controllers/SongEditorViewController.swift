@@ -62,26 +62,16 @@ fileprivate class SongEditorViewController: UITableViewController, UITextFieldDe
         return true
     }
     
-    private var previousStatusBarState: UIStatusBarStyle!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        previousStatusBarState = UIApplication.shared.statusBarStyle
-        UIApplication.shared.statusBarStyle = .default
         tableView.separatorInset.left = 0
         tableView.rowHeight = 50
         navigationItem.title = "Edit Song"
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(respondToCancelButton))
         navigationItem.rightBarButtonItem = rightBarButtonItem
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        
-        UIApplication.shared.statusBarStyle = previousStatusBarState
-    }
-    
+   
     
     
     private func createCell(completion: (UITableViewCell) -> Void) -> UITableViewCell{

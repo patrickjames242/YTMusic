@@ -128,21 +128,15 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
     
     
     private func displayDownloadFinishedNotification(){
+        let content = UNMutableNotificationContent()
+        content.title = "Download Complete"
+        content.body = "Now you can listen to your new song!!😆"
         
-        //
-        //        let content = UNMutableNotificationContent()
-        //        content.title = "Download Complete"
-        //        content.body = "Tap to start listening mother fuckaaa!!"
-        //        content.badge = 1
-        //
-        //        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        //
-        //        let request = UNNotificationRequest(identifier: "downloadCompleteRequest", content: content, trigger: trigger)
-        //
-        //        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        //
-        //
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         
+        let request = UNNotificationRequest(identifier: "downloadCompleteRequest", content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
     

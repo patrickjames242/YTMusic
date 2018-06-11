@@ -11,7 +11,7 @@ import AVFoundation
 import MediaPlayer
 
 
-extension MusicView{
+extension NowPlayingViewController{
     
     
     //MARK: - HANDLE SLIDING

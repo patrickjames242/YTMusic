@@ -11,7 +11,7 @@ import AVFoundation
 import MediaPlayer
 
 
-extension MusicView{
+extension NowPlayingViewController{
     
     
     
@@ -20,16 +20,13 @@ extension MusicView{
     
     func makeMyselfInvisible(){
         
-        if !musicViewIsMinimized{
-            delegate!.userDid_Minimize_MusicView()
-        }
-        
+
         deactivateAllSongPlayingFeatures()
         
 
         UIView.animate(withDuration: 0.4) {
             self.set_makeMyselfInvisible_Constraints()
-            self.layoutIfNeeded()
+            self.view.layoutIfNeeded()
         }
         self.musicViewIsMinimized = true
         
@@ -84,10 +81,10 @@ extension MusicView{
     
     
     func prepareMusicViewFor_Maximization(animationTime: TimeInterval){
-        
+        delegate?.userDidMaximizeNowPlayingView()
         UIView.animate(withDuration: 0.1, animations: {
             
-            self.backgroundColor = .white
+            self.view.backgroundColor = .white
         
         }) { (success) in
             
@@ -97,12 +94,11 @@ extension MusicView{
             }
         }
         
-        UIApplication.shared.statusBarStyle = .lightContent
 
         
         UIView.animate(withDuration: animationTime, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: UIViewAnimationOptions.curveLinear, animations: {
             
-            self.layer.cornerRadius = self.musicViewEndingFrameCornerRadius
+            self.view.layer.cornerRadius = self.musicViewEndingFrameCornerRadius
             self.topNub.alpha = 1
             
             self.setMaximizedAlbumCoverConstraints(sliding: false, playing: self.songIsPlaying)
@@ -138,7 +134,7 @@ extension MusicView{
         musicViewIsMinimized = false
         topNub.addGestureRecognizer(topNubGesture)
         minimizedObjectsHolderView.removeGestureRecognizer(goUpRecognizer)
-        self.removeGestureRecognizer(longPressGesture)
+        self.view.removeGestureRecognizer(longPressGesture)
  
         
         prepareMusicViewFor_Maximization(animationTime: animationTime)
@@ -156,8 +152,7 @@ extension MusicView{
     
     @objc func liftUpMusicViewTapGestureSelectorFunction(){
         liftUpMusicView(animationTime: 0.7)
-        delegate?.userDid_Maximize_MusicView()
-        self.addGestureRecognizer(bringBackDownGesture)
+        self.view.addGestureRecognizer(bringBackDownGesture)
     }
     
     
@@ -200,13 +195,14 @@ extension MusicView{
     
     func prepareMusicViewFor_Minimization(){
         
-        UIApplication.shared.statusBarStyle = .default
+        delegate?.userDidMinimizeNowPlayingView()
+        
         
         lengthOfPan = 0
         
-        removeGestureRecognizer(bringBackDownGesture)
+        view.removeGestureRecognizer(bringBackDownGesture)
         minimizedObjectsHolderView.addGestureRecognizer(goUpRecognizer)
-        addGestureRecognizer(longPressGesture)
+        view.addGestureRecognizer(longPressGesture)
         topNub.removeGestureRecognizer(topNubGesture)
         
         albumImage.hideShadow(with: 0.2)
@@ -216,7 +212,7 @@ extension MusicView{
         }) { (success) in
             
             UIView.animate(withDuration: 0.1) {
-                self.backgroundColor = .clear
+                self.view.backgroundColor = .clear
                 
                 
             }
@@ -227,7 +223,7 @@ extension MusicView{
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.1, options: UIViewAnimationOptions.curveLinear, animations: {
             
-            self.layer.cornerRadius = 0
+            self.view.layer.cornerRadius = 0
             self.setMinimizedAlbumCoverConstraints()
             self.topNub.alpha = 0
             self.minimizedObjectsHolderView.alpha = 1
@@ -260,7 +256,6 @@ extension MusicView{
         
         prepareMusicViewFor_Minimization()
         
-        delegate?.userDid_Minimize_MusicView()
         
         
         
@@ -276,7 +271,7 @@ extension MusicView{
     @objc func bringMusicViewBackDown(gesture: UIPanGestureRecognizer){
         
         
-        let gestureTranslation = gesture.translation(in: self)
+        let gestureTranslation = gesture.translation(in: self.view)
         
         switch gesture.state{
         case .began, .changed:
@@ -291,7 +286,7 @@ extension MusicView{
             lengthOfPan = 0
         default: break
         }
-        gesture.setTranslation(CGPoint.zero, in: self)
+        gesture.setTranslation(CGPoint.zero, in: self.view)
     }
     
     

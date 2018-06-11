@@ -17,8 +17,10 @@ class MusicSettings_NavCon: UINavigationController {
         navigationBar.prefersLargeTitles = true
         navigationBar.isTranslucent = false
         navigationBar.tintColor = THEME_COLOR(asker: self)
-        viewControllers.append(AppManager.shared.musicSettings)
+        viewControllers.append(mainView)
     }
+    
+    private let mainView = MusicSettings()
     
     override func interfaceColorDidChange(to color: UIColor) {
         navigationBar.tintColor = color
@@ -33,6 +35,12 @@ class MusicSettings_NavCon: UINavigationController {
 
 
 class MusicSettings: SafeAreaObservantTableViewController, MFMailComposeViewControllerDelegate{
+    
+    
+    init(){
+        super.init(style: .grouped)
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -220,9 +228,8 @@ class MusicSettings: SafeAreaObservantTableViewController, MFMailComposeViewCont
     
     
     
-    override init(style: UITableViewStyle) { super.init(style: .grouped) }
     
-    init(){ fatalError("Don't use the 'init()' initializer to initialize a Music Settings View Controller!!!!") }; required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
 
 

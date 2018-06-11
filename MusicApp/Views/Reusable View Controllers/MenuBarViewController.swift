@@ -37,19 +37,7 @@ class MenuBarViewController: PortraitViewController, UIScrollViewDelegate, MenuB
     private let menuBarItems: [MenuBarControllerItem]
     
     
-    private var statusBarStyle: UIStatusBarStyle!
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.statusBarStyle = UIApplication.shared.statusBarStyle
-        UIApplication.shared.statusBarStyle = .default
-        
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        UIApplication.shared.statusBarStyle = statusBarStyle
-    }
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
