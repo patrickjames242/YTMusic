@@ -13,27 +13,19 @@ import CoreData
 //MARK: - NAVIGATION CONTROLLER
 
 
-class RecentlyAdded_NavCon: UINavigationController{
+class RecentlyAddedViewController: StandardAppNavigationController{
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationBar.shadowImage = UIImage()
-        navigationBar.isTranslucent = false
-        navigationBar.prefersLargeTitles = true
-        navigationBar.tintColor = THEME_COLOR(asker: self)
-        viewControllers.append(mainViewController)
-    }
+   
     
     func scrollToCellOf(song: Song){
-        mainViewController.scrollToCellOfSong(song)
+        mainController.scrollToCellOfSong(song)
     }
     
-    private let mainViewController = RecentlyAddedView(collectionViewLayout: UICollectionViewFlowLayout())
+    private let mainController = _RecentlyAddedViewController(collectionViewLayout: UICollectionViewFlowLayout())
     
-    override func interfaceColorDidChange(to color: UIColor) {
-        navigationBar.tintColor = color
+    override var mainViewController: UIViewController{
+        return mainController
     }
-    
     
     
     
@@ -51,7 +43,7 @@ class RecentlyAdded_NavCon: UINavigationController{
 
 //MARK: - COLLECTION VIEW CONTROLLER
 
-class RecentlyAddedView: SafeAreaObservantCollectionViewController, UICollectionViewDelegateFlowLayout, NSFetchedResultsControllerDelegate{
+fileprivate class _RecentlyAddedViewController: SafeAreaObservantCollectionViewController, UICollectionViewDelegateFlowLayout, NSFetchedResultsControllerDelegate{
     
     
     

@@ -21,18 +21,11 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
     
     
     let libraryView = LibraryViewController()
-    let settingsView = MusicSettings_NavCon()
-    let downloadsView = DownloadsView_NavCon()
-    let searchView = SearchTableView_NavCon()
+    let settingsView = SettingsViewController()
+    let downloadsView = DownloadHistoryViewController()
+    let searchView = YoutubeSearchViewController()
 
-    lazy var nowPlayingView = NowPlayingViewController(parent: self)
-    
-    
-    
-    
-    
-    
-    
+    lazy var nowPlayingView = NowPlayingViewController()
     
 
     
@@ -40,17 +33,21 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         addChildViewController(libraryView)
         addChildViewController(searchView)
         addChildViewController(downloadsView)
         addChildViewController(settingsView)
+        addChildViewController(nowPlayingView)
+        
         
         view.addSubview(holderView)
+        view.addSubview(nowPlayingView.view)
         view.addSubview(tabBar)
-        
         holderView.pinAllSidesTo(view)
         
-        
+        nowPlayingView.setAllConstraintsToParent()
 
 
         view.backgroundColor = .black
@@ -159,14 +156,14 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
         
     }()
     
-    
+
     private lazy var shadeView: UIView = {
         let x = UIView()
         x.backgroundColor = .white
         x.translatesAutoresizingMaskIntoConstraints = false
         return x
     }()
-    
+
     
     
     

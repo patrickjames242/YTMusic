@@ -16,33 +16,14 @@ extension NowPlayingViewController {
 
     
     
-    func constrainSelfToParent(){
-        parentView.layoutIfNeeded()
+    func setInitialConstraints(){
+     
+        view.pin(left: parentView.leftAnchor, right: parentView.rightAnchor)
+        view.heightAnchor.constraint(equalTo: parentView.heightAnchor, constant: -APP_INSETS.top - endingMusicViewFrameSpaceFromTop).isActive = true
         
-        
-        if let leftAnchor = leftAnchorConstraint{
-            leftAnchor.isActive = false
-        }
-        if let rightAnchor = rightAnchorConstraint{
-            rightAnchor.isActive = false
-        }
-        if let heightAnchor = heightAnchorConstraint{
-            heightAnchor.isActive = false
-        }
-        if let topAnchor = topAnchorConstraint{
-            topAnchor.isActive = false
-        }
-        
-        
-        leftAnchorConstraint = view.leftAnchor.constraint(equalTo: parentView.leftAnchor)
-        rightAnchorConstraint = view.rightAnchor.constraint(equalTo: parentView.rightAnchor)
-        heightAnchorConstraint = view.heightAnchor.constraint(equalTo: parentView.heightAnchor, constant: -APP_INSETS.top - endingMusicViewFrameSpaceFromTop)
         topAnchorConstraint = view.topAnchor.constraint(equalTo: parentView.topAnchor, constant: parentView.frame.height)
-        
-        leftAnchorConstraint.isActive = true
-        rightAnchorConstraint.isActive = true
-        heightAnchorConstraint.isActive = true
         topAnchorConstraint.isActive = true
+        
         parentView.layoutIfNeeded()
     }
     

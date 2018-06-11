@@ -18,31 +18,17 @@ import CoreData
 
 //MARK: - NAVIGATION CONTROLLER
 
-class SongListView_NavCon: UINavigationController{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        
-        
-        
-        navigationBar.isTranslucent = false
-        navigationBar.prefersLargeTitles = true
-        navigationBar.tintColor = THEME_COLOR(asker: self)
-        viewControllers.append(mainViewController)
-        navigationBar.shadowImage = UIImage()
+class SongListViewController: StandardAppNavigationController{
 
-        
-        
-    }
-    
     func scrollToCellOf(song: Song){
-        mainViewController.scrollToCellOfSong(song)
+        mainController.scrollToCellOfSong(song)
     }
     
-    private var mainViewController = SongListView()
     
-    override func interfaceColorDidChange(to color: UIColor) {
-        navigationBar.tintColor = color
+    private var mainController = PrivateSongListViewController()
+    
+    override var mainViewController: UIViewController{
+        return mainController
     }
     
     
@@ -59,7 +45,7 @@ class SongListView_NavCon: UINavigationController{
 
 //MARK: - SONG LIST VIEW
 
-class SongListView: SafeAreaObservantTableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate{
+fileprivate class PrivateSongListViewController: SafeAreaObservantTableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate{
     
     let cellID = "The Best cell everrrrr!!!!!"
     let headerID = "the Best HEADER EVERRRR!!!!! 😁😁"
@@ -387,49 +373,13 @@ class SongListView: SafeAreaObservantTableViewController, NSFetchedResultsContro
         
         if songIndexPath == nil { return }
         tableView.selectRow(at: songIndexPath!, animated: true, scrollPosition: .middle)
-        Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false) { [weak weakSelf = self](timer) in
-            guard let weakSelf = weakSelf else {timer.invalidate(); return}
-            weakSelf.tableView.deselectRow(at: songIndexPath!, animated: true)
-        }
+        
     }
     
-    
-    
-//    
-//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        if userIsSearching {return UISwipeActionsConfiguration()}
-//        let handler: UIContextualActionHandler = {(action, view, completion) in
-//            let song = self.officialSongsTuple.songs[indexPath.section][indexPath.row]
-//            
-//            AppManager.shared.handleDeletionOf(song: song)
-//            completion(false)
-//        }
-//        
-//        let deleteAction = UIContextualAction(style: UIContextualAction.Style.destructive, title: "DELETE", handler: handler)
-//
-//        let config = UISwipeActionsConfiguration(actions: [deleteAction])
-//        
-//        return config
-//    }
-//    
-//    
-    
-    
-    
-    
 
+  
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-
-        
         
         
     //MARK: - FETCHED RESULTS CONTROLLER STUFF

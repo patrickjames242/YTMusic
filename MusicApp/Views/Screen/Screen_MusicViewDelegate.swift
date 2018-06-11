@@ -43,8 +43,8 @@ extension Screen: NowPlayingViewControllerDelegate{
         
         self.desiredStatusBarStyle = .lightContent
         setNeedsStatusBarAppearanceUpdate()
-        self.snapshotView = self.holderView.snapshotView(afterScreenUpdates: true)
-        self.holderView.addSubview(self.snapshotView)
+//        self.snapshotView = self.holderView.snapshotView(afterScreenUpdates: true)
+//        self.holderView.addSubview(self.snapshotView)
         
         UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
             
@@ -70,6 +70,15 @@ extension Screen: NowPlayingViewControllerDelegate{
     func userDidMinimizeNowPlayingView() {
         self.desiredStatusBarStyle = .default
         setNeedsStatusBarAppearanceUpdate()
+//        self.snapshotView.removeFromSuperview()
+//        self.snapshotView = nil
+//
+//        UIView.animate(withDuration: 0.5, animations:{
+//           self.snapshotView.alpha = 0
+//        }, completion: { (success) in
+//
+//        })
+        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             
             self.holderView.center = self.view.centerInFrame
@@ -78,9 +87,8 @@ extension Screen: NowPlayingViewControllerDelegate{
             self.holderView.center = self.view.centerInBounds
             self.holderView.layer.cornerRadius = 0
             self.holderView.alpha = 1
-            self.snapshotView.removeFromSuperview()
-            self.snapshotView = nil
-        }, completion: nil)
+            
+        })
         self.showTabBar()
         
         

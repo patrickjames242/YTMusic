@@ -86,14 +86,16 @@ class MenuBarViewController: PortraitViewController, UIScrollViewDelegate, MenuB
         x.showsHorizontalScrollIndicator = false
         x.showsVerticalScrollIndicator = false
         
-        var y: CGFloat = 0
-        viewControllers.forEach { (controller) in
+        
+        viewControllers.enumerated().forEach { (y, controller) in
             addChildViewController(controller)
+            controller.additionalSafeAreaInsets.bottom = self.bottomBarHeight
+            controller.additionalSafeAreaInsets.top = self.navBarHeight
             controller.view.frame = x.bounds
-            controller.view.frame.origin.x = (y / CGFloat(viewControllers.count)) * x.contentSize.width
+            controller.view.frame.origin.x = (CGFloat(y) / CGFloat(viewControllers.count)) * x.contentSize.width
             x.addSubview(controller.view)
-
-            y += 1
+            
+        
         }
         return x
     }()

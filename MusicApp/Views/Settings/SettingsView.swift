@@ -9,22 +9,15 @@
 import UIKit
 import MessageUI
 
-class MusicSettings_NavCon: UINavigationController {
+class SettingsViewController: StandardAppNavigationController{
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationBar.prefersLargeTitles = true
-        navigationBar.isTranslucent = false
-        navigationBar.tintColor = THEME_COLOR(asker: self)
-        viewControllers.append(mainView)
+    private let mainView = _SettingsViewController()
+    
+    override var mainViewController: UIViewController{
+        return mainView
     }
     
-    private let mainView = MusicSettings()
-    
-    override func interfaceColorDidChange(to color: UIColor) {
-        navigationBar.tintColor = color
-    }
     
     
 }
@@ -34,7 +27,7 @@ class MusicSettings_NavCon: UINavigationController {
 
 
 
-class MusicSettings: SafeAreaObservantTableViewController, MFMailComposeViewControllerDelegate{
+fileprivate class _SettingsViewController: SafeAreaObservantTableViewController, MFMailComposeViewControllerDelegate{
     
     
     init(){
@@ -167,7 +160,7 @@ class MusicSettings: SafeAreaObservantTableViewController, MFMailComposeViewCont
             
         case IndexPath(item: 0, section: 1):
             
-            navigationController?.pushViewController(AppInfoTableView(), animated: true)
+            navigationController?.pushViewController(GeneralSettingsTableView(), animated: true)
             
         case IndexPath(item: 1, section: 1):
             

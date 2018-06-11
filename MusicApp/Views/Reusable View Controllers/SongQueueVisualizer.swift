@@ -71,7 +71,7 @@ class SongQueueVisualizer: UITableViewController{
         tableView.rowHeight = CellConstants.cellHeight
         tableView.separatorInset.left = CellConstants.separatorLeftInset
         let inset = (CellConstants.imageLeftInset / 2) + 3
-        tableView.contentInset = UIEdgeInsets(top: 80 + inset, bottom: inset + 49)
+        tableView.contentInset = UIEdgeInsets(top:inset, bottom: inset)
         tableView.scrollIndicatorInsets = UIEdgeInsets(top: 80, bottom: 40)
         tableView.setEditing(type == .upNext, animated: false)
         tableView.allowsSelectionDuringEditing = true

@@ -59,13 +59,7 @@ extension NowPlayingViewController{
             
             
         
-        }, completion: { (success) in
-            
-            UIView.animate(withDuration: 0.2, animations: {
-                self.topLine.alpha = 1
-                
-            })
-        })
+        }, completion: nil)
         
         AppManager.shared.musicViewWasShown()
         iAmVisible = true
@@ -107,7 +101,7 @@ extension NowPlayingViewController{
         
         
         UIView.animate(withDuration: 0.3) {
-            self.minimizedObjectsHolderView.alpha = 0
+            self.minimizedNowPlayingPreview.alpha = 0
             
             
         }
@@ -133,7 +127,7 @@ extension NowPlayingViewController{
     func liftUpMusicView(animationTime: Double){
         musicViewIsMinimized = false
         topNub.addGestureRecognizer(topNubGesture)
-        minimizedObjectsHolderView.removeGestureRecognizer(goUpRecognizer)
+        minimizedNowPlayingPreview.removeGestureRecognizer(goUpRecognizer)
         self.view.removeGestureRecognizer(longPressGesture)
  
         
@@ -201,7 +195,7 @@ extension NowPlayingViewController{
         lengthOfPan = 0
         
         view.removeGestureRecognizer(bringBackDownGesture)
-        minimizedObjectsHolderView.addGestureRecognizer(goUpRecognizer)
+        minimizedNowPlayingPreview.addGestureRecognizer(goUpRecognizer)
         view.addGestureRecognizer(longPressGesture)
         topNub.removeGestureRecognizer(topNubGesture)
         
@@ -226,10 +220,10 @@ extension NowPlayingViewController{
             self.view.layer.cornerRadius = 0
             self.setMinimizedAlbumCoverConstraints()
             self.topNub.alpha = 0
-            self.minimizedObjectsHolderView.alpha = 1
+            self.minimizedNowPlayingPreview.alpha = 1
             
             // this is because sometimes the label doesn't appear, because it was probably set to zero for some reason when the song changed. I don't feel like figuring it out, so I acknowledge the fact that I am a lazy, crappy programmer.
-            self.minimizedViewSongNameLabel.alpha = 1
+            self.minimizedNowPlayingPreview.songNameLabel.alpha = 1
             
         }, completion: nil)
         

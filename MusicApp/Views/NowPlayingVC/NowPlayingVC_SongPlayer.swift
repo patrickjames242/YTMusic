@@ -64,7 +64,7 @@ extension NowPlayingViewController: SongQueueDelegate{
     private func justRewindToTheBeginningOfCurrentSong(){
         songPlayer.currentTime = 0
         self.scrubbingSlider.syncSliderPositionWith(playBackPosition: 0)
-        minimizedProgressBar.changeProgressTo(0)
+        minimizedNowPlayingPreview.progressBar.changeProgressTo(0)
     }
     
     
@@ -99,7 +99,7 @@ extension NowPlayingViewController: SongQueueDelegate{
         
         let newSong = songQueue.getNewUpNextSong()
         scrubbingSlider.syncSliderPositionWith(playBackPosition: 0)
-        minimizedProgressBar.changeProgressTo(0)
+        minimizedNowPlayingPreview.progressBar.changeProgressTo(0)
         setUpMusicPlayer(withSong: newSong, userHandPicked: false, playWhenSetted: playWhenFastForwarded, animated: false)
          
         syncNowPlayingSliderWithCurrentSongTime()
@@ -160,7 +160,7 @@ extension NowPlayingViewController: SongQueueDelegate{
     func changePlayPauseButtonImagesTo(_ type: MediaButtonType){
         
         play_PauseButton.changeButtonImage(withEndingType: type)
-        minimizedPlayPauseButton.changeButtonImage(withEndingType: type)
+        minimizedNowPlayingPreview.playPauseButton.changeButtonImage(withEndingType: type)
         
     }
     
@@ -196,20 +196,9 @@ extension NowPlayingViewController: SongQueueDelegate{
     
 
     
-    private final class Storage{
     
-        static weak var currentlyPlayingSong: Song?
-        
-    }
     
-    var currentlyPlayingSong: Song?{
-        get{
-            return Storage.currentlyPlayingSong
-        } set {
-            Storage.currentlyPlayingSong = newValue
-        }
-    }
-    
+  
     
     
     //MARK: - MUSIC PLAYER SETUP
@@ -334,7 +323,7 @@ extension NowPlayingViewController: SongQueueDelegate{
     
     @objc private func respondToSongNameDidChangeNotification(){
         
-        self.minimizedViewSongNameLabel.text = currentlyPlayingSong?.name
+        self.minimizedNowPlayingPreview.songNameLabel.text = currentlyPlayingSong?.name
         self.songNameLabel.text = currentlyPlayingSong?.name
         self.artistAndAlbumLabel.text = currentlyPlayingSong?.artistName
     }
@@ -344,7 +333,7 @@ extension NowPlayingViewController: SongQueueDelegate{
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if flag == true{
             scrubbingSlider.syncSliderPositionWith(playBackPosition: 0)
-            minimizedProgressBar.changeProgressTo(0)
+            minimizedNowPlayingPreview.progressBar.changeProgressTo(0)
             fastForwardMusic(playWhenFastForwarded: true)
         }
     }
@@ -381,7 +370,7 @@ extension NowPlayingViewController: SongQueueDelegate{
             self.songNameLabel.alpha = MINIMUM_ALPHA
             self.artistAndAlbumLabel.alpha = MINIMUM_ALPHA
             if self.musicViewIsMinimized{
-                self.minimizedViewSongNameLabel.alpha = MINIMUM_ALPHA
+                self.minimizedNowPlayingPreview.songNameLabel.alpha = MINIMUM_ALPHA
                 
             }
         }) { (success) in
@@ -391,13 +380,13 @@ extension NowPlayingViewController: SongQueueDelegate{
             }
 
             self.songNameLabel.text = song.name
-            self.minimizedViewSongNameLabel.text = song.name
+            self.minimizedNowPlayingPreview.songNameLabel.text = song.name
             self.artistAndAlbumLabel.text = song.artistName
 
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
                 self.songNameLabel.alpha = 1
                 if self.musicViewIsMinimized{
-                    self.minimizedViewSongNameLabel.alpha = 1
+                    self.minimizedNowPlayingPreview.songNameLabel.alpha = 1
                     
                 }
             }, completion: nil)
@@ -422,7 +411,7 @@ extension NowPlayingViewController: SongQueueDelegate{
     @objc private func respondToMPRemoteCommandCenter__ChangePositionCommand(event: MPChangePlaybackPositionCommandEvent){
         songPlayer.currentTime = event.positionTime
         scrubbingSlider.syncSliderPositionWith(playBackPosition: event.positionTime)
-        minimizedProgressBar.changeProgressTo(event.positionTime / songPlayer.duration)
+        minimizedNowPlayingPreview.progressBar.changeProgressTo(event.positionTime / songPlayer.duration)
     }
     
     
@@ -436,37 +425,25 @@ extension NowPlayingViewController: SongQueueDelegate{
         let interuptionTypeInt = notification.userInfo!["AVAudioSessionInterruptionTypeKey"]! as! UInt
         
         let interuptionType = AVAudioSessionInterruptionType(rawValue: interuptionTypeInt)!
-
+        
         switch interuptionType{
         case .began:
             
+            self.pauseMusic()
+            changePlayPauseButtonImagesTo(.play)
             
-            if songIsPlaying{
-                self.pauseMusic()
-                changePlayPauseButtonImagesTo(.play)
-            }
         case .ended:
+            
             if let optionsValue = notification.userInfo![AVAudioSessionInterruptionOptionKey] as? UInt{
                 let options = AVAudioSessionInterruptionOptions.init(rawValue: optionsValue)
                 if options.contains(.shouldResume){
-                    
-                    if !songIsPlaying {
-                        self.playMusic()
-                        changePlayPauseButtonImagesTo(.pause)
-                    }
-                    
+                    self.playMusic()
+                    changePlayPauseButtonImagesTo(.pause)
                 } else {
-                    if songIsPlaying{
-                        self.pauseMusic()
-                        changePlayPauseButtonImagesTo(.play)
-                    }
+                    self.pauseMusic()
+                    changePlayPauseButtonImagesTo(.play)
                 }
-                
-                
             }
-            
-            
-            
         }
     }
     
@@ -513,10 +490,7 @@ extension NowPlayingViewController: SongQueueDelegate{
         controller.nextTrackCommand.isEnabled = true
         controller.changePlaybackPositionCommand.isEnabled = true
         
-        
-        
-        
-        
+    
         controller.playCommand.addTarget(self, action: #selector(respondToNowPlaying_Play_Button))
         controller.pauseCommand.addTarget(self, action: #selector(respondToNowPlaying_Pause_Button))
         controller.previousTrackCommand.addTarget(self, action: #selector(carryOutRewindingButtonTarget))
@@ -570,7 +544,7 @@ extension NowPlayingViewController: SongQueueDelegate{
         albumImage.image = nil
         
         songNameLabel.text = nil
-        minimizedViewSongNameLabel.text = nil
+        minimizedNowPlayingPreview.songNameLabel.text = nil
         artistAndAlbumLabel.text = nil
         
         stop_SyncingSliderPositionWithMusicPlaybackPosition()

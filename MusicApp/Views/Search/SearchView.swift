@@ -8,22 +8,14 @@
 
 import UIKit
 
-class SearchTableView_NavCon: UINavigationController{
+class YoutubeSearchViewController: StandardAppNavigationController{
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationBar.prefersLargeTitles = true
-        navigationBar.isTranslucent = false
-        navigationBar.shadowImage = UIImage()
-        navigationBar.tintColor = THEME_COLOR(asker: self)
-        viewControllers.append(SearchTableView())
-        
-        
-    }
-    override func interfaceColorDidChange(to color: UIColor) {
-        navigationBar.tintColor = color
-    }
     
+    private let mainController = _YoutubeSearchViewController()
+    
+    override var mainViewController: UIViewController{
+        return mainController
+    }
     
     
     
@@ -35,7 +27,7 @@ class SearchTableView_NavCon: UINavigationController{
 
 
 
-class SearchTableView: SafeAreaObservantTableViewController, UISearchBarDelegate, SearchSuggestionsCellDelegate, SearchSuggestionsBrainDelegate{
+fileprivate class _YoutubeSearchViewController: SafeAreaObservantTableViewController, UISearchBarDelegate, SearchSuggestionsCellDelegate, SearchSuggestionsBrainDelegate{
   
  
     private lazy var searchController = UISearchController(searchResultsController: nil)

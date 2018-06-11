@@ -19,7 +19,7 @@ protocol NowPlayingViewControllerDelegate: class{
 
 class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioPlayerDelegate{
     
-
+    
     
     var songQueue: SongQueue!
     
@@ -34,21 +34,25 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
         return false
     }
     
-    var vcParent: UIViewController
     var parentView: UIView{
-        return vcParent.view
+        return parent!.view
     }
     
+    init() { super.init(nibName: nil, bundle: nil) }
     
-    init(parent: UIViewController){
-        self.vcParent = parent
-        super.init(nibName: nil, bundle: nil)
-        vcParent.addChildViewController(self)
-        parentView.addSubview(self.view)
-        constrainSelfToParent()
-
+    override func didMove(toParentViewController parent: UIViewController?) {
+        super.didMove(toParentViewController: parent)
+        print(#function)
     }
     
+    func setAllConstraintsToParent(){
+        setInitialConstraints()
+        setUpViews()
+        minimizedNowPlayingPreview.addGestureRecognizer(goUpRecognizer)
+        
+        view.addGestureRecognizer(longPressGesture)
+        
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init coder has not been implemented")
@@ -56,33 +60,7 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     
     weak var delegate: NowPlayingViewControllerDelegate?
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-
-        view.layoutIfNeeded()
-        
-        view.clipsToBounds = true
-        
-        view.addSubview(backGroundBluryView)
-        view.addSubview(albumImage)
-        setInitialAlbumCoverConstraints()
-        view.addSubview(scrubbingSlider)
-        
-        
-        setUpViews()
-        
-        
-        view.bringSubview(toFront: albumImage)
-        
-        minimizedObjectsHolderView.addGestureRecognizer(goUpRecognizer)
-        
-        view.addGestureRecognizer(longPressGesture)
-    }
-    
+ 
 
     
 
@@ -103,12 +81,9 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     
     //MARK: - CONSTANTS
     
-   
+   weak var currentlyPlayingSong: Song?
    
     var topAnchorConstraint: NSLayoutConstraint!
-    var leftAnchorConstraint: NSLayoutConstraint!
-    var rightAnchorConstraint: NSLayoutConstraint!
-    var heightAnchorConstraint: NSLayoutConstraint!
     
     
     
@@ -155,7 +130,13 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     
     
     
-    
+    lazy var minimizedNowPlayingPreview: MinimizedNowPlayingPreview = {
+        let x = MinimizedNowPlayingPreview.init(nameLabelLeftInset:  10 + minimizedAlbumCover_Size.width + 9)
+        x.rewindButton.action = { self.carryOutRewindingButtonTarget()}
+        x.playPauseButton.action = {self.carryOutPlayPauseButtonTarget()}
+        x.fastForwardButton.action = {self.carryOutFastForwardButtonTarget()}
+        return x
+    }()
     
     
     lazy var backGroundBluryView: UIVisualEffectView = {
@@ -164,169 +145,7 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
         return x
     }()
     
-    
 
-    
-    
-    
-    
-    //MARK: - OBJECTS PRESENT IN MINIMIZED STATE
-
-    
-    // in order from left to right
-    
-    
-    lazy var topLine: UIView = {
-        let x = UIView()
-        x.backgroundColor = .lightGray
-        x.translatesAutoresizingMaskIntoConstraints = false
-        return x
-    }()
-    
-    lazy var minimizedProgressBar: ProgressIndicator = {
-        let x = ProgressIndicator()
-        x.backgroundColor = .clear
-        x.translatesAutoresizingMaskIntoConstraints = false
-        return x
-        
-        
-    }()
-    
-    
-    
-    lazy var minimizedViewSongNameLabel: UILabel = {
-        let x = UILabel()
-        x.textColor = .black
-        x.translatesAutoresizingMaskIntoConstraints = false
-        return x
-    }()
-    
-    
-    lazy var minimizedRewindButton: MediaPlayingButton = {
-        let x = MediaPlayingButton(buttonType: .rewind, imageSize: 30, circleSize: 50)
-        x.translatesAutoresizingMaskIntoConstraints = false
-        x.action = { self.carryOutRewindingButtonTarget()}
-        return x
-    }()
-    
-    
-    lazy var minimizedPlayPauseButton: MediaPlayingButton = {
-        let x = MediaPlayingButton.init(buttonType: .play_pause, imageSize: 30, circleSize: 50)
-        x.translatesAutoresizingMaskIntoConstraints = false
-      
-        x.automaticallyAnimatesImageWhenTapped = false
-        x.action = self.carryOutPlayPauseButtonTarget
-            
-        
-        return x
-    }()
-    
-    
-    lazy var minimizedFastForwardButton: MediaPlayingButton = {
-        let x = MediaPlayingButton(buttonType: .fastForward, imageSize: 30, circleSize: 50)
-        x.translatesAutoresizingMaskIntoConstraints = false
-        x.action = { self.carryOutFastForwardButtonTarget()}
-        return x
-    }()
-    
-    
-    
-    
-    
-    
-    lazy var minimizedMusicControlsStackView: UIStackView = {
-        let x = UIStackView(arrangedSubviews: [minimizedRewindButton,
-                                               minimizedPlayPauseButton,
-                                               minimizedFastForwardButton])
-        x.spacing = 7.5
-        x.distribution = .fillEqually
-        
-        minimizedFastForwardButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        minimizedFastForwardButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        x.translatesAutoresizingMaskIntoConstraints = false
-
-        
-        return x
-    }()
-    
-    
-    lazy var minimizedObjectsHolderView: UIView = {
-        let x = MyView()
-        x.backgroundColor = .clear
-
-        func touchBegan(){
-            x.backgroundColor = UIColor(red: 215, green: 215, blue: 215)
-        }
-
-        func touchEnded(){
-            UIView.animate(withDuration: 0.3, animations: {
-                x.backgroundColor = .clear
-            })
-        }
-
-
-
-        x.touchesDidBeginAction = touchBegan
-        x.touchesDidEndAction = touchEnded
-        x.touchesDidCancelAction = touchEnded
-
-        x.translatesAutoresizingMaskIntoConstraints = false
-        
-        x.addSubview(minimizedViewSongNameLabel)
-        x.addSubview(minimizedMusicControlsStackView)
-        x.addSubview(topLine)
-        x.addSubview(minimizedProgressBar)
-        
-        let label = minimizedViewSongNameLabel
-        let stackView = minimizedMusicControlsStackView
-        let bar = minimizedProgressBar
-
-
-        bar.topAnchor.constraint(equalTo: x.topAnchor).isActive = true
-        bar.leftAnchor.constraint(equalTo: x.leftAnchor).isActive = true
-        bar.rightAnchor.constraint(equalTo: x.rightAnchor).isActive = true
-        bar.heightAnchor.constraint(equalToConstant: 2).isActive = true
-
-
-        stackView.rightAnchor.constraint(equalTo: x.rightAnchor, constant: -15).isActive = true
-        stackView.centerYAnchor.constraint(equalTo: x.centerYAnchor).isActive = true
-
-        label.leftAnchor.constraint(equalTo: x.leftAnchor, constant: 10 + minimizedAlbumCover_Size.width + 9).isActive = true
-        label.centerYAnchor.constraint(equalTo: x.centerYAnchor).isActive = true
-        label.rightAnchor.constraint(equalTo: stackView.leftAnchor, constant: -5).isActive = true
-
-        topLine.pin(left: x.leftAnchor, right: x.rightAnchor, top: x.topAnchor, size: CGSize(height: 0.5))
-
-    
-        return x
-    }()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // MARK: - OBJECTS PRESENT IN MAXIMIZED STATE
-    
-    // in order from top to bottom
-    
-
-    
     lazy var topNub: UIView = {
 
         let holderView = UIView()
@@ -368,35 +187,6 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
         x.customDelegate = self
         return x
     }()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -711,28 +501,38 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     func setUpViews(){
         
         
+        view.translatesAutoresizingMaskIntoConstraints = false
         
+        view.layoutIfNeeded()
         
+        view.clipsToBounds = true
         
-        
+        view.addSubview(backGroundBluryView)
+        view.addSubview(scrubbingSlider)
+        view.addSubview(topNub)
+        view.addSubview(textInfoStackView)
+        view.addSubview(mediaButtonHolderView)
+        view.addSubview(volumeSliderHolderView)
+        view.addSubview(bottomBarHolderView)
+        view.addSubview(minimizedNowPlayingPreview)
+        view.addSubview(albumImage)
+
         // MARK: - SETUP VIEWS VISIBLE IN MINIMIZED STATE
         
+        setInitialAlbumCoverConstraints()
         
-        backGroundBluryView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backGroundBluryView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        backGroundBluryView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        backGroundBluryView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
+        backGroundBluryView.pinAllSidesTo(view)
         
         
         
-        view.addSubview(minimizedObjectsHolderView)
+        
 
         
-        minimizedObjectsHolderView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        minimizedObjectsHolderView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        minimizedObjectsHolderView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        minimizedObjectsHolderView.heightAnchor.constraint(equalToConstant: AppManager.minimizedMusicViewHeight).isActive = true
+        minimizedNowPlayingPreview.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        minimizedNowPlayingPreview.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        minimizedNowPlayingPreview.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        minimizedNowPlayingPreview.heightAnchor.constraint(equalToConstant: AppManager.minimizedMusicViewHeight).isActive = true
         
         
 
@@ -741,11 +541,6 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
         // MARK: - SETUP VIEWS VISIBLE IN MAXIMIZED STATE
 
         
-        view.addSubview(topNub)
-        view.addSubview(textInfoStackView)
-        view.addSubview(mediaButtonHolderView)
-        view.addSubview(volumeSliderHolderView)
-        view.addSubview(bottomBarHolderView)
         
         
         

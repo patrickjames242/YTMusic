@@ -328,10 +328,10 @@ class CircleInteractionTableViewCell: UITableViewCell{
     
     private var circleInteractor = CircleInteractor()
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        if selected{
-            circleInteractor.highLight()
-        }
+ 
+    func highlight(){
+        circleInteractor.highLight()
+
         
     }
     

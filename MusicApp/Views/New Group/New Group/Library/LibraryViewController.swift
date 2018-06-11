@@ -16,8 +16,8 @@ import UIKit
 class LibraryViewController: UIViewController {
     
     
-    let songView = SongListView_NavCon()
-    let recentlyAddedView = RecentlyAdded_NavCon()
+    let songView = SongListViewController()
+    let recentlyAddedView = RecentlyAddedViewController()
     
     
     private var leftViewIsVisible: Bool{

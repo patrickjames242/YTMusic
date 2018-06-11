@@ -9,28 +9,34 @@
 import UIKit
 
 
-class ViewDidLayoutSubviewsViewController: UIViewController{
+class StandardAppNavigationController: PortraitNavigationController{
     
-    private var subviewsWereAlreadyLaidOut = false
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if self.subviewsWereAlreadyLaidOut == false{
-            self.firstTimeTheViewLaysOutItsSubviews()
-            self.subviewsWereAlreadyLaidOut = true
-        }
-        
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        navigationBar.prefersLargeTitles = true
+        navigationBar.isTranslucent = false
+        navigationBar.shadowImage = UIImage()
+        navigationBar.tintColor = THEME_COLOR(asker: self)
+        viewControllers.append(mainViewController)
     }
     
-    func firstTimeTheViewLaysOutItsSubviews(){
+    var mainViewController: UIViewController{
+        
+        return UIViewController()
         
     }
-    
+    override func interfaceColorDidChange(to color: UIColor) {
+        navigationBar.tintColor = color
+    }
     
 }
 
 
-class PortraitViewController: ViewDidLayoutSubviewsViewController{
+class PortraitViewController: UIViewController{
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
         return .portrait
     }

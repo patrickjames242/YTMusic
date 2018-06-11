@@ -34,7 +34,7 @@ extension NowPlayingViewController{
             start_SyncingSliderPositionWithMusicPlaybackPosition()
             
         }
-        minimizedProgressBar.changeProgressTo(point)
+        minimizedNowPlayingPreview.progressBar.changeProgressTo(point)
         
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.9, options: .curveLinear, animations: {
             self.setMaximizedAlbumCoverConstraints(sliding: false, playing: self.songIsPlaying)        }, completion: nil)
@@ -52,7 +52,7 @@ extension NowPlayingViewController{
         
         timer = Timer(timeInterval: 0.1, repeats: true, block: { (timer) in
             self.scrubbingSlider.syncSliderPositionWith(playBackPosition: self.songPlayer.currentTime)
-            self.minimizedProgressBar.changeProgressTo(self.songPlayer.currentTime / self.songPlayer.duration)
+            self.minimizedNowPlayingPreview.progressBar.changeProgressTo(self.songPlayer.currentTime / self.songPlayer.duration)
         })
         
         RunLoop.current.add(timer, forMode: RunLoopMode.commonModes)

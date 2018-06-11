@@ -10,12 +10,11 @@ import UIKit
 
 
 
-class AppInfoTableView: UITableViewController{
+class GeneralSettingsTableView: SafeAreaObservantTableViewController{
 
 
     init(){
         super.init(style: .grouped)
-        
         navigationItem.largeTitleDisplayMode = .never
         NotificationCenter.default.addObserver(self, selector: #selector(initiateStatistics), name: MNotifications.SongWasDeletedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(initiateStatistics), name: MNotifications.NewSongWasCreatedNotification, object: nil)
