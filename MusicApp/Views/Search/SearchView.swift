@@ -197,7 +197,7 @@ fileprivate class _YoutubeSearchViewController: SafeAreaObservantTableViewContro
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     
         suggestionBrain.searchTextDidChangeTo(text: searchText)
-        
+        tableView.setContentOffset(CGPoint(x: 0, y: -tableView.adjustedContentInset.top), animated: false)
         
     }
     

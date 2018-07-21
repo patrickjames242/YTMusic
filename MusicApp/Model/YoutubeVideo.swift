@@ -49,10 +49,6 @@ class YoutubeVideo {
         self.duration = duration
         self.views = views
         self.date = date
-        
-        
-        
-        
     }
     
     
@@ -78,22 +74,8 @@ class YoutubeVideo {
         self.delegate = nil
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
+    
     private var imageDownloadIsInProgress = false
     
     private func initiateImageDownloadIfNeeded() {

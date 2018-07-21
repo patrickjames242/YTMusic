@@ -39,28 +39,21 @@ class Song: NSObject {
        
         DBManager.createAndSaveNewDBSongObject(from: downloadItem.object, songData: songData){ (dbSong) in
             
-            
             let newSong = wrap(object: dbSong)
-            
             completion(newSong)
-            
             MNotifications.sendNewSongWasCreatedNotification(for: newSong)
         }
     }
     
-    
+
     func isTheWrapperFor(DBObject: DBSong) -> Bool{
-        
         return object == DBObject
-        
     }
     
     static func isDownloaded(youtubeID: String) -> Bool{
         for song in allSongs.values where song.youtubeID == youtubeID{
             return true
         }
-        
-        
         return false
     }
 
@@ -248,6 +241,7 @@ class Song: NSObject {
     }
 
     let youtubeID: String?
+    
     
     /// This is not used outside of the Song and DownloadItem classes
     let object: DBSong

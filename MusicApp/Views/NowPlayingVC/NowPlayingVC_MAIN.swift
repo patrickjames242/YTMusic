@@ -40,18 +40,13 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     
     init() { super.init(nibName: nil, bundle: nil) }
     
-    override func didMove(toParentViewController parent: UIViewController?) {
-        super.didMove(toParentViewController: parent)
-        print(#function)
-    }
+    
     
     func setAllConstraintsToParent(){
         setInitialConstraints()
         setUpViews()
         minimizedNowPlayingPreview.addGestureRecognizer(goUpRecognizer)
-        
         view.addGestureRecognizer(longPressGesture)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -83,39 +78,23 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     
    weak var currentlyPlayingSong: Song?
    
-    var topAnchorConstraint: NSLayoutConstraint!
-    
-    
-    
+
     var elasticDistance: CGFloat = 150
-    
-    
-    
     var musicViewEndingFrameCornerRadius: CGFloat = 10
-    
-    
     var endingMusicViewFrameSpaceFromTop: CGFloat = 20
-    
-    
     var lengthOfPan: CGFloat = 0
     
     
     var timer = Timer()
-    
-    
-    
-    
-    
     var musicViewIsMinimized = true
-    
     var iAmVisible = false
     
     
     
     
     
-    
-    
+    var topAnchorConstraint: NSLayoutConstraint!
+
     var albumCover_centerXConstraint: NSLayoutConstraint!
     var albumCover_topConstraint: NSLayoutConstraint!
     var albumCover_leftConstraint: NSLayoutConstraint!
@@ -195,7 +174,6 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     
     
     override func interfaceColorDidChange(to color: UIColor) {
-        
         artistAndAlbumLabel.textColor = color
         audioDevicesButton.tintColor = color
         audioDevicesButtonCover.tintColor = color
@@ -217,13 +195,13 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     }()
     
     
+    
     lazy var artistAndAlbumLabel: UILabel = {
         let x = UILabel()
         x.font = UIFont.systemFont(ofSize: 22)
         x.textColor = THEME_COLOR(asker: self)
         x.textAlignment = .center
         x.translatesAutoresizingMaskIntoConstraints = false
-
         return x
     }()
     
@@ -233,7 +211,7 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     lazy var rewindButton: MediaPlayingButton = {
         let x = MediaPlayingButton(buttonType: .rewind, imageSize: 40, circleSize: 70)
         x.translatesAutoresizingMaskIntoConstraints = false
-        x.action = {self.carryOutRewindingButtonTarget()}
+        x.action = { self.carryOutRewindingButtonTarget() }
         return x
     }()
     

@@ -78,13 +78,16 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
         do {
             data = try Data(contentsOf: location)
             let downloadItem = self.downloadTaskDict[downloadTask]!
-
+            print(data)
             do{
                 let _ = try AVAudioPlayer(data: data)
             } catch {
                 
                 dataTaskDidFinishWithError(error: error, task: downloadTask)
-                AppManager.displayErrorMessage(target: AppManager.shared.screen, message: "The video you attempted to download, titled \n\n'\(downloadItem.name)'\n\ncannot be played, possibly due to the data being corrupted. Please try again or delete.", completion: nil)
+                DispatchQueue.main.sync {
+                    AppManager.displayErrorMessage(target: AppManager.shared.screen, message: "Sorry, recently, because of issues out of the developer's controll, many Youtube Videos are unable to be downloaded, such as this one. Please try downloading a VEVO music video published before June 2018!", completion: nil)
+                }
+                
                 return
             }
             
@@ -275,7 +278,7 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
     
     
     func beginDownloadOf(_ video: YoutubeVideo){
-        
+        print("The Video ID of this video is: " + video.videoID)
         let title = "Song_Downloaded_With_Patricks_App"
         
         let url = URL(string: "https://cdn.mixload.co/get.php?id=\(video.videoID)&name=\(title)")!

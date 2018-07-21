@@ -289,13 +289,6 @@ struct Variations {
         
         
     }
-    
-   
-    
-    
-        
-   
-    
 }
 
 

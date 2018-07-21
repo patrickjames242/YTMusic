@@ -12,18 +12,7 @@ import MediaPlayer
 import UserNotifications
 
 
-func checkForDoubleVideo(videos: [YoutubeVideo], functionName: String){
-    
-//    for video in videos{
-//        let filteredVids = videos.filter{$0.videoID == video.videoID}
-//        
-//        if filteredVids.count > 1{
-//            print(functionName + " has attempted to return \(filteredVids.count) repeated videos. Here is the video that was repeated: \(video.name)")
-//        }
-//    }
-    
-    
-}
+
 
 
 // Learned how to do this from https://www.spaceotechnologies.com/fetch-youtube-videos-integrate-youtube-api-ios-app/
@@ -113,7 +102,6 @@ class YTAPIManager: NSObject {
                 return
             }
             
-            checkForDoubleVideo(videos: videoArray, functionName: #function)
             
             
             Downloader.main.beginDownloadOf(videoArray.first!)
@@ -172,7 +160,6 @@ class YTAPIManager: NSObject {
             if error != nil{
                 DispatchQueue.main.sync {
                     completion(YoutubeSearchResponse(videos: [], moreResultsCode: nil, error: error, searchText: searchText))
-                    
                 }
                 return
             }
@@ -180,9 +167,7 @@ class YTAPIManager: NSObject {
             
             if let data = data {
                 self.parseJSONFromYoutubeSearchResults(data: data, completion: { (videos, nextPageToken)  in
-                    
                     DispatchQueue.main.sync {
-                        checkForDoubleVideo(videos: videos, functionName: #function)
                         completion(YoutubeSearchResponse(videos: videos, moreResultsCode: nextPageToken, error: nil, searchText: searchText))
                     }
                 })
@@ -243,7 +228,6 @@ class YTAPIManager: NSObject {
             
             
             getVideosFromYT_IDs(youtubeIDs.elements) { (videos) in
-                checkForDoubleVideo(videos: videos, functionName: #function)
                 completion(videos, nextPageToken)
             }
             
@@ -269,7 +253,6 @@ class YTAPIManager: NSObject {
                     
                     let videos = videosToReturn.sorted { $0.1 < $1.1}.filter{$0.0 != nil}.map{$0.0!}
                     
-                    checkForDoubleVideo(videos: videos, functionName: #function)
                     completion(videos)
                 }
             }
@@ -288,7 +271,7 @@ class YTAPIManager: NSObject {
                 }
                 if data == nil{videosToReturn.append((nil, y)); return}
             
-                let newVideo = YoutubeVideo(data: data!)
+                let newVideo = YoutubeVideo(JSON_Data: data!)
                 
                 videosToReturn.append((newVideo, y))
                 

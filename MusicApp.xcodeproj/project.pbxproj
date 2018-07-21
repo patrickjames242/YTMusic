@@ -12,6 +12,8 @@
 		60057ADB20CB30E30024BFBC /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60057ADA20CB30E30024BFBC /* Notifications.swift */; };
 		600F7E8A203E2030009CF6BF /* NowPlayingVC_SongPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600F7E89203E2030009CF6BF /* NowPlayingVC_SongPlayer.swift */; };
 		60164FF7203A21D400A6B2B6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60164FF6203A21D400A6B2B6 /* Extensions.swift */; };
+		601AEC1920D1C28E00092215 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601AEC1820D1C28E00092215 /* CustomTabBarController.swift */; };
+		601AEC1B20D1CECB00092215 /* MiddleTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601AEC1A20D1CECB00092215 /* MiddleTextTableViewCell.swift */; };
 		601AF52B209E98B70014FA46 /* SongQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601AF522209E98B60014FA46 /* SongQueue.swift */; };
 		601AF52C209E98B70014FA46 /* NowPlayingInfoCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601AF523209E98B60014FA46 /* NowPlayingInfoCenter.swift */; };
 		601AF52D209E98B70014FA46 /* SearchAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601AF524209E98B70014FA46 /* SearchAPI.swift */; };
@@ -125,6 +127,8 @@
 		60057ADA20CB30E30024BFBC /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		600F7E89203E2030009CF6BF /* NowPlayingVC_SongPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingVC_SongPlayer.swift; sourceTree = "<group>"; };
 		60164FF6203A21D400A6B2B6 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		601AEC1820D1C28E00092215 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		601AEC1A20D1CECB00092215 /* MiddleTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiddleTextTableViewCell.swift; sourceTree = "<group>"; };
 		601AF522209E98B60014FA46 /* SongQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongQueue.swift; sourceTree = "<group>"; };
 		601AF523209E98B60014FA46 /* NowPlayingInfoCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowPlayingInfoCenter.swift; sourceTree = "<group>"; };
 		601AF524209E98B70014FA46 /* SearchAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAPI.swift; sourceTree = "<group>"; };
@@ -319,6 +323,7 @@
 				60AFFA4D2084CF0000FC0C6B /* SongEditorViewController.swift */,
 				6043DF1020977D780068101F /* SongQueueVisualizer.swift */,
 				6069299920990914008B0796 /* MenuBarViewController.swift */,
+				601AEC1820D1C28E00092215 /* CustomTabBarController.swift */,
 			);
 			path = "Reusable View Controllers";
 			sourceTree = "<group>";
@@ -457,22 +462,23 @@
 				6002F043209AB67100360063 /* Model */,
 				6002F03A209AB4C900360063 /* Mechanisms */,
 				6002F039209AB4BD00360063 /* Views */,
-				605876A8203F92D6003E4799 /* Useless Crap */,
+				605876A8203F92D6003E4799 /* Supporting Files */,
 			);
 			path = MusicApp;
 			sourceTree = "<group>";
 		};
-		605876A8203F92D6003E4799 /* Useless Crap */ = {
+		605876A8203F92D6003E4799 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				605876A920406447003E4799 /* Colors.swift */,
 				604E0DDE2034953200F0A5B8 /* MusicApp.xcdatamodeld */,
 				603CE0502065A50E00BDD5D6 /* NVActivityIndicatorView */,
+				6044AC4E20AB881600E013F5 /* PlaybackHistory.swift */,
+				605876A920406447003E4799 /* Colors.swift */,
 				604E0DE32034953200F0A5B8 /* LaunchScreen.storyboard */,
 				60989F25205DF4DC006E998B /* Assets.xcassets */,
 				604E0DE62034953200F0A5B8 /* Info.plist */,
 			);
-			path = "Useless Crap";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		60ACCB4820ACEE2C009344AE /* Database Wrappers */ = {
@@ -482,7 +488,6 @@
 				60C774BA20A63E1A00F24C0E /* DownloadItem.swift */,
 				606AF59D209D552300F45E11 /* SearchHistory.swift */,
 				60ACCB4620ACEDC5009344AE /* AudioPanning.swift */,
-				6044AC4E20AB881600E013F5 /* PlaybackHistory.swift */,
 				60F2431320A79969007085E6 /* ColorManager.swift */,
 			);
 			path = "Database Wrappers";
@@ -496,6 +501,7 @@
 				60EECBA5209FA14500853741 /* GeneralSettingsTableView.swift */,
 				60EECBA7209FC85500853741 /* AudioPanningTableView.swift */,
 				604D758520A9ECD600AE56D0 /* ColorChooserView.swift */,
+				601AEC1A20D1CECB00092215 /* MiddleTextTableViewCell.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -580,6 +586,7 @@
 			files = (
 				6068CD6120CE96860074B88B /* MinimizedNowPlayingPreview.swift in Sources */,
 				603CE09D2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallRotateChase.swift in Sources */,
+				601AEC1920D1C28E00092215 /* CustomTabBarController.swift in Sources */,
 				60C959CD20922B7D00DA0E9C /* ProgresSlider.swift in Sources */,
 				607709C9205955AC00CB5940 /* SearchResultsView.swift in Sources */,
 				6044CC4E209B2BEA00B5B1E3 /* ScrollBar.swift in Sources */,
@@ -589,6 +596,7 @@
 				603CE0AD2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallPulseRise.swift in Sources */,
 				603CE0952065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallZigZagDeflect.swift in Sources */,
 				603CE0902065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallClipRotate.swift in Sources */,
+				601AEC1B20D1CECB00092215 /* MiddleTextTableViewCell.swift in Sources */,
 				60C774BB20A63E1A00F24C0E /* DownloadItem.swift in Sources */,
 				605876AA20406447003E4799 /* Colors.swift in Sources */,
 				603CE08E2065A50E00BDD5D6 /* NVActivityIndicatorAnimationBallRotate.swift in Sources */,
@@ -808,7 +816,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N44KF5BXBU;
-				INFOPLIST_FILE = "$(SRCROOT)/MusicApp/Useless Crap/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/MusicApp/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PracticeProjects.MusicApp;
@@ -826,7 +834,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N44KF5BXBU;
-				INFOPLIST_FILE = "$(SRCROOT)/MusicApp/Useless Crap/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/MusicApp/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PracticeProjects.MusicApp;

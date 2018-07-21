@@ -143,6 +143,7 @@ fileprivate class CircleInteractor{
     }
     
     private func animateCircle(at point: CGPoint){
+        
         self.circle.alpha = 0.4
         circle.center = point
         UIView.animate(withDuration: 0.4, delay: 0, options: .allowUserInteraction, animations: {
@@ -160,6 +161,7 @@ fileprivate class CircleInteractor{
     
     private lazy var circle: MyView = {
         let x = MyView()
+        x.isUserInteractionEnabled = false
         x.alpha = 0
         x.backgroundColor = .lightGray
         x.layer.masksToBounds = true
@@ -173,6 +175,7 @@ fileprivate class CircleInteractor{
     private lazy var highlightView: UIView = {
         let x = UIView()
         x.alpha = 0
+        x.isUserInteractionEnabled = false
         x.backgroundColor = .lightGray
         return x
     }()
@@ -352,7 +355,7 @@ class CircleInteractionTableViewCell: UITableViewCell{
         circleInteractor.respondToTouchesCancelled(touches, with: event)
 
     }
-    
+
     
     
     

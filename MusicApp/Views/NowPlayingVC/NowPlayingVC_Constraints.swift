@@ -39,7 +39,7 @@ extension NowPlayingViewController {
     func setMinimizedConstraints() {
         
         parentView.layoutIfNeeded()
-        let minimizedViewHeight = AppManager.minimizedMusicViewHeight + AppManager.tabBarHeight
+        let minimizedViewHeight = AppManager.minimizedMusicViewHeight + AppManager.tabBarHeight + APP_INSETS.bottom
         topAnchorConstraint.constant = parentView.frame.height - minimizedViewHeight
         parentView.layoutIfNeeded()
     }

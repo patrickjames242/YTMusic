@@ -20,7 +20,7 @@ protocol SearchHistoryDelegate{
 
 
 
-class DBHistory{
+class YTSearchHistory{
     
     
     private static let searchHistoryKey = "SEARCH HISTORY KEY"
@@ -77,23 +77,18 @@ class DBHistory{
     
     
     private static func saveHistory(){
-        
         UserDefaults.standard.set(_searchHistory!.data!, forKey: searchHistoryKey)
-        
     }
     
     
     
     
     private static func initialize_searchHistory_ifNeeded(){
-        if _searchHistory != nil{return}
+        if _searchHistory != nil { return }
         if let data = UserDefaults.standard.value(forKey: searchHistoryKey) as? Data,
             let history = SearchHistoryList(data: data){
-            
             self._searchHistory = history
-            
         } else {
-            
             let newHistoryList = SearchHistoryList()
             UserDefaults.standard.set(newHistoryList.data!, forKey: searchHistoryKey)
             _searchHistory = newHistoryList

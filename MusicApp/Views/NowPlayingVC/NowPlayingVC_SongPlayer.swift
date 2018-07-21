@@ -217,9 +217,7 @@ extension NowPlayingViewController: SongQueueDelegate{
     
     func setUpMusicPlayer(withSong song: Song, userHandPicked: Bool, playWhenSetted: Bool, animated: Bool) {
         var shouldIAnimatePlayButtonWhenImDone = animated
-        
     
-        
         
         
         // CARRIED OUT IF THE USER CHOSE THE SONG BY HAND
@@ -265,7 +263,7 @@ extension NowPlayingViewController: SongQueueDelegate{
         
         
         songPlayer.delegate = self
-        songPlayer.pan = DBPanning.audioPanningPositionToUse
+        songPlayer.pan = AudioPanning.audioPanningPositionToUse
         
         if userHandPicked{ songQueue.songWasChosenByHand(song: song)}
         
@@ -476,7 +474,6 @@ extension NowPlayingViewController: SongQueueDelegate{
     
     
     
-    
     func activateAllSongPlayingFeatures(){
         
         songQueue = SongQueue()
@@ -490,13 +487,15 @@ extension NowPlayingViewController: SongQueueDelegate{
         controller.nextTrackCommand.isEnabled = true
         controller.changePlaybackPositionCommand.isEnabled = true
         
-    
+        
+
         controller.playCommand.addTarget(self, action: #selector(respondToNowPlaying_Play_Button))
         controller.pauseCommand.addTarget(self, action: #selector(respondToNowPlaying_Pause_Button))
         controller.previousTrackCommand.addTarget(self, action: #selector(carryOutRewindingButtonTarget))
         controller.togglePlayPauseCommand.addTarget(self, action: #selector(carryOutPlayPauseButtonTarget))
         controller.nextTrackCommand.addTarget(self, action: #selector(carryOutFastForwardButtonTarget))
         controller.changePlaybackPositionCommand.addTarget(self, action: #selector(respondToMPRemoteCommandCenter__ChangePositionCommand))
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(respondToAudioRouteDidChangeNotification(notification:)), name: Notification.Name.AVAudioSessionRouteChange, object: nil)
         
@@ -512,7 +511,7 @@ extension NowPlayingViewController: SongQueueDelegate{
         
         guard let player = songPlayer else {return}
         
-        player.pan = DBPanning.audioPanningPositionToUse
+        player.pan = AudioPanning.audioPanningPositionToUse
     }
     
     func deactivateAudioSession(){

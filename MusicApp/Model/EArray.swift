@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+
+
+///E stands for efficient 😁
 class EArray<Element>{
     
     private var storage = [Int: Element]()
@@ -17,8 +20,7 @@ class EArray<Element>{
         self.add(contentsOf: array)
     }
     
-    init(){
-    }
+    init() { }
     
     var elements: [Element]{
         if storage.isEmpty { return [] }

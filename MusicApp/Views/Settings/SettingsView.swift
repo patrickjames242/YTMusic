@@ -87,7 +87,6 @@ fileprivate class _SettingsViewController: SafeAreaObservantTableViewController,
         
         [
             SettingsCell(text: "Report a Bug", type: SettingsCellIconType.bug),
-            
             SettingsCell(text: "Give Feedback", type: SettingsCellIconType.feedback),
             
             ],
@@ -267,17 +266,13 @@ fileprivate class SettingsCell: UITableViewCell{
     
     private lazy var label: UILabel = {
         let x = UILabel()
-        
         return x
-        
     }()
     
     private lazy var iconImageView: UIImageView = {
         let x = UIImageView()
         x.contentMode = .scaleAspectFit
         return x
-        
-        
     }()
     
     
@@ -295,17 +290,6 @@ fileprivate class SettingsCell: UITableViewCell{
         
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
- 
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError()

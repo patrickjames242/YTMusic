@@ -10,7 +10,13 @@
 import UIKit
 import SafariServices
 
-
+extension UIStackView{
+    
+    func removeAllArangedSubviews(){
+        arrangedSubviews.forEach{self.removeArrangedSubview($0)}
+    }
+    
+}
 
 class WeakWrapper<Value: AnyObject>: NSObject{
 

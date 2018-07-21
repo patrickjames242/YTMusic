@@ -27,10 +27,10 @@ extension YoutubeVideo{
     
     
     
-    convenience init?(data: Data){
+    convenience init?(JSON_Data: Data){
         do{
             
-            guard let result = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary else {return nil}
+            guard let result = try JSONSerialization.jsonObject(with: JSON_Data, options: .mutableContainers) as? NSDictionary else {return nil}
             
             guard let items = result["items"] as? Array<NSDictionary> else {return nil}
             

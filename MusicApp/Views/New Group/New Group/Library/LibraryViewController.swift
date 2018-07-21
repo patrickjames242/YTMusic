@@ -40,9 +40,11 @@ class LibraryViewController: UIViewController {
         }
         
         
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveLinear, animations: {
+        
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.85, initialSpringVelocity: 1, options: .curveLinear, animations: {
             self.scrollView.contentOffset = desiredOffset
         })
+        
         
     }
     

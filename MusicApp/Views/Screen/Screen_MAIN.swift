@@ -11,21 +11,32 @@ import MediaPlayer
 import Foundation
 
 
-class Screen: PortraitViewController, CustomTabBarDelegate{
+class Screen: CustomTabBarController {
 
     
     
-    
+    override init(){
+        super.init()
+        setItems(items: [songItem, searchItem, downloadsItem, settingsItem])
+        
+        
+    }
     
     //MARK: - CHILD VIEW CONTROLLERS
     
     
-    let libraryView = LibraryViewController()
-    let settingsView = SettingsViewController()
-    let downloadsView = DownloadHistoryViewController()
-    let searchView = YoutubeSearchViewController()
+    let libraryVC = LibraryViewController()
+    let settingsVC = SettingsViewController()
+    let downloadsVC = DownloadHistoryViewController()
+    let searchVC = YoutubeSearchViewController()
 
-    lazy var nowPlayingView = NowPlayingViewController()
+    lazy var songItem = CustomTabBarItem(tag: 1, image: #imageLiteral(resourceName: "note"), viewController: libraryVC)
+    lazy var searchItem = CustomTabBarItem(tag: 2, image: #imageLiteral(resourceName: "search"), viewController: searchVC)
+    lazy var downloadsItem = CustomTabBarItem(tag: 3, image: #imageLiteral(resourceName: "downloadIcon"), viewController: downloadsVC, imagePadding: UIEdgeInsets(top: 6))
+    lazy var settingsItem = CustomTabBarItem(tag: 4, image: #imageLiteral(resourceName: "settingsIcon"), viewController: settingsVC)
+    
+    
+    lazy var nowPlayingVC = NowPlayingViewController()
     
 
     
@@ -35,19 +46,10 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
         super.viewDidLoad()
         
         
-        addChildViewController(libraryView)
-        addChildViewController(searchView)
-        addChildViewController(downloadsView)
-        addChildViewController(settingsView)
-        addChildViewController(nowPlayingView)
+        addChildViewController(nowPlayingVC)
         
-        
-        view.addSubview(holderView)
-        view.addSubview(nowPlayingView.view)
-        view.addSubview(tabBar)
-        holderView.pinAllSidesTo(view)
-        
-        nowPlayingView.setAllConstraintsToParent()
+        view.addSubview(nowPlayingVC.view)
+        nowPlayingVC.setAllConstraintsToParent()
 
 
         view.backgroundColor = .black
@@ -106,148 +108,29 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
     
     
     
-    lazy var holderView: UIView = {
-       let x = UIView(frame: view.bounds)
-        x.layer.masksToBounds = true
-        x.backgroundColor = .white
-        x.translatesAutoresizingMaskIntoConstraints = false
-        
-        x.addSubview(settingsView.view)
-        x.addSubview(searchView.view)
-        x.addSubview(downloadsView.view)
-        x.addSubview(shadeView)
-        x.addSubview(libraryView.view)
-        
-        shadeView.pinAllSidesTo(x)
-        libraryView.view.pinAllSidesTo(x)
-        searchView.view.pinAllSidesTo(x)
-        downloadsView.view.pinAllSidesTo(x)
-        settingsView.view.pinAllSidesTo(x)
-        
-        
-        return x
-        
-    }()
     
-
-    
-    
-    
-    override func interfaceColorDidChange(to color: UIColor) {
-        tabBar.tintColor = color
-    }
-    
-
-    
-    
-    
-    lazy var songItem = CustomTabBarItem(tag: 1, image: #imageLiteral(resourceName: "note"), viewController: self.libraryView)
-    lazy var searchItem = CustomTabBarItem(tag: 2, image: #imageLiteral(resourceName: "search"), viewController: self.searchView)
-    lazy var downloadsItem = CustomTabBarItem(tag: 3, image: #imageLiteral(resourceName: "downloadIcon"), viewController: self.downloadsView, imagePadding: UIEdgeInsets(top: 6))
-    
-    lazy var settingsItem = CustomTabBarItem(tag: 4, image: #imageLiteral(resourceName: "settingsIcon"), viewController: self.settingsView)
-
-    
-    
-    lazy var tabBar: CustomTabBar = {
-        let x = CustomTabBar(items: [songItem, searchItem, downloadsItem, settingsItem], delegate: self)
-        x.tintColor = THEME_COLOR(asker: self)
-        return x
-        
-    }()
-    
-
-    private lazy var shadeView: UIView = {
-        let x = UIView()
-        x.backgroundColor = .white
-        x.translatesAutoresizingMaskIntoConstraints = false
-        return x
-    }()
-
-    
-    
-    
-    
-    
-    
-   
-    
-    
-    
+  
     var preferredCornerRadius: CGFloat = 13
     
     
     
-    
-    
-
-
-
-    
-    
-    
-
-
-    
-    
     //MARK: - SWITCHING BETWEEN TAB BAR ITEMS
     
-    func customTabBar(tabBar: CustomTabBar, itemWasSelected newItem: CustomTabBarItem, oldItem: CustomTabBarItem?, animationFinishedBlock: @escaping () -> Void) {
-        
-        let timer = Timer(timeInterval: 0.3, repeats: false) { (timer) in
-            animationFinishedBlock()
-            timer.invalidate()
+  
+    override func itemTappedSameAsCurrentlyDisplayedItem(item: CustomTabBarItem) {
+        super.itemTappedSameAsCurrentlyDisplayedItem(item: item)
+        let itemView = item.view
+        if itemView === searchVC.view{
+            searchVC.popToRootViewController(animated: true)
+        } else if itemView === settingsVC.view{
+            settingsVC.popToRootViewController(animated: true)
+        } else if itemView === libraryVC.view{
+            libraryVC.page()
         }
-        
-        RunLoop.current.add(timer, forMode: .commonModes)
-        
-        let newView = newItem.view
-        let oldView = oldItem!.view
-        
-        if newView === oldView {
-            if newView === searchView.view{
-                searchView.popToRootViewController(animated: true)
-            } else if newView === settingsView.view{
-                settingsView.popToRootViewController(animated: true)
-            } else if newView === libraryView.view{
-                libraryView.page()
-            }
-            return
-        }
-        
-
-        let viewShouldEnterFromLeft = newItem.tag < oldItem!.tag
-        
-        
-        holderView.bringSubview(toFront: shadeView)
-        holderView.bringSubview(toFront: oldView)
-        holderView.bringSubview(toFront: newView)
-        newView.alpha = 0
-        newView.transform = CGAffineTransform(translationX: (viewShouldEnterFromLeft) ? -170 : 170, y: 0)
-        let oldViewEndingXPosition: CGFloat = (viewShouldEnterFromLeft) ? 170 : -170
-        
-        
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            oldView.alpha = 0
-            oldView.transform = CGAffineTransform(translationX: oldViewEndingXPosition, y: 0)
-            
-            newView.transform = CGAffineTransform.identity
-            newView.alpha = 1
-            
-            
-        }, completion: { (success) in
-            
-            oldView.alpha = 1
-            oldView.transform = CGAffineTransform.identity
-            self.holderView.bringSubview(toFront: self.shadeView)
-            self.holderView.bringSubview(toFront: newView)
-            animationFinishedBlock()
-            
-        })
-        
         
         
     }
+    
     
 
     
@@ -261,10 +144,10 @@ class Screen: PortraitViewController, CustomTabBarDelegate{
    
     
     
-    func showtabBarItem(tag: Int){
-        tabBar.selectItem(with: tag)
-        
-        
+ 
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init coder has not been implemented")
     }
 
  

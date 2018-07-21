@@ -89,9 +89,7 @@ class DownloadItem: NSObject{
     
 
 
-    deinit{
-
-        
+    deinit {
         print("A downloadItem has been been deinitialized")
     }
 
@@ -99,16 +97,15 @@ class DownloadItem: NSObject{
     
 
     
-    var name: String{ return object.name!}
-    var channelName: String{ return object.channelName!}
-    var ytVideoID: String{ return object.ytID!}
-    var startDate: Date{ return object.dateStarted!}
+    var name: String { return object.name!}
+    var channelName: String { return object.channelName!}
+    var ytVideoID: String { return object.ytID!}
+    var startDate: Date { return object.dateStarted!}
     var uniqueID: String
     private var _runTimeStatus: DownloadStatus
     
     var runTimeStatus: DownloadStatus{
         return _runTimeStatus
-        
     }
     
     var storageStatus: DBDownloadItemStatus{
@@ -188,12 +185,9 @@ class DownloadItem: NSObject{
     
     func deleteResumeData(){
         if let dataObject = DBManager.getDBDataObjectFor(downloadItem: object){
-            
             Database.context.delete(dataObject)
             Database.saveContext()
-            
         }
-        
     }
     
     
@@ -251,11 +245,8 @@ class DownloadItem: NSObject{
                 self._storageStatus = .changing
             }
         }
-        
         self._runTimeStatus = newStatus
-        
         delegate?.DLStatusDidChangeTo(newStatus)
-        
     }
     
     
@@ -352,9 +343,6 @@ class DownloadItem: NSObject{
             self._runTimeStatus = DownloadStatus.canceled(DBObject.dateFinished!)
         }
         super.init()
-
-        
-
     }
 }
 
@@ -418,16 +406,6 @@ fileprivate final class DBManager {
     
     private static let context = Database.context
     private static func saveContext() { Database.saveContext() }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     

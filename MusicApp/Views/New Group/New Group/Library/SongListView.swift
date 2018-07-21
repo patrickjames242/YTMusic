@@ -25,7 +25,7 @@ class SongListViewController: StandardAppNavigationController{
     }
     
     
-    private var mainController = PrivateSongListViewController()
+    private var mainController = _SongListViewController()
     
     override var mainViewController: UIViewController{
         return mainController
@@ -45,7 +45,7 @@ class SongListViewController: StandardAppNavigationController{
 
 //MARK: - SONG LIST VIEW
 
-fileprivate class PrivateSongListViewController: SafeAreaObservantTableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate{
+fileprivate class _SongListViewController: SafeAreaObservantTableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate, UISearchControllerDelegate{
     
     let cellID = "The Best cell everrrrr!!!!!"
     let headerID = "the Best HEADER EVERRRR!!!!! 😁😁"
@@ -369,10 +369,20 @@ fileprivate class PrivateSongListViewController: SafeAreaObservantTableViewContr
     }
     
     func scrollToCellOfSong(_ song: Song){
-        let songIndexPath = self.getIndexPathOf(song: song.object)
+        guard let songIndexPath = self.getIndexPathOf(song: song.object) else {return}
         
-        if songIndexPath == nil { return }
-        tableView.selectRow(at: songIndexPath!, animated: true, scrollPosition: .middle)
+        
+        tableView.selectRow(at: songIndexPath, animated: true, scrollPosition: .middle)
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (timer) in
+            if let cell = self.tableView.cellForRow(at: songIndexPath) as? CircleInteractionTableViewCell{
+                cell.highlight()
+                timer.invalidate()
+            }
+        }
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { (timer2) in
+            timer.invalidate()
+            timer2.invalidate()
+        }
         
     }
     

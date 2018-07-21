@@ -9,7 +9,7 @@
 import Foundation
 
 
-class DBPanning{
+class AudioPanning{
     
     private static let audioPanningPositionKey = "audio Panning position"
     private static let audioPanningToggleKey = "audio panning toggle"

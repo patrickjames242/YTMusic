@@ -12,7 +12,7 @@ extension Screen: NowPlayingViewControllerDelegate{
     
     
     func delegate_Stuff_To_Be_Done_In_ViewDidLoad(){
-        self.nowPlayingView.delegate = self
+        self.nowPlayingVC.delegate = self
         
     }
     
@@ -43,8 +43,6 @@ extension Screen: NowPlayingViewControllerDelegate{
         
         self.desiredStatusBarStyle = .lightContent
         setNeedsStatusBarAppearanceUpdate()
-//        self.snapshotView = self.holderView.snapshotView(afterScreenUpdates: true)
-//        self.holderView.addSubview(self.snapshotView)
         
         UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
             
@@ -55,12 +53,12 @@ extension Screen: NowPlayingViewControllerDelegate{
             let topSpace = (self.view.frame.height - (self.view.frame.height * yTranslation)) / 2
             let remainingSpace = self.holderViewMinimizedFrame.minY - topSpace
             
-            self.holderView.transform = scaleTransform.translatedBy(x: 0, y: remainingSpace)
+            self.viewHolder.transform = scaleTransform.translatedBy(x: 0, y: remainingSpace)
             
             
             
-            self.holderView.layer.cornerRadius = 10
-            self.holderView.alpha = 0.7
+            self.viewHolder.layer.cornerRadius = 10
+            self.viewHolder.alpha = 0.7
         }, completion: nil)
         self.dismissTabBar()
         
@@ -70,40 +68,21 @@ extension Screen: NowPlayingViewControllerDelegate{
     func userDidMinimizeNowPlayingView() {
         self.desiredStatusBarStyle = .default
         setNeedsStatusBarAppearanceUpdate()
-//        self.snapshotView.removeFromSuperview()
-//        self.snapshotView = nil
-//
-//        UIView.animate(withDuration: 0.5, animations:{
-//           self.snapshotView.alpha = 0
-//        }, completion: { (success) in
-//
-//        })
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             
-            self.holderView.center = self.view.centerInFrame
+            self.viewHolder.center = self.view.centerInFrame
             
-            self.holderView.transform = CGAffineTransform.identity
-            self.holderView.center = self.view.centerInBounds
-            self.holderView.layer.cornerRadius = 0
-            self.holderView.alpha = 1
+            self.viewHolder.transform = CGAffineTransform.identity
+            self.viewHolder.center = self.view.centerInBounds
+            self.viewHolder.layer.cornerRadius = 0
+            self.viewHolder.alpha = 1
             
         })
         self.showTabBar()
         
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
 
 

@@ -205,7 +205,6 @@ class SearchResultsTableView: SafeAreaObservantTableViewController, SearchResult
             return
         }
         
-        checkForDoubleVideo(videos: response.videos, functionName: #function)
     
         if response.videos.isEmpty {
             if isAdditionalResults{return}

@@ -102,7 +102,7 @@ class AppManager: NSObject{
     
     
     private var musicView: NowPlayingViewController{
-        return screen.nowPlayingView
+        return screen.nowPlayingVC
     }
     
     
@@ -291,7 +291,7 @@ class AppManager: NSObject{
         guard let song = item.song else {return}
         
         AppManager.shared.screen.showtabBarItem(tag: 1)
-        AppManager.shared.screen.libraryView.scrollToCellOf(song: song)
+        AppManager.shared.screen.libraryVC.scrollToCellOf(song: song)
         
     }
     
@@ -602,7 +602,7 @@ class AppManager: NSObject{
     @objc private static func respondToSearchButtonTapped(){
         
         AppManager.shared.screen.showtabBarItem(tag: 2)
-        AppManager.shared.screen.searchView.popToRootViewController(animated: true)
+        AppManager.shared.screen.searchVC.popToRootViewController(animated: true)
         
         
     }

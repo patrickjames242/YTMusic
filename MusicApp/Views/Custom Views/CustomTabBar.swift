@@ -53,21 +53,41 @@ protocol CustomTabBarDelegate: class{
 class CustomTabBar: UIView,  CustomTabBarImageViewDelegate{
     
     
-    init(items: [CustomTabBarItem], delegate: CustomTabBarDelegate){
-        self.items = items
+    init(delegate: CustomTabBarDelegate){
+        
         self.delegate = delegate
 
         super.init(frame: CGRect.zero)
         
         clipsToBounds = true
         backgroundColor = .white
+        
     }
+ 
+    
+    func setItems(items: [CustomTabBarItem]){
+        self.items = items
+        setUpImagesStackView(for: self.items)
+        
+    }
+    
     
     private weak var delegate: CustomTabBarDelegate?
     
-    private let items: [CustomTabBarItem]
+    private(set) var items: [CustomTabBarItem] = []
     
     private let barHeight: CGFloat = 49
+    
+    private var imagesStackView = UIStackView()
+    
+    private var imageViews = [CustomTabBarImageView]()
+    
+    private var currentlySelectedItem: CustomTabBarItem?
+    
+    
+    
+    
+    
     
     private lazy var topLine: UIView = {
         let x = UIView()
@@ -90,22 +110,23 @@ class CustomTabBar: UIView,  CustomTabBarImageViewDelegate{
         
         pin(left: superview.leftAnchor, right: superview.rightAnchor, top: superview.safeAreaLayoutGuide.bottomAnchor, bottom: superview.bottomAnchor, insets: UIEdgeInsets(top: -barHeight))
 
-        addSubview(topLine)
-        topLine.pin(left: leftAnchor, right: rightAnchor, top: topAnchor, size: CGSize(height: 0.5))
         
+        setUpViews()
         setUpImagesStackView(for: items)
     }
     
     
     
-    private var imagesStackView = UIStackView()
+   
     
-    private var imageViews = [CustomTabBarImageView]()
-    
-    private func setUpImagesStackView(for items: [CustomTabBarItem]){
+    private func setUpViews(){
+        
+        addSubview(topLine)
+        topLine.pin(left: leftAnchor, right: rightAnchor, top: topAnchor, size: CGSize(height: 0.5))
+        
         
         let STACKVIEW_SIDE_INSET: CGFloat = 0
-
+        
         imagesStackView.distribution = .fillEqually
         imagesStackView.axis = .horizontal
         addSubview(imagesStackView)
@@ -113,14 +134,21 @@ class CustomTabBar: UIView,  CustomTabBarImageViewDelegate{
         
         imagesStackView.pin(left: leftAnchor, right: rightAnchor, top: topAnchor, bottom: superview!.safeAreaLayoutGuide.bottomAnchor, insets: UIEdgeInsets(left: STACKVIEW_SIDE_INSET, right: STACKVIEW_SIDE_INSET))
         
+    }
+    
+    
+    private func setUpImagesStackView(for items: [CustomTabBarItem]){
+        
+        imagesStackView.removeAllArangedSubviews()
+        imageViews = []
+        
+        currentlySelectedItem = nil
+        
         for item in items{
-            
             let imageView = CustomTabBarImageView(item: item, delegate: self)
             imagesStackView.addArrangedSubview(imageView)
             imageViews.append(imageView)
-            
         }
-        
         if let firstItem = imageViews.first{
             currentlySelectedItem = items.first!
             firstItem.select()
@@ -129,7 +157,9 @@ class CustomTabBar: UIView,  CustomTabBarImageViewDelegate{
     
     }
     
-    private var currentlySelectedItem: CustomTabBarItem?
+  
+    
+    
     
 
     

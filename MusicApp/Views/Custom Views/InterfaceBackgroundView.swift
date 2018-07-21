@@ -123,7 +123,7 @@ class ScrollableContentBackgroundView: UIView{
     @objc private func respondToSearchButtonTapped(){
         
         AppManager.shared.screen.showtabBarItem(tag: 2)
-        AppManager.shared.screen.searchView.popToRootViewController(animated: true)
+        AppManager.shared.screen.searchVC.popToRootViewController(animated: true)
         
         
     }
