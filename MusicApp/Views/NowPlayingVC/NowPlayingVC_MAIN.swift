@@ -570,40 +570,6 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
     // MARK: - TAP GESTURE RECOGNIZERS
     
     lazy var goUpRecognizer = UITapGestureRecognizer(target: self, action: #selector(liftUpMusicViewTapGestureSelectorFunction))
@@ -628,13 +594,4 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
         
     }
     
-    
-    
-    
-    
-    
-   
-    
-    
-
 }

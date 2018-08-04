@@ -89,13 +89,13 @@
 		607709C7205955A200CB5940 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607709C6205955A200CB5940 /* SearchView.swift */; };
 		607709C9205955AC00CB5940 /* SearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607709C8205955AC00CB5940 /* SearchResultsView.swift */; };
 		607709CB205955BA00CB5940 /* SongListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607709CA205955B900CB5940 /* SongListView.swift */; };
-		60989F26205DF4DD006E998B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60989F25205DF4DC006E998B /* Assets.xcassets */; };
 		60ACCB4720ACEDC5009344AE /* AudioPanning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ACCB4620ACEDC5009344AE /* AudioPanning.swift */; };
 		60AE9BA320BF4C4F00A54568 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AE9BA220BF4C4F00A54568 /* CustomTabBar.swift */; };
 		60AFFA4E2084CF0000FC0C6B /* SongEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AFFA4D2084CF0000FC0C6B /* SongEditorViewController.swift */; };
 		60BF644C2059EA62001DE306 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BF644B2059EA62001DE306 /* DownloadsView.swift */; };
 		60C5389620C1EAAE00919E3F /* CircleInteractionCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C5389520C1EAAE00919E3F /* CircleInteractionCells.swift */; };
 		60C774BB20A63E1A00F24C0E /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C774BA20A63E1A00F24C0E /* DownloadItem.swift */; };
+		60C7D8AB2111C65100852450 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60989F25205DF4DC006E998B /* Assets.xcassets */; };
 		60C959CD20922B7D00DA0E9C /* ProgresSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C959CC20922B7D00DA0E9C /* ProgresSlider.swift */; };
 		60EECB9D209EA24200853741 /* Ugly_YoutubeVideo_JSONParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EECB9C209EA24200853741 /* Ugly_YoutubeVideo_JSONParsing.swift */; };
 		60EECBA2209FA10100853741 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EECBA1209FA10100853741 /* SettingsView.swift */; };
@@ -572,7 +572,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60989F26205DF4DD006E998B /* Assets.xcassets in Resources */,
+				60C7D8AB2111C65100852450 /* Assets.xcassets in Resources */,
 				604E0DE52034953200F0A5B8 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
