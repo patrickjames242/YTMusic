@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>youtubeID</key>
+            <string>7eiv5aElMZs</string>
+			<key>name</key>
+            <string>Over And Over Again</string>
+			<key>artistName</key>
+			<string>Nathan Sykes</string>
+		</dict>
+        
+        <dict>
+            <key>youtubeID</key>
+            <string>U41KPUfOSFk</string>
+            <key>name</key>
+            <string>Mirrors</string>
+            <key>artistName</key>
+            <string>Justin Timberlake</string>
+        </dict>
+        
+        <dict>
+            <key>youtubeID</key>
+            <string>AebsJPV2ZYM</string>
+            <key>name</key>
+            <string>Audio</string>
+            <key>artistName</key>
+            <string>Sia</string>
+        </dict>
+        
+        <dict>
+            <key>youtubeID</key>
+            <string>KsxTYrqHti8</string>
+            <key>name</key>
+            <string>Silence</string>
+            <key>artistName</key>
+            <string>Marshmello</string>
+        </dict>
+        
+        <dict>
+            <key>youtubeID</key>
+            <string>V5M2WZiAy6k</string>
+            <key>name</key>
+            <string>Natural</string>
+            <key>artistName</key>
+            <string>Imagine Dragons</string>
+        </dict>
+        
+        <dict>
+            <key>youtubeID</key>
+            <string>JDjTJ6lkb-8</string>
+            <key>name</key>
+            <string>Thunderclouds</string>
+            <key>artistName</key>
+            <string>Sia</string>
+        </dict>
+        
+        <dict>
+            <key>youtubeID</key>
+            <string>TdClcgeEnh4</string>
+            <key>name</key>
+            <string>Connection</string>
+            <key>artistName</key>
+            <string>OneRepublic</string>
+        </dict>
+        
+        <dict>
+            <key>youtubeID</key>
+            <string>bqIxCtEveG8</string>
+            <key>name</key>
+            <string>Beneath Your Beautiful</string>
+            <key>artistName</key>
+            <string>Labrynth</string>
+        </dict>
+        
+        <dict>
+            <key>youtubeID</key>
+            <string>j2WWrupMBAE</string>
+            <key>name</key>
+            <string>Who You Are</string>
+            <key>artistName</key>
+            <string>Jessie J</string>
+        </dict>
+        
+        <dict>
+            <key>youtubeID</key>
+            <string>hQy6zdyvA6A</string>
+            <key>name</key>
+            <string>She Don't Like The Lights</string>
+            <key>artistName</key>
+            <string>Justin Bieber</string>
+        </dict>
+	</array>
+</dict>
+</plist>
