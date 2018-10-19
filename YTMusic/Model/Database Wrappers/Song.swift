@@ -357,7 +357,6 @@ fileprivate final class DBManager{
     
     
     static func createAndSaveDBObject(from tempSong: TempDBSong, completion: ((DBSong) -> ())? = nil){
-        DispatchQueue.global(qos: .userInitiated).async {
             let identifier = NSUUID().uuidString
             
             let newDBSong = DBSong(context: context)
@@ -377,12 +376,11 @@ fileprivate final class DBManager{
             let newDBDAta = DBData(context: DBManager.context)
             newDBDAta.data = tempSong.audioData
             newDBDAta.identifier = identifier
-            DispatchQueue.main.async {
                 saveContext()
                 completion?(newDBSong)
-            }
+
             
-        }
+
     }
     
     

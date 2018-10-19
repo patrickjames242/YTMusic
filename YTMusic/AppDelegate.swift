@@ -18,8 +18,7 @@ var APP_INSETS = UIEdgeInsets.zero
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    private var player: AVPlayer!
-    private var audioPlayer: AVAudioPlayer!
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         DefaultMusic.configure()
