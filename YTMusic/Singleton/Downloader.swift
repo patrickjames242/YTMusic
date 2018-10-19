@@ -79,7 +79,7 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
             data = try Data(contentsOf: location)
             let downloadItem = self.downloadTaskDict[downloadTask]!
             do{ try FileManager.default.removeItem(at: location) } catch { print(error) }
-            
+
             do{
                 let _ = try AVAudioPlayer(data: data)
             } catch {
@@ -99,6 +99,7 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
                     downloadItem.changeStatusTo(.finished(song, Date()))
                     self.downloadTaskDict[downloadTask] = nil
                 }
+                
             }
             
             

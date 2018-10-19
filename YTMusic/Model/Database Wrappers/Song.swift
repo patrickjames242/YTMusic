@@ -195,9 +195,7 @@ class Song: NSObject {
         
     }
     
-    deinit {
-        print("A song oject was deinitted")
-    }
+
     
     
     

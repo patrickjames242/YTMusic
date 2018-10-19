@@ -89,9 +89,7 @@ class DownloadItem: NSObject{
     
 
 
-    deinit {
-        print("A downloadItem has been been deinitialized")
-    }
+
 
     
     
