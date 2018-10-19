@@ -86,7 +86,7 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
                 
                 dataTaskDidFinishWithError(error: error, task: downloadTask)
                 DispatchQueue.main.sync {
-                    AppManager.displayErrorMessage(target: AppManager.shared.screen, message: "Sorry, it seems the backend of this app has stopped working completely😞. It would seem Youtube's software engineers are very good at their jobs.", completion: nil)
+                    AppManager.displayErrorMessage(target: AppManager.shared.screen, message: "Sorry, an error occured when trying to download the song. Please try again later.", completion: nil)
                 }
                 
                 return
