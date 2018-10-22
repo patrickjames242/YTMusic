@@ -94,7 +94,6 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
             
             DispatchQueue.main.sync {
                 Song.createNew(from: downloadItem, songData: data){(song) in
-                    self.displayDownloadFinishedNotification()
                     
                     downloadItem.changeStatusTo(.finished(song, Date()))
                     self.downloadTaskDict[downloadTask] = nil
@@ -132,17 +131,7 @@ class Downloader: NSObject, URLSessionDownloadDelegate{
     }
     
     
-    private func displayDownloadFinishedNotification(){
-        let content = UNMutableNotificationContent()
-        content.title = "Download Complete"
-        content.body = "Now you can listen to your new song!!😆"
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: "downloadCompleteRequest", content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-    }
+
     
     
     
