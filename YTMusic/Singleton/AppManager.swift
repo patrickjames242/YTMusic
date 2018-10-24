@@ -60,7 +60,7 @@ class AppManager: NSObject{
     
     
     
-    private let APP_HAS_LAUNCHED_ALREADY_KEY = "APP HAS LAUNCHED ALREADY."
+//    private let APP_HAS_LAUNCHED_ALREADY_KEY = "APP HAS LAUNCHED ALREADY."
     
     
     
@@ -69,32 +69,23 @@ class AppManager: NSObject{
     func generateInterface() -> UIViewController{
         
         
-        if UserDefaults.standard.bool(forKey: self.APP_HAS_LAUNCHED_ALREADY_KEY) == false{
-            
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: false) {[weak self] (timer) in
-                guard let self = self else {return}
-                let alert = UIAlertController(title: "Hey There!", message: "Wecome To YTMusic! Unfortunately, the backend used for this app has been malfunctioning lately. As a result, most Youtube videos cannot be downloaded. Regardless, feel free to enjoy the fantastic UI and preinstalled music.", preferredStyle: .alert)
-                
-                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alert.addAction(action)
-                self.screen.present(alert, animated: true, completion: nil)
-                
-            }
-            UserDefaults.standard.set(true, forKey: self.APP_HAS_LAUNCHED_ALREADY_KEY)
-        }
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+//        if UserDefaults.standard.bool(forKey: self.APP_HAS_LAUNCHED_ALREADY_KEY) == false{
+//
+//            Timer.scheduledTimer(withTimeInterval: 1, repeats: false) {[weak self] (timer) in
+//                guard let self = self else {return}
+//                let alert = UIAlertController(title: "Hey There!", message: "Wecome To YTMusic! Unfortunately, the backend used for this app has been malfunctioning lately. As a result,  Youtube videos cannot be downloaded. Regardless, feel free to enjoy the fantastic UI and preinstalled music.", preferredStyle: .alert)
+//
+//                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+//                alert.addAction(action)
+//                self.screen.present(alert, animated: true, completion: nil)
+//
+//            }
+//            UserDefaults.standard.set(true, forKey: self.APP_HAS_LAUNCHED_ALREADY_KEY)
+//        }
+    
         return screen
     }
     
