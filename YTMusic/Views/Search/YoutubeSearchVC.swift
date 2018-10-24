@@ -51,7 +51,7 @@ fileprivate class _YoutubeSearchViewController: SafeAreaObservantTableViewContro
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        definesPresentationContext = true
         navigationItem.searchController = self.searchController
         //        searchController.searchBar.shadowImage = UIImage()
         
