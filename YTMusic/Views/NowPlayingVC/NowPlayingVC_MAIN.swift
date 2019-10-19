@@ -111,9 +111,9 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     
     lazy var minimizedNowPlayingPreview: MinimizedNowPlayingPreview = {
         let x = MinimizedNowPlayingPreview.init(nameLabelLeftInset:  10 + minimizedAlbumCover_Size.width + 9)
-        x.rewindButton.action = { self.carryOutRewindingButtonTarget()}
-        x.playPauseButton.action = {self.carryOutPlayPauseButtonTarget()}
-        x.fastForwardButton.action = {self.carryOutFastForwardButtonTarget()}
+        x.rewindButton.action = { self.performRewindButtonAction()}
+        x.playPauseButton.action = {self.performPlayPauseButtonAction()}
+        x.fastForwardButton.action = {self.performFastForwardButtonAction()}
         return x
     }()
     
@@ -211,7 +211,7 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     lazy var rewindButton: MediaPlayingButton = {
         let x = MediaPlayingButton(buttonType: .rewind, imageSize: 40, circleSize: 70)
         x.translatesAutoresizingMaskIntoConstraints = false
-        x.action = { self.carryOutRewindingButtonTarget() }
+        x.action = { self.performRewindButtonAction() }
         return x
     }()
     
@@ -221,7 +221,7 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
         let x = MediaPlayingButton(buttonType: .play_pause, imageSize: 50, circleSize: 70)
         x.translatesAutoresizingMaskIntoConstraints = false
         x.action = {
-            self.carryOutPlayPauseButtonTarget()
+            self.performPlayPauseButtonAction()
         }
      
         
@@ -236,7 +236,7 @@ class NowPlayingViewController: UIViewController, CustomSliderDelegate, AVAudioP
     lazy var fastForwardButton: MediaPlayingButton = {
         let x = MediaPlayingButton(buttonType: .fastForward, imageSize: 40, circleSize: 70)
         x.translatesAutoresizingMaskIntoConstraints = false
-        x.action = { self.carryOutFastForwardButtonTarget() }
+        x.action = { self.performFastForwardButtonAction() }
         return x
     }()
     

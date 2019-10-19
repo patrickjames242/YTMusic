@@ -935,7 +935,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/YTMusic/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = PracticeProjects.MusicApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.patrickhanna.PracticeProjects.MusicApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -953,7 +953,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/YTMusic/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = PracticeProjects.MusicApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.patrickhanna.PracticeProjects.MusicApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;

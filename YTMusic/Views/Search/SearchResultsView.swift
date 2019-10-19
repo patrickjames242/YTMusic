@@ -31,7 +31,7 @@ class SearchResultsTableView: SafeAreaObservantTableViewController, SearchResult
 
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        tableView.action
+        
         tableView.rowHeight = cellHeight
         tableView.separatorColor = .clear
         tableView.contentInset.top = -3

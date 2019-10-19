@@ -126,11 +126,11 @@ extension NowPlayingViewController: SongQueueDelegate{
     
     //MARK: - SELECTORS
     
-    @objc func carryOutRewindingButtonTarget(){
+    @objc func performRewindButtonAction(){
         rewindMusic(playWhenRewinded: (songPlayer.isPlaying) ? true : false)
     }
     
-    @objc func carryOutPlayPauseButtonTarget(){
+    @objc func performPlayPauseButtonAction(){
 
         if songPlayer.isPlaying{ pauseMusic() }
         else { playMusic() }
@@ -138,20 +138,20 @@ extension NowPlayingViewController: SongQueueDelegate{
         self.changePlayPauseButtonImagesTo(self.songIsPlaying ? .pause : .play)
 
     }
-    @objc func carryOutFastForwardButtonTarget(){
+    @objc func performFastForwardButtonAction(){
         fastForwardMusic(playWhenFastForwarded: songPlayer.isPlaying)
     }
     
     
     
     
-    @objc func respondToNowPlaying_Play_Button(){
+    @objc func carryOutNowPlaying_Play_ButtonAction(){
 
         self.playMusic()
         changePlayPauseButtonImagesTo(.pause)
     }
     
-    @objc func respondToNowPlaying_Pause_Button(){
+    @objc func carryOutNowPlaying_Pause_ButtonAction(){
 
         self.pauseMusic()
         changePlayPauseButtonImagesTo(.play)
@@ -406,10 +406,11 @@ extension NowPlayingViewController: SongQueueDelegate{
     
     
 
-    @objc private func respondToMPRemoteCommandCenter__ChangePositionCommand(event: MPChangePlaybackPositionCommandEvent){
+    @objc private func respondToMPRemoteCommandCenter__ChangePositionCommand(event: MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus{
         songPlayer.currentTime = event.positionTime
         scrubbingSlider.syncSliderPositionWith(playBackPosition: event.positionTime)
         minimizedNowPlayingPreview.progressBar.changeProgressTo(event.positionTime / songPlayer.duration)
+        return .success
     }
     
     
@@ -487,13 +488,29 @@ extension NowPlayingViewController: SongQueueDelegate{
         controller.nextTrackCommand.isEnabled = true
         controller.changePlaybackPositionCommand.isEnabled = true
         
+        enum CommandActionType{
+            case play, pause, rewind, play_pause, fastforward
+        }
         
-
-        controller.playCommand.addTarget(self, action: #selector(respondToNowPlaying_Play_Button))
-        controller.pauseCommand.addTarget(self, action: #selector(respondToNowPlaying_Pause_Button))
-        controller.previousTrackCommand.addTarget(self, action: #selector(carryOutRewindingButtonTarget))
-        controller.togglePlayPauseCommand.addTarget(self, action: #selector(carryOutPlayPauseButtonTarget))
-        controller.nextTrackCommand.addTarget(self, action: #selector(carryOutFastForwardButtonTarget))
+        func getCommandAction(actionType: CommandActionType) -> (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus{
+            return {[weak self] event in
+                
+                switch actionType{
+                case .play: self?.carryOutNowPlaying_Play_ButtonAction()
+                case .pause: self?.carryOutNowPlaying_Pause_ButtonAction()
+                case .rewind: self?.performRewindButtonAction()
+                case .play_pause: self?.carryOutNowPlaying_Pause_ButtonAction()
+                case .fastforward: self?.performFastForwardButtonAction()
+                }
+                return .success
+            }
+        }
+        
+        controller.playCommand.addTarget(handler: getCommandAction(actionType: .play))
+        controller.pauseCommand.addTarget(handler: getCommandAction(actionType: .pause))
+        controller.previousTrackCommand.addTarget(handler: getCommandAction(actionType: .rewind))
+        controller.togglePlayPauseCommand.addTarget(handler: getCommandAction(actionType: .play_pause))
+        controller.nextTrackCommand.addTarget(handler: getCommandAction(actionType: .fastforward))
         controller.changePlaybackPositionCommand.addTarget(self, action: #selector(respondToMPRemoteCommandCenter__ChangePositionCommand))
         
         
