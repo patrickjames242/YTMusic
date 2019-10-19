@@ -39,10 +39,16 @@ extension Screen: NowPlayingViewControllerDelegate{
     
     //MARK: - MUSIC VIEW DELEGATE METHODS
     
+
+    
     func userDidMaximizeNowPlayingView(){
         
         self.desiredStatusBarStyle = .lightContent
         setNeedsStatusBarAppearanceUpdate()
+        
+        let snapshot = self.viewHolder.snapshotView(afterScreenUpdates: true)!
+        self.viewHolder.addSubview(snapshot)
+        self.currentHolderViewSnapshot = snapshot
         
         UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseIn, animations: {
             
@@ -55,14 +61,11 @@ extension Screen: NowPlayingViewControllerDelegate{
             
             self.viewHolder.transform = scaleTransform.translatedBy(x: 0, y: remainingSpace)
             
-            
-            
             self.viewHolder.layer.cornerRadius = 10
             self.viewHolder.alpha = 0.7
         }, completion: nil)
         self.dismissTabBar()
-        
-        
+    
     }
     
     func userDidMinimizeNowPlayingView() {
@@ -78,6 +81,9 @@ extension Screen: NowPlayingViewControllerDelegate{
             self.viewHolder.layer.cornerRadius = 0
             self.viewHolder.alpha = 1
             
+        }, completion: {_ in
+            self.currentHolderViewSnapshot?.removeFromSuperview()
+            self.currentHolderViewSnapshot = nil
         })
         self.showTabBar()
         

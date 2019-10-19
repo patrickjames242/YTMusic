@@ -14,24 +14,6 @@ import UIKit
 class AlbumImageView: UIView{
     
     
-    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        setUpViews()
-//
-//    }
-//
-//    override init(image: UIImage?) {
-//        super.init(image: image)
-//        setUpViews()
-//    }
-//
-//    override init(image: UIImage?, highlightedImage: UIImage?) {
-//        super.init(image: image, highlightedImage: highlightedImage)
-//        setUpViews()
-//
-//    }
-    
     init(){
         super.init(frame: CGRect.zero)
         setUpViews()

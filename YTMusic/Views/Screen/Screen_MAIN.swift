@@ -13,7 +13,7 @@ import Foundation
 
 class Screen: CustomTabBarController {
 
-    
+    var currentHolderViewSnapshot: UIView?
     
     override init(){
         super.init()

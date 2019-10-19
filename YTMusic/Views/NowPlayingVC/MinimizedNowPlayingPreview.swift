@@ -21,7 +21,7 @@ class MinimizedNowPlayingPreview: UIView{
     
     lazy var topLine: UIView = {
         let x = UIView()
-        x.backgroundColor = .lightGray
+        x.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
         x.translatesAutoresizingMaskIntoConstraints = false
         return x
     }()

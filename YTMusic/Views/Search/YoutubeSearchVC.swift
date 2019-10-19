@@ -51,17 +51,17 @@ fileprivate class _YoutubeSearchViewController: SafeAreaObservantTableViewContro
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        definesPresentationContext = true
-        navigationItem.searchController = self.searchController
-        //        searchController.searchBar.shadowImage = UIImage()
         
-       
+        navigationItem.searchController = self.searchController
+        
+        
+        
+        
         searchController.searchBar.delegate = self
         searchController.searchBar.tintColor = THEME_COLOR(asker: self)
         searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.hidesSearchBarWhenScrolling = false
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
         self.definesPresentationContext = false
         
         
@@ -69,26 +69,21 @@ fileprivate class _YoutubeSearchViewController: SafeAreaObservantTableViewContro
         
         let searchBar = searchController.searchBar
         
-        searchBar.placeholder = "Tap here to search"
-        let coverView = UIView()
-        coverView.translatesAutoresizingMaskIntoConstraints = false
-        coverView.backgroundColor = .white
-        searchBar.addSubview(coverView)
-        coverView.leftAnchor.constraint(equalTo: searchBar.leftAnchor).isActive = true
-        coverView.rightAnchor.constraint(equalTo: searchBar.rightAnchor).isActive = true
-        coverView.bottomAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 1).isActive = true
-        coverView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        searchBar.placeholder = "Type here to search"
         
         
         tableView.separatorColor = .white
         tableView.rowHeight = 60
         navigationItem.title = "Search Youtube"
         navigationItem.largeTitleDisplayMode = .always
+        
+        
+        
 
         suggestionBrain = SearchSuggestionsBrain(owner: self)
         
         tableView.register(SearchSuggestionsCell.self, forCellReuseIdentifier: cellID)
-        
+                
     }
     
 
