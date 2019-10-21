@@ -150,6 +150,15 @@ class AboutMeView: UIView {
 
 class AboutMeController: PortraitViewController, MFMailComposeViewControllerDelegate{
     
+    init(){
+        super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .fullScreen
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init coder has not being implemented")
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -157,6 +166,11 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
         
         setUpViews()
         
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
     }
     
@@ -171,7 +185,7 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
     
     private lazy var paragraphLabel: UILabel = {
         let x = UILabel()
-        x.text = "In addition to being a programming enthusiast in my spare time, I currently major in Accounting at the University of The Bahamas. Yep, that’s right, an Accounting major. So when I’m not gleefully bursting my brain over Xcode, Swift, and iOS development, I’m busy mulling over income statements, journal entries and balance sheets. \n\nThis app is the amalgamation of two months of hard work and endless Stack Overflow searches, and will be continuously improved as time goes on. I hope you’re thoroughly enjoying it!"
+        x.text = "In addition to being a programming enthusiast in my spare time, I currently major in Accounting at the University of The Bahamas. Yep, that’s right, an Accounting major. So when I’m not gleefully bursting my brain over Xcode, Swift, and iOS development, I’m busy mulling over income statements, journal entries and balance sheets. \n\nThis app is the result of two months of hard work and endless Stack Overflow searches, and will be continuously improved as time goes on. I hope you’re thoroughly enjoying it!"
         x.textAlignment = .center
         x.font = UIFont.systemFont(ofSize: 14)
         x.numberOfLines = 0
@@ -181,10 +195,7 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
         
         x.heightAnchor.constraint(equalToConstant: boundingRectHeight).isActive = true
         
-        
         return x
-        
-        
     }()
     
     

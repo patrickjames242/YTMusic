@@ -40,6 +40,8 @@ class YoutubeVideo {
     let thumbnailLink_highQuality: URL
     let thumbnailLink_lowQuality: URL
     
+    
+    
     init(name: String, videoID: String, channel: String, thumbnailLink_highQuality: URL,thumbnailLink_lowQuality: URL, duration: String, views: String, date: String) {
         self.thumbnailLink_highQuality = thumbnailLink_highQuality
         self.thumbnailLink_lowQuality = thumbnailLink_lowQuality
@@ -85,7 +87,7 @@ class YoutubeVideo {
         
         imageDownloadIsInProgress = true
         
-        let task = URLSession.shared.dataTask(with: thumbnailLink_lowQuality) { [weak weakSelf = self](data, response, error) in
+        let task = URLSession.shared.dataTask(with: thumbnailLink_lowQuality) { [weak weakSelf = self] (data, response, error) in
             guard let weakSelf = weakSelf else {return}
             weakSelf.imageDownloadIsInProgress = false
             

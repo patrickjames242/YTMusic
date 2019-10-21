@@ -72,7 +72,14 @@ extension Screen: NowPlayingViewControllerDelegate{
         self.desiredStatusBarStyle = .default
         setNeedsStatusBarAppearanceUpdate()
         
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
+        let animationDuration = 0.5
+        
+        Timer.scheduledTimer(withTimeInterval: animationDuration, repeats: false) {[weak self] _ in
+            self?.currentHolderViewSnapshot?.removeFromSuperview()
+            self?.currentHolderViewSnapshot = nil
+        }
+        
+        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             
             self.viewHolder.center = self.view.centerInFrame
             
@@ -81,9 +88,6 @@ extension Screen: NowPlayingViewControllerDelegate{
             self.viewHolder.layer.cornerRadius = 0
             self.viewHolder.alpha = 1
             
-        }, completion: {_ in
-            self.currentHolderViewSnapshot?.removeFromSuperview()
-            self.currentHolderViewSnapshot = nil
         })
         self.showTabBar()
         

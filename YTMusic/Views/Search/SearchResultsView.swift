@@ -15,7 +15,7 @@ import MediaPlayer
 
 class SearchResultsTableView: SafeAreaObservantTableViewController, SearchResultsTableViewCellDelegate {
 
-    private let searchResultsAmount = 50
+    private let searchResultsAmount = 20
 
     
     //MARK: - VIEW CONTROLLER LIFECYCLE
@@ -35,6 +35,7 @@ class SearchResultsTableView: SafeAreaObservantTableViewController, SearchResult
         tableView.rowHeight = cellHeight
         tableView.separatorColor = .clear
         tableView.contentInset.top = -3
+        tableView.contentInset.bottom = 100
         navigationItem.largeTitleDisplayMode = .never
         tableView.register(SearchResultsTableViewCell.self, forCellReuseIdentifier: cellID)
         
@@ -156,14 +157,14 @@ class SearchResultsTableView: SafeAreaObservantTableViewController, SearchResult
     
     func setSearchResultsWithText(_ text: String){
         navigationItem.title = text
-
-        YTAPIManager.main.getYoutubeSearchResultsWith(searchText: text, amount: searchResultsAmount) { [weak weakSelf = self] (youtubeResponse) in
-            if let weakSelf = weakSelf {
-                weakSelf.dealWithYoutubeVideoQueryResults(response: youtubeResponse)
-            }
-            
-            
+        
+      
+        
+        YTAPIManager.getSearchResultsFor(searchText: text, numberOfResults: searchResultsAmount) {[weak self] response in
+            self?.dealWithYoutubeVideoQueryResults(response: response)
         }
+
+        
         
     }
     
@@ -178,62 +179,70 @@ class SearchResultsTableView: SafeAreaObservantTableViewController, SearchResult
     
     private func getAdditionalResults(){
         guard let currentResponse = self.currentResponse else {return}
-        
-        YTAPIManager.main.getNextPageOfYoutubeSearchResults(using: currentResponse, amount: searchResultsAmount, completion: {self.dealWithYoutubeVideoQueryResults(response: $0, isAdditionalResults: true)})
-        
+
+        YTAPIManager.getSearchResultsFor(searchText: currentResponse.searchText, numberOfResults: searchResultsAmount, pageToken: currentResponse.moreResultsCode, completion: {
+            self.dealWithYoutubeVideoQueryResults(response: $0, isAdditionalResults: true)
+        })
     }
     
     
     func setRelatedVideosTo(vidID: String){
         
-        YTAPIManager.main.getRelatedVidoesTo(vidID: vidID) { [weak weakSelf = self] (youtubeResponse)  in
-            guard let weakSelf = weakSelf else {return}
-            weakSelf.dealWithYoutubeVideoQueryResults(response: youtubeResponse)
+        YTAPIManager.getRecommendedVideosForVideoWith(videoID: vidID, numberOfResults: searchResultsAmount) {[weak self] youtubeResponse in
+            self?.dealWithYoutubeVideoQueryResults(response: youtubeResponse.map{YoutubeSearchResponse(videos: $0, moreResultsCode: nil, searchText: "")})
         }
+
     }
     
     
     
-    private func dealWithYoutubeVideoQueryResults(response: YoutubeSearchResponse, isAdditionalResults: Bool = false){
+    private func dealWithYoutubeVideoQueryResults(response: CompletionResult<YoutubeSearchResponse>, isAdditionalResults: Bool = false){
+        
         removeProgressAnimator()
         
-        if response.error != nil{
+        switch response{
+        case .success(let videoResponse):
+            
+            guard videoResponse.videos.isEmpty == false else {
+                if isAdditionalResults{return}
+                AppManager.displayErrorMessage(target: self, message: "There are no videos to display."){
+                    self.navigationController?.popViewController(animated: true)
+                }
+                return
+            }
+        
+            self.currentResponse = videoResponse
+      
+
+            if isAdditionalResults{
+                videos.append(contentsOf: videoResponse.videos)
+                let offset = tableView.contentOffset
+                tableView.reloadData()
+                tableView.contentOffset = offset
+            } else {
+                tableView.beginUpdates()
+
+                videos = videoResponse.videos
+                let newIndices = Array<Int>(videos.indices)
+                tableView.insertRows(at: newIndices.map{IndexPath.init(row: $0, section: 0)}, with: .fade)
+                tableView.endUpdates()
+
+            }
+            
+        case .failure(let error):
             if isAdditionalResults{return}
-            AppManager.displayErrorMessage(target: self, message: response.error!.localizedDescription){
+            AppManager.displayErrorMessage(target: self, message: error.localizedDescription){
                 self.navigationController?.popViewController(animated: true)
             }
-            return
+            
         }
-        
-    
-        if response.videos.isEmpty {
-            if isAdditionalResults{return}
-            AppManager.displayErrorMessage(target: self, message: "There are no videos to display."){
-                self.navigationController?.popViewController(animated: true)
-            }
-            return
-        }
-        
-        
-        
-        
-        currentResponse = response
 
         
-        if isAdditionalResults{
-            videos.append(contentsOf: response.videos)
-            let offset = tableView.contentOffset
-            tableView.reloadData()
-            tableView.contentOffset = offset
-        } else {
-            tableView.beginUpdates()
 
-            videos = response.videos
-            let newIndices = Array<Int>(videos.indices)
-            tableView.insertRows(at: newIndices.map{IndexPath.init(row: $0, section: 0)}, with: .fade)
-            tableView.endUpdates()
 
-        }
+
+
+        
     }
     
     

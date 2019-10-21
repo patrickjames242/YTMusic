@@ -79,12 +79,14 @@ fileprivate class _DownloadHistoryViewController: SafeAreaObservantTableViewCont
         let pasteboardString: String? = UIPasteboard.general.string
         if let theString = pasteboardString {
             if let youtubeID = URLComponents(string: theString)?.queryItems?.first(where: { $0.name == "v" })?.value {
-                YTAPIManager.main.handleDownloadOfVideoWithID(ID: youtubeID)
+                #warning("fix this")
+//                YTAPIManager.main.handleDownloadOfVideoWithID(ID: youtubeID)
                 return
             }
             if theString.starts(with: "https://youtu.be/"){
                 let id = theString.replacingOccurrences(of: "https://youtu.be/", with: "")
-                YTAPIManager.main.handleDownloadOfVideoWithID(ID: id)
+                #warning("fix this")
+//                YTAPIManager.main.handleDownloadOfVideoWithID(ID: id)
                 return
             }
         }

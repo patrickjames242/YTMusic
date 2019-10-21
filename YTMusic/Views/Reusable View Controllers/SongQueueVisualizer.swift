@@ -26,6 +26,8 @@ class SongQueueVisualizer: UITableViewController{
         }
     }
     
+
+    
     
     
     private let type: SongQueueVisualizerType

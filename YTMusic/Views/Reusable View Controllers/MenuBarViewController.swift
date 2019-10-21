@@ -26,6 +26,8 @@ class MenuBarViewController: PortraitViewController, UIScrollViewDelegate, MenuB
         self.titleText = titleText
         self.menuBarItems = items
         super.init(nibName: nil, bundle: nil)
+        
+        modalPresentationStyle = .fullScreen
     }
     
 

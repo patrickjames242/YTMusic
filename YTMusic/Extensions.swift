@@ -554,20 +554,6 @@ extension String{
 
 
 
-//MARK: - YT VIDEO DURATION ALGORITHM EXTENSIONS
-
-extension Character{
-    var isNumber: Bool{
-        return CharacterSet(charactersIn: String(self)).isSubset(of: CharacterSet.decimalDigits)
-    }
-    
-    var isLetter: Bool{
-        return CharacterSet(charactersIn: String(self)).isSubset(of: CharacterSet.letters)
-    }
-}
-
-
-
 
 
 

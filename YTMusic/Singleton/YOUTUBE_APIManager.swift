@@ -15,341 +15,135 @@ import UserNotifications
 
 
 
-// Learned how to do this from https://www.spaceotechnologies.com/fetch-youtube-videos-integrate-youtube-api-ios-app/
-
-// Great JSON viewing site https://jsonformatter.curiousconcept.com
-
-
-// Youtube suggestion site https://shreyaschand.com/blog/2013/01/03/google-autocomplete-api/
-
-
-
-
 
 struct YoutubeSearchResponse{
     
     let videos: [YoutubeVideo]
     let moreResultsCode: String?
-    let error: Error?
-    let searchText: String?
+    let searchText: String
     
 }
 
 
-
-class YTAPIManager: NSObject {
-    static var main = YTAPIManager()
-    
-    
-    private let APIKey: NSString = "AIzaSyDXn6ZJ1Zi01Zlp8irQY0g_Z-WBgR7UDdc"
-    
+class YTAPIManager{
     
     
 
+    private static let apiKey = "AIzaSyDvO-B0N8F6yG_Yh2_7PiEpp1r9dTHiiaE"
     
+    static func getURLFor(string: String) -> URL?{
+        return URL(string: (string as NSString).addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!)
+    }
     
-    
-    // MARK: - GET RELATED VIDEOS
-    
-    
-    func getRelatedVidoesTo(vidID: String, completion: @escaping (YoutubeSearchResponse) -> Void){
+    static func getSearchResultsFor(searchText: String, numberOfResults: Int = 20, pageToken: String? = nil, completion: @escaping (CompletionResult<YoutubeSearchResponse>) -> ()){
+        let numberOfResults = max(min(numberOfResults, 50), 1)
         
-        let strURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=\(vidID)&type=video&key=\(APIKey)" as NSString
-
-        guard let urlString = strURL.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlFragmentAllowed), let url = URL(string: urlString) else {
-            completion(YoutubeSearchResponse(videos: [], moreResultsCode: nil, error: nil, searchText: nil))
-            return
+        var urlString = "https://www.googleapis.com/youtube/v3/search?key=\(self.apiKey)&part=snippet&maxResults=\(numberOfResults)&q=\(searchText)&type=video"
+        if let pageToken = pageToken{
+            urlString += "&pageToken=" + pageToken
         }
         
         
-        
-        activateYoutubeSearchDataTask(with: url, searchText: nil, completion: {completion($0)})
-        
-        
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    func handleDownloadOfVideoWithID(ID: String){
-        
-        getVideosFromYT_IDs([ID]) { (videoArray) in
-            if videoArray.isEmpty{
-                DispatchQueue.main.async {
 
-                AppManager.displayErrorMessage(target: AppManager.shared.screen, message: "A problem occured when attempting to download the video from your clipboard", completion: nil)
+        fetchJSON(url: getURLFor(string: urlString)!) { result in
+            switch result{
+            case .success(let data):
+                do{
+                    let (ids, nextPageToken) = try getVideoIdsAndNextPageTokenFrom(ytJsonResponse: data)
+                    
+                    fetchVideosForVideoIDs(ids: ids, completion: { result1 in
+                        completion(result1.map{
+                            YoutubeSearchResponse(videos: $0, moreResultsCode: nextPageToken, searchText: searchText)
+                        })
+                    })
+                    
+                } catch {
+                    completion(.failure(error))
                 }
-                return
+            case .failure(let error): completion(.failure(error))
             }
-            
-            
-            
-            Downloader.main.beginDownloadOf(videoArray.first!)
-            
         }
-        
     }
     
     
-    
-    
-    //MARK: - GET YOUTUBE SEARCH RESULTS
-    
-    
-    
-    
-    
-    
-    
-    func getNextPageOfYoutubeSearchResults(using previousResponse: YoutubeSearchResponse, amount: Int, completion: @escaping (YoutubeSearchResponse) -> Void){
+    static func getRecommendedVideosForVideoWith(videoID: String, numberOfResults: Int = 20, completion: @escaping (CompletionResult<[YoutubeVideo]>) -> ()){
+        let numberOfResults = max(min(numberOfResults, 50), 1)
         
-        guard let searchText = previousResponse.searchText, let pageToken = previousResponse.moreResultsCode else {
-            completion(YoutubeSearchResponse(videos: [], moreResultsCode: previousResponse.moreResultsCode, error: nil, searchText: previousResponse.searchText))
-            return
-        }
+        let urlString = "https://www.googleapis.com/youtube/v3/search?key=\(self.apiKey)&part=snippet&maxResults=\(numberOfResults)&type=video&relatedToVideoId=\(videoID)"
         
         
-        let url = prepareVideoSearchURLWith(amount: amount, searchText: searchText, previousNextPageToken: pageToken)
-        
-        activateYoutubeSearchDataTask(with: url, searchText: searchText, completion: {completion($0)})
-        
-        
-    }
-    
-    
-    
-    
-    
-    
-    
-    func getYoutubeSearchResultsWith(searchText: String, amount: Int, completion: @escaping (YoutubeSearchResponse) -> Void){
-        
-        let url = prepareVideoSearchURLWith(amount: amount, searchText: searchText)
-        
-        activateYoutubeSearchDataTask(with: url, searchText: searchText, completion: {completion($0)})
-        
-        
-    }
-    
-    
-    private func activateYoutubeSearchDataTask(with url: URL, searchText: String?, completion: @escaping (YoutubeSearchResponse) -> Void){
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            
-            
-            if error != nil{
-                DispatchQueue.main.sync {
-                    completion(YoutubeSearchResponse(videos: [], moreResultsCode: nil, error: error, searchText: searchText))
+        fetchJSON(url: getURLFor(string: urlString)!) { result in
+            switch result{
+            case .success(let data):
+                do{
+                    let (ids, _) = try getVideoIdsAndNextPageTokenFrom(ytJsonResponse: data)
+                    
+                    fetchVideosForVideoIDs(ids: ids, completion: completion)
+                    
+                } catch {
+                    completion(.failure(error))
                 }
-                return
+            case .failure(let error):
+                
+                completion(.failure(error))
             }
-            
-            
-            if let data = data {
-                self.parseJSONFromYoutubeSearchResults(data: data, completion: { (videos, nextPageToken)  in
-                    DispatchQueue.main.sync {
-                        completion(YoutubeSearchResponse(videos: videos, moreResultsCode: nextPageToken, error: nil, searchText: searchText))
-                    }
+        }
+    }
+    
+    static func getVideoFor(videoId: String, completion: @escaping (CompletionResult<YoutubeVideo>) -> ()){
+        let urlString = "https://www.googleapis.com/youtube/v3/videos?key=\(self.apiKey)&part=id,snippet,statistics,contentDetails&id=\(videoId)"
+        
+        fetchJSON(url: getURLFor(string: urlString)!) { response in
+            completion(response.flatMap({ data -> Result<YoutubeVideo, Error> in
+                CompletionResult(catching: {
+                    let videoArray = try YoutubeResponseParser.parseVideoList(JSON_Response_Data: data)
+                    guard let video = videoArray.first else {throw GenericError.unknownError}
+                    return video
                 })
-            } else {
-                DispatchQueue.main.sync {
-                    
-                    completion(YoutubeSearchResponse(videos: [], moreResultsCode: nil, error: nil, searchText: searchText))}
-            }
-            
-            }.resume()
-    }
-    
-    
-    
-    
-    private func prepareVideoSearchURLWith(amount: Int, searchText: String, previousNextPageToken: String? = nil) -> URL{
-        
-        func countryCode() -> NSString{
-            let local = NSLocale.current as NSLocale
-            return local.object(forKey: NSLocale.Key.countryCode) as! NSString
-        }
-        
-        
-        let searchText = NSString(string: searchText)
-        
-        
-
-        let strURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=\(amount)&order=Relevance&q=\(searchText)&regionCode=\(countryCode())&type=video&key=\(APIKey)\((previousNextPageToken != nil) ? "&pageToken=\(previousNextPageToken!)" : "" )" as NSString
-
-
-        
-        let urlString = strURL.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlFragmentAllowed)!
-        let url = URL(string: urlString)!
-        return url
-    }
-    
-    
-    
-    
-    private func parseJSONFromYoutubeSearchResults(data: Data, completion: @escaping ([YoutubeVideo], _ moreResultsCode: String?) -> Void) {
-        
-        
-        
-        
-        do{
-            guard let result = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary else {completion([], nil); return}
-            guard let info = result["items"] as? Array<NSDictionary> else {completion([], nil); return}
-            let nextPageToken = result["nextPageToken"] as? String
-            let youtubeIDs = EArray<String>()
-            
-            youtubeIDs.irateThrough(array: info) { (item) -> String? in
-                guard let idDict = item["id"] as? NSDictionary else {return nil}
-                guard let id = idDict["videoId"] as? String else {return nil}
-                
-                return id
-            }
-            
-            
-            
-            getVideosFromYT_IDs(youtubeIDs.elements) { (videos) in
-                completion(videos, nextPageToken)
-            }
-            
-        } catch {
-
-            completion([], nil)
+            }))
         }
     }
-
-
-
-
-
     
-    // MARK: - GET INFO FROM EACH VIDEO
-
     
-    private func getVideosFromYT_IDs(_ IDs: [String], completion: @escaping ([YoutubeVideo]) -> Void){
-        if IDs.isEmpty{completion([]); return}
-        var videosToReturn = [(YoutubeVideo?, Int)](){
-            didSet{
-                if videosToReturn.count >= IDs.count{
-                    
-                    let videos = videosToReturn.sorted { $0.1 < $1.1}.filter{$0.0 != nil}.map{$0.0!}
-                    
-                    completion(videos)
+    private static func getVideoIdsAndNextPageTokenFrom(ytJsonResponse: Data) throws -> (ids: [String], nextPageToken: String?){
+        guard let dictionary = try JSONSerialization.jsonObject(with: ytJsonResponse, options: []) as? NSDictionary,
+        let items = dictionary["items"] as? Array<NSDictionary>
+        else {throw GenericError.unknownError}
+        
+        let nextPageToken = dictionary["nextPageToken"] as? String
+        let videoIDs = items.compactMap({($0["id"] as? NSDictionary)?["videoId"] as? String})
+        
+        return (videoIDs, nextPageToken)
+    }
+    
+    static func fetchVideosForVideoIDs(ids: [String], completion: @escaping (CompletionResult<[YoutubeVideo]>) -> ()){
+        let joinedIDs = ids.joined(separator: ",")
+        let url = URL(string: "https://www.googleapis.com/youtube/v3/videos?key=\(self.apiKey)&part=snippet,contentDetails,statistics&id=\(joinedIDs)")!
+        
+        fetchJSON(url: url) { callback in
+            
+            completion(callback.flatMap({ data in
+                return CompletionResult(catching: {
+                    return try YoutubeResponseParser.parseVideoList(JSON_Response_Data: data)
+                })
+            }))
+        
+        }
+    }
+    
+    
+    static func fetchJSON(url: URL, completion: @escaping (CompletionResult<Data>) -> ()){
+        URLSession.shared.dataTask(with: url) { (data, _, error) in
+            DispatchQueue.main.async{
+                if let data = data{
+                    completion(.success(data))
+                } else {
+                    completion(.failure(error ?? GenericError.unknownError))
                 }
             }
-        }
-
-        var x = 1
-        for ID in IDs{
-            let y = x
-            guard let url = YoutubeVideo.getAppropriateURLForInit(from: ID, APIKey: APIKey as String) else { continue }
             
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                if error != nil{
-                    print(error!)
-                    videosToReturn.append((nil, y))
-                    return
-                }
-                if data == nil{videosToReturn.append((nil, y)); return}
-            
-                let newVideo = YoutubeVideo(JSON_Data: data!)
-                
-                videosToReturn.append((newVideo, y))
-                
-            }
-            
-            task.resume()
-            x += 1
-        }
+        }.resume()
     }
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
