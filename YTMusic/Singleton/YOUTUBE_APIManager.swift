@@ -90,17 +90,26 @@ class YTAPIManager{
         }
     }
     
+    static func handleDownloadOfVideoWithID(ID: String){
+        getVideoFor(videoId: ID) { result in
+            switch result{
+            case .success(let video):
+                Downloader.main.beginDownloadOf(video)
+            case .failure:
+                AppManager.displayErrorMessage(target: AppManager.shared.screen, message: "A problem occured when attempting to download the video from your clipboard", completion: nil)
+            }
+            
+        }
+            
+    }
+    
     static func getVideoFor(videoId: String, completion: @escaping (CompletionResult<YoutubeVideo>) -> ()){
-        let urlString = "https://www.googleapis.com/youtube/v3/videos?key=\(self.apiKey)&part=id,snippet,statistics,contentDetails&id=\(videoId)"
-        
-        fetchJSON(url: getURLFor(string: urlString)!) { response in
-            completion(response.flatMap({ data -> Result<YoutubeVideo, Error> in
-                CompletionResult(catching: {
-                    let videoArray = try YoutubeResponseParser.parseVideoList(JSON_Response_Data: data)
-                    guard let video = videoArray.first else {throw GenericError.unknownError}
-                    return video
-                })
-            }))
+        fetchVideosForVideoIDs(ids: [videoId]) { result in
+            completion(result.flatMap{
+                if let video = $0.first{
+                    return .success(video)
+                } else {return .failure(GenericError.unknownError)}
+            })
         }
     }
     

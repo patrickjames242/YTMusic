@@ -24,11 +24,7 @@ class WeakWrapper<Value: AnyObject>: NSObject{
     weak var value: Value?
     
     init(_ value: Value){
-        
         self.value = value
-        
-        
-        
     }
     
 }

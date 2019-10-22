@@ -163,10 +163,7 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
         setUpViews()
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -271,7 +268,6 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
         x.contentLayoutGuide.widthAnchor.constraint(equalTo: x.frameLayoutGuide.widthAnchor).isActive = true
         x.contentLayoutGuide.heightAnchor.constraint(equalTo: x.frameLayoutGuide.heightAnchor, constant: Variations.Settings.scrollViewContentViewHeightDifferenceFactor).isActive = true
         
- 
         x.addSubview(aboutMeLabel)
         x.addSubview(paragraphLabel)
         x.addSubview(shortDescriptionLabel)
@@ -282,20 +278,43 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
         
         let CIRCLE_INSETS = Variations.Settings.meImageTopAndBottomSpacing
         
-        circleImage.pin(top: aboutMeLabel.bottomAnchor, bottom: imPatrickLabel.topAnchor, centerX: x.contentLayoutGuide.centerXAnchor, width: circleImage.heightAnchor, height: circleImage.widthAnchor,insets: UIEdgeInsets(top: CIRCLE_INSETS, bottom: CIRCLE_INSETS))
+        let circleImageHolder = UIView()
+        circleImageHolder.addSubview(circleImage)
+        
+        x.addSubview(circleImageHolder)
+        
+        circleImageHolder.pin(left: x.contentLayoutGuide.leftAnchor, right: x.contentLayoutGuide.rightAnchor, top: aboutMeLabel.bottomAnchor, bottom: imPatrickLabel.topAnchor, centerX: x.contentLayoutGuide.centerXAnchor, insets: UIEdgeInsets(top: CIRCLE_INSETS, bottom: CIRCLE_INSETS))
+        
+        circleImage.translatesAutoresizingMaskIntoConstraints = false
+        circleImage.topAnchor.constraint(greaterThanOrEqualTo: circleImageHolder.topAnchor).isActive = true
+        circleImage.bottomAnchor.constraint(lessThanOrEqualTo: circleImageHolder.bottomAnchor).isActive = true
+        
+        
+        circleImage.centerXAnchor.constraint(equalTo: circleImageHolder.centerXAnchor).isActive = true
+        circleImage.centerYAnchor.constraint(equalTo: circleImageHolder.centerYAnchor).isActive = true
+        circleImage.widthAnchor.constraint(equalTo: circleImage.heightAnchor).isActive = true
+        {
+            let h = circleImage.heightAnchor.constraint(equalToConstant: 1000)
+            h.priority = UILayoutPriority(900)
+            h.isActive = true
+        }()
+        
+        circleImage.heightAnchor.constraint(lessThanOrEqualToConstant: 200).isActive = true
+        
         
         
         imPatrickLabel.pin(bottom: shortDescriptionLabel.topAnchor, centerX: x.contentLayoutGuide.centerXAnchor, insets: UIEdgeInsets(bottom: 3))
         
         shortDescriptionLabel.pin(bottom: paragraphLabel.topAnchor, centerX: x.contentLayoutGuide.centerXAnchor, insets: UIEdgeInsets(bottom: 10))
         
+        paragraphLabel.pin(left: x.contentLayoutGuide.leftAnchor, right: x.contentLayoutGuide.rightAnchor, bottom: x.contentLayoutGuide.bottomAnchor, insets: UIEdgeInsets(left: 25, right: 25))
         
-        paragraphLabel.pin (left: x.contentLayoutGuide.leftAnchor, right: x.contentLayoutGuide.rightAnchor, bottom: x.contentLayoutGuide.bottomAnchor, insets: UIEdgeInsets(left: 25, right: 25))
-        
-
         return x
-        
     }()
+    
+    
+    
+    
     
     private lazy var aboutMeLabel: UILabel = {
         let x = UILabel()
@@ -334,7 +353,6 @@ class AboutMeController: PortraitViewController, MFMailComposeViewControllerDele
         wrapper.layer.shadowRadius = 10
         wrapper.layer.shadowOffset = CGSize(width: 0, height: 2)
         wrapper.layer.shadowOpacity = 0.8
-        
         
         return wrapper
     }()
