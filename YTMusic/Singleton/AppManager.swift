@@ -13,31 +13,9 @@ import AudioToolbox
 import SafariServices
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class AppManager: NSObject{
+    
     static let shared = AppManager()
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     //MARK: - APP CONSTANTS
@@ -47,18 +25,7 @@ class AppManager: NSObject{
     
     static var currentAppBottomInset: CGFloat = 49
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+   
     
     private let APP_HAS_LAUNCHED_ALREADY_KEY = "APP HAS LAUNCHED ALREADY."
     
@@ -69,9 +36,7 @@ class AppManager: NSObject{
     func generateInterface() -> UIViewController{
         
         
-        
-        
-        
+
         if UserDefaults.standard.bool(forKey: self.APP_HAS_LAUNCHED_ALREADY_KEY) == false{
 
             Timer.scheduledTimer(withTimeInterval: 1, repeats: false) {[weak self] (timer) in
@@ -91,19 +56,6 @@ class AppManager: NSObject{
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     //MARK: - APP VIEW CONTROLLERS
     
     var screen = Screen()
@@ -112,20 +64,6 @@ class AppManager: NSObject{
     private var musicView: NowPlayingViewController{
         return screen.nowPlayingVC
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -149,7 +87,6 @@ class AppManager: NSObject{
     static func vibrate(type: UINotificationFeedbackType){
         let hapticFeedback = UINotificationFeedbackGenerator()
         hapticFeedback.notificationOccurred(.error)
-        
     }
     
     
@@ -211,52 +148,10 @@ class AppManager: NSObject{
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     func setDownloadCountTo(_ int: Int){
         if int <= 0{screen.downloadsItem.badgeValue = nil; return}
         screen.downloadsItem.badgeValue = String(int)
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -363,7 +258,6 @@ class AppManager: NSObject{
     //MARK: - ACTION MENU FUCTIONS
     
     func displayActionMenuFor(song: Song){
-        AppManager.vibrate(type: .success)
         let optionMenu = UIAlertController(title: "Song Options", message: song.name, preferredStyle: .actionSheet)
         
         let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
@@ -445,7 +339,7 @@ class AppManager: NSObject{
     }
     
     func displayActionMenuFor(downloadItem: DownloadItem){
-        AppManager.vibrate(type: .success)
+        
         
         let downloader = Downloader.main
         
@@ -525,86 +419,6 @@ class AppManager: NSObject{
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // THIS IS THE BACKGROUND VIEW DISPLAYED ON ALL COLLECTION AND TABLE VIEWS WHEN THERE ARE NO CELLS TO DISPLAY
-    
-    //    static func getInterfaceBackgroundViewWith(title: String, message: String) -> UIView{
-    //
-    //        let x = UIView()
-    //
-    //        let topLabel = UILabel()
-    //        topLabel.translatesAutoresizingMaskIntoConstraints = false
-    //        topLabel.text = title
-    //        topLabel.font = UIFont.boldSystemFont(ofSize: 20)
-    //
-    //        let bottomLabel = UILabel()
-    //        bottomLabel.translatesAutoresizingMaskIntoConstraints = false
-    //        bottomLabel.text = message
-    //        bottomLabel.textColor = .gray
-    //
-    //        let button = UIButton(type: .system)
-    //        button.translatesAutoresizingMaskIntoConstraints = false
-    //        button.backgroundColor = THEME_COLOR(asker: self)
-    //
-    //        button.setAttributedTitle(NSAttributedString(string: "Search Youtube", attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white]), for: .normal)
-    //
-    //        let buttonHolderView = UIView()
-    //        buttonHolderView.translatesAutoresizingMaskIntoConstraints = false
-    //        buttonHolderView.backgroundColor = .clear
-    //        buttonHolderView.layer.shadowColor = UIColor.black.cgColor
-    //        buttonHolderView.layer.shadowRadius = 10
-    //        buttonHolderView.layer.shadowOffset = CGSize(width: 0, height: 2)
-    //        buttonHolderView.layer.shadowOpacity = 0.8
-    //        buttonHolderView.addSubview(button)
-    //
-    //
-    //        button.addTarget(self, action: #selector(AppManager.respondToSearchButtonTapped), for: .touchUpInside)
-    //        [topLabel, bottomLabel, buttonHolderView].forEach { x.addSubview($0) }
-    //
-    //
-    //        topLabel.centerXAnchor.constraint(equalTo: x.centerXAnchor).isActive = true
-    //        topLabel.topAnchor.constraint(equalTo: x.topAnchor, constant: 70).isActive = true
-    //
-    //
-    //        bottomLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 5).isActive = true
-    //        bottomLabel.centerXAnchor.constraint(equalTo: x.centerXAnchor).isActive = true
-    //
-    //
-    //        buttonHolderView.centerXAnchor.constraint(equalTo: x.centerXAnchor).isActive = true
-    //        buttonHolderView.topAnchor.constraint(equalTo: bottomLabel.bottomAnchor, constant: 20).isActive = true
-    //        buttonHolderView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-    //        buttonHolderView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-    //
-    //        button.topAnchor.constraint(equalTo: buttonHolderView.topAnchor).isActive = true
-    //        button.leftAnchor.constraint(equalTo: buttonHolderView.leftAnchor).isActive = true
-    //        button.rightAnchor.constraint(equalTo: buttonHolderView.rightAnchor).isActive = true
-    //        button.bottomAnchor.constraint(equalTo: buttonHolderView.bottomAnchor).isActive = true
-    //
-    //
-    //
-    //        x.layoutIfNeeded()
-    //
-    //        button.layer.cornerRadius = button.frame.height/2
-    //
-    //
-    //        return x
-    //
-    //
-    //    }
-    //
-    
     @objc private static func respondToSearchButtonTapped(){
         
         AppManager.shared.screen.showtabBarItem(tag: 2)
@@ -614,13 +428,5 @@ class AppManager: NSObject{
     }
     
     
-    
-    
-    
-    
 }
-
-
-
-
 

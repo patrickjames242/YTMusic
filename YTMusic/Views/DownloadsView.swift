@@ -17,6 +17,7 @@ class DownloadHistoryViewController: StandardAppNavigationController{
     private let mainView = _DownloadHistoryViewController()
     
     override var mainViewController: UIViewController{
+        
         return mainView
     }
         

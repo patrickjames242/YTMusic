@@ -32,8 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = AppManager.shared.generateInterface()
         window?.makeKeyAndVisible()
 
-        window!.gestureRecognizers!.remove(at: 0)
-        window!.gestureRecognizers!.remove(at: 0)
+        window?.gestureRecognizers!.remove(at: 0)
+        window?.gestureRecognizers!.remove(at: 0)
+        if #available(iOS 13.0, *) {
+            window?.overrideUserInterfaceStyle = .light
+        }
         return true
     }
     
